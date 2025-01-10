@@ -259,7 +259,7 @@ export default {
         if(e.id === row.id){
           e[code] = val
         }
-        if(e.children.length > 0){
+        if(e.children && e.children.length > 0){
           this.setChildren(val,row,code,e.children)
         }
       })
