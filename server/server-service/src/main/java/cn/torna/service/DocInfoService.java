@@ -230,7 +230,9 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
                             DocInfo::getOrderIndex, DocInfo::getIsShow, DocInfo::getIsLocked, DocInfo::getStatus)
                     .eq(DocInfo::getModuleId, docListFormDTO.getModuleId())
                     .eq(docListFormDTO.getStatus() != null, DocInfo::getStatus, docListFormDTO.getStatus())
-                    .orLambda(q -> q.eq(DocInfo::getModuleId, docListFormDTO.getModuleId()).eq(DocInfo::getIsFolder, Booleans.TRUE));
+                    .eq(DocInfo::getIsDeleted, Booleans.FALSE)
+                    .orLambda(q -> q.eq(DocInfo::getModuleId, docListFormDTO.getModuleId())
+                            .eq(DocInfo::getIsFolder, Booleans.TRUE).eq(DocInfo::getIsDeleted, Booleans.FALSE));
         }
         List<DocInfo> docInfoList = this.list(query);
         sortDocInfo(docInfoList);
