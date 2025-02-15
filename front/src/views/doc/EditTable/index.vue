@@ -240,7 +240,8 @@ export default {
       const children = row.children || []
       let child = this.getParamNewRow()
       child.parentId = row.id
-      children.push(child)
+     // children.push(child)
+       children.unshift(child)
       row.children = children
     },
     onParamRemove(row) {
