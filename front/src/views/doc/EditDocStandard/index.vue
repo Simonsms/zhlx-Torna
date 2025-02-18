@@ -451,7 +451,7 @@ export default {
       this.pmsNextOrderIndex(rows).then(order => {
         item.orderIndex = order
       })
-      rows.push(item)
+      rows.unshift(item)//改为头部插入
     },
     onResponseParamAdd: function() {
       this.onParamAdd(this.docInfo.responseParams)
