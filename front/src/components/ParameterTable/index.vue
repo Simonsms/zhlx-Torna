@@ -64,7 +64,8 @@
       <template slot-scope="scope">
         <div v-if="scope.row.enumId" style="display: inline-block;">
           <div v-html="scope.row.description"></div>
-          <enum-item-view :ref="`enumRef_${scope.row.id}`" :enum-id="scope.row.enumId" mounted-load />
+          <el-tag v-show="rowId === scope.row.id" effect="plain" class="enumShow" @click.stop="handleEnumShow(scope.row.id)">{{ enumShow[scope.row.id]? $t('collapse'):$t('expand') }}</el-tag>
+          <enum-item-view v-if="enumShow[scope.row.id]" :ref="`enumRef_${scope.row.id}`" :enum-id="scope.row.enumId" mounted-load />
         </div>
         <div v-else style="display: inline-block;">
           <div v-if="scope.row.description.length < 100" v-html="scope.row.description"></div>
@@ -95,6 +96,9 @@
   cursor: pointer;
   position: absolute;
   right: 5px;
+}
+.el-table .enumShow{
+  position: relative;
 }
 </style>
 <script>
@@ -131,7 +135,17 @@ export default {
   data() {
     return {
       enumId: '',
-      rowId: ''
+      rowId: '',
+      enumShow: {}
+    }
+  },
+  watch: {
+    data: function(oldValue) {
+      for (const item of oldValue) {
+        if (item.enumId) {
+          this.enumShow[item.id] = false
+        }
+      }
     }
   },
   methods: {
@@ -159,6 +173,9 @@ export default {
     },
     copy(text) {
       this.copyText(text)
+    },
+    handleEnumShow(key) {
+      this.enumShow[key] = !this.enumShow[key]
     }
   }
 }
