@@ -20,14 +20,29 @@
         auto-complete="on"
         @submit.native.prevent
       >
+        <div class="share-name" >{{ shareConfig.shareName }}</div>
         <el-form-item prop="password">
           <el-input
             v-model="encryptFormData.password"
-            type="password"
+            :type="isPasswordVisible ? 'text' : 'password'"
             :placeholder="$t('visitPassword')"
-            prefix-icon="el-icon-lock"
+            class="password-style"
           >
-            <el-button slot="append" class="btn-send" native-type="submit" @click="onCheckPassword">{{ $t('btnOk') }}</el-button>
+            <template #append>
+              <el-button
+                @click="togglePasswordVisibility"
+                class="lock-icon-button"
+              >
+                <i :class="isPasswordVisible ? 'el-icon-unlock' : 'el-icon-lock'"></i>
+              </el-button>
+              <el-button
+                class="btn-send"
+                native-type="submit"
+                @click="onCheckPassword"
+              >
+                {{ $t('btnOk') }}
+              </el-button>
+            </template>
           </el-input>
         </el-form-item>
       </el-form>
@@ -55,16 +70,18 @@ export default {
     return {
       shareConfig: {
         id: '',
-        type: 0
+        type: 0,
+        shareName: ''
       },
       encryptFormData: {
         password: ''
       },
       encryptFormRules: {
         password: [
-          { required: true, message: $t('notEmpty'), trigger: 'blur' }
+          { required: true, message: $t('passwordNotEmpty'), trigger: 'blur' }
         ]
-      }
+      },
+      isPasswordVisible: false
     }
   },
   computed: {
@@ -151,6 +168,9 @@ export default {
     },
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBarView', { withoutAnimation: false })
+    },
+    togglePasswordVisibility() {
+      this.isPasswordVisible = !this.isPasswordVisible;
     }
   }
 }
@@ -165,6 +185,9 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &.mobile.openSidebar{
       position: fixed;
       top: 0;
@@ -192,6 +215,23 @@ export default {
     width: 100%;
   }
   .encrypt-form {
-    margin-top: 200px;
+    margin-top: 0;
+    width: 600px;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+
+  .share-name {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 20px;
+    min-height: 25px;
+  }
+
+  .btn-send {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
   }
 </style>

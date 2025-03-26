@@ -477,6 +477,9 @@ export default {
   'valid': 'valid',
   'invalid': 'invalid',
   'bindingApiDoc': 'Binding interface document',
+  'randomPassword': ' Random Password',
+  'passwordNotEmpty': 'Password not empty',
+  'shareName': 'Share Name',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {

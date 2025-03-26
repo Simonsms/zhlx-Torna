@@ -58,12 +58,8 @@ public class ShareConfigService extends BaseLambdaService<ShareConfig, ShareConf
         shareConfig.setCreatorName(user.getNickname());
         shareConfig.setStatus(StatusEnum.ENABLE.getStatus());
         shareConfig.setIsShowDebug(shareConfigDTO.getIsShowDebug());
-        if (shareConfigDTO.getType() == ShareConfigTypeEnum.ENCRYPT.getType()) {
-            String pwd = PasswordUtil.getRandomSimplePassword(4);
-            shareConfig.setPassword(pwd);
-        } else {
-            shareConfig.setPassword("");
-        }
+        shareConfig.setPassword(shareConfigDTO.getPassword());
+        shareConfig.setShareName(shareConfigDTO.getShareName());
         // 设置过期时间
         shareConfig.setExpirationTime(shareConfigDTO.getExpirationTime());
         this.save(shareConfig);
@@ -80,14 +76,8 @@ public class ShareConfigService extends BaseLambdaService<ShareConfig, ShareConf
         shareConfig.setRemark(shareConfigDTO.getRemark());
         shareConfig.setIsShowDebug(shareConfigDTO.getIsShowDebug());
         shareConfig.setIsAllSelectedDebug(shareConfigDTO.getIsAllSelectedDebug());
-        if (shareConfigDTO.getType() == ShareConfigTypeEnum.ENCRYPT.getType()) {
-            if (StringUtils.isEmpty(shareConfig.getPassword())) {
-                String pwd = PasswordUtil.getRandomSimplePassword(4);
-                shareConfig.setPassword(pwd);
-            }
-        } else {
-            shareConfig.setPassword("");
-        }
+        shareConfig.setPassword(shareConfigDTO.getPassword());
+        shareConfig.setShareName(shareConfigDTO.getShareName());
         // 设置过期时间 如果是null 则永久有效
         shareConfig.setExpirationTime(shareConfigDTO.getExpirationTime());
         this.update(shareConfig);

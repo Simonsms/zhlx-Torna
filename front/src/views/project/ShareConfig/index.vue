@@ -8,23 +8,40 @@
       border
       highlight-current-row
     >
-      <el-table-column :label="$t('shareUrl')" show-overflow-tooltip>
+      <el-table-column :label="$t('shareName')" prop="shareName" width="200"/>
+      <el-table-column :label="$t('shareUrl')"  show-overflow-tooltip  >
         <template slot-scope="scope">
-          <el-link type="primary" :href="buildUrl(scope.row)" target="_blank">{{ buildUrl(scope.row) }}</el-link>
-          <span v-if="scope.row.type === getEnums().SHARE_TYPE.ENCRYPT">
-            &nbsp;&nbsp;{{ $t('pwdShow') }}：{{ scope.row.password }}
-          </span>
-          <span v-if="scope.row.remark.length > 0" class="info-tip">
-            {{ $t('remarkShow') }}：{{ scope.row.remark }}
-          </span>
+          <div class="share-url-wrapper">
+            <el-link type="primary" :href="buildUrl(scope.row)" target="_blank">{{ buildUrl(scope.row) }}</el-link>
+            <el-button
+              type="text"
+              class="copy-btn"
+              @click="copyUrl(buildUrl(scope.row))"
+            >
+              <i class="el-icon-document-copy"></i>
+            </el-button>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('shareDoc')" width="100">
+      <el-table-column :label="$t('pwdShow')" prop="password" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.isAll">{{ $t('allDocs') }}</span>
-          <el-button v-else type="text" @click="viewDoc(scope.row)">{{ $t('look') }}</el-button>
+          <div class="password-wrapper">
+            <span>{{ scope.row.password }}</span>
+            <el-button
+              type="text"
+              class="copy-btn"
+              @click="copyPassword(scope.row.password)"
+            >
+              <i class="el-icon-document-copy"></i>
+            </el-button>
+          </div>
         </template>
-      </el-table-column>
+      </el-table-column>      <el-table-column :label="$t('shareDoc')" width="100">
+      <template slot-scope="scope">
+        <span v-if="scope.row.isAll">{{ $t('allDocs') }}</span>
+        <el-button v-else type="text" @click="viewDoc(scope.row)">{{ $t('look') }}</el-button>
+      </template>
+    </el-table-column>
       <el-table-column :label="$t('shareStyle')" width="100">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.type === getEnums().SHARE_TYPE.PUBLIC">{{ $t('public') }}</el-tag>
@@ -58,6 +75,7 @@
           <span :title="scope.row.gmtCreate">{{ scope.row.gmtCreate.split(' ')[0] }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('remark')" prop="remark" width="150"/>
       <el-table-column
         :label="$t('operation')"
         width="200"
@@ -110,14 +128,20 @@
         label-width="120px"
         size="mini"
       >
-        <el-form-item :label="$t('remark')">
-          <el-input v-model="dialogFormData.remark" :placeholder="$t('optional')" show-word-limit maxlength="50"/>
+        <el-form-item :label="$t('shareName')">
+          <el-input v-model="dialogFormData.shareName" :placeholder="$t('optional')" show-word-limit maxlength="50"/>
         </el-form-item>
         <el-form-item :label="$t('shareStyle')">
           <el-radio-group v-model="dialogFormData.type">
             <el-radio :label="1">{{ $t('public') }}</el-radio>
             <el-radio :label="2">{{ $t('encryption') }}</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="dialogFormData.type === 2" :label="$t('pwdShow')" prop="password">
+          <el-input v-model="dialogFormData.password" :type="passwordType" maxlength="32">
+            <el-button slot="append" @click="generateRandomPassword">{{ $t('randomPassword') }}</el-button>
+            <i slot="suffix" :class="['el-input__icon', passwordType === 'password' ? 'el-icon-lock' : 'el-icon-unlock']" style="cursor: pointer" @click="togglePasswordVisibility"></i>
+          </el-input>
         </el-form-item>
         <el-form-item :label="$t('expirationTime')">
           <template slot="label">
@@ -158,6 +182,9 @@
         </el-form-item>
         <el-form-item v-show="dialogFormData.isAll === 0">
           <doc-tree ref="docTreeRef"/>
+        </el-form-item>
+        <el-form-item :label="$t('remark')">
+          <el-input v-model="dialogFormData.remark" :placeholder="$t('optional')" show-word-limit maxlength="50"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -204,11 +231,25 @@ export default {
         isAll: 0,
         remark: '',
         isShowDebug: 1,
-        moduleEnvironmentIdList: []
+        moduleEnvironmentIdList: [] ,
+        password: '',
+        shareName: '',
       },
       autoAppend: 1,
       moduleEnvironmentList: [],
-      dialogFormRules: {},
+      passwordType: 'password',
+      dialogFormRules: {
+        password: [
+          { required: true, message: this.$t('passwordNotEmpty'), trigger: 'blur', validator: (rule, value, callback) => {
+              console.log(value)
+              if (this.dialogFormData.type === 2 && !value) {
+                callback(new Error(this.$t('passwordNotEmpty')))
+              } else {
+                callback()
+              }
+            }}
+        ]
+      },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7; // Disable dates before today
@@ -231,6 +272,25 @@ export default {
     }
   },
   methods: {
+    togglePasswordVisibility() {
+      this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
+    },
+    generateRandomPassword() {
+      const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789';
+      let password = '';
+      for (let i = 0; i < 8; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      this.dialogFormData.password = password;
+      this.$nextTick(() => {
+        this.$refs.dialogForm.validateField('password');
+      });
+      this.$message({
+        message: this.$t('pwdShow') + ': ' + password,
+        type: 'success',
+        duration: 3000
+      });
+    },
     reload(moduleId) {
       if (moduleId) {
         this.moduleId = moduleId
@@ -257,6 +317,7 @@ export default {
         moduleId: '',
         isAll: 0,
         remark: '',
+        password: '',
         moduleEnvironmentList: [],
         moduleEnvironmentIdList: []
       }
@@ -379,6 +440,10 @@ export default {
       data.content = content
       data.isAllSelectedDebug = this.checkAll
       const uri = this.dialogFormData.id ? '/doc/share/update' : '/doc/share/add'
+      if (this.dialogFormData.type === 2 && !this.dialogFormData.password) {
+        this.tipError(this.$t('passwordNotEmpty'))
+        return
+      }
       if (this.checkAll) {
         this.dialogFormData.moduleEnvironmentIdList = []
       }
@@ -426,7 +491,75 @@ export default {
           })
         })
       })
+    },
+    copyUrl(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        this.$message({
+          message: this.$t('copySuccess'),
+          type: 'success',
+          duration: 2000
+        });
+      }).catch(() => {
+        this.$message({
+          message: this.$t('copyFailed'),
+          type: 'error'
+        });
+      });
+    },
+    copyPassword(password) {
+      navigator.clipboard.writeText(password).then(() => {
+        this.$message({
+          message: this.$t('copySuccess'),
+          type: 'success',
+          duration: 2000
+        });
+      }).catch(() => {
+        this.$message({
+          message: this.$t('copyFailed'),
+          type: 'error'
+        });
+      });
     }
   }
 }
 </script>
+
+<style scoped>
+.share-url-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.copy-btn {
+  padding: 2px 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  position: absolute;
+  right: 0;
+}
+
+.share-url-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+.password-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.copy-btn {
+  padding: 2px 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  position: absolute;
+  right: 0;
+}
+
+.password-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+</style>
