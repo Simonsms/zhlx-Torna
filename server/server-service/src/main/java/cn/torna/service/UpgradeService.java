@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UpgradeService {
 
-    private static final int VERSION = 13100;
+    private static final int VERSION = 13103;
 
     private static final String TORNA_VERSION_KEY = "torna.version";
 
@@ -191,6 +191,16 @@ public class UpgradeService {
         v1_29_2(oldVersion);
         v1_30_1(oldVersion);
         v1_31_0(oldVersion);
+        v1_31_3(oldVersion);
+    }
+
+    private void v1_31_3(int oldVersion) {
+        int version = 13103;
+        if (oldVersion < version) {
+            log.info("Upgrade version to {}", version);
+            addColumn("share_config", "share_name",
+                    "ALTER TABLE `share_config` ADD COLUMN `share_name` varchar(128) NOT NULL DEFAULT '' COMMENT '分享名称';");
+        }
     }
 
     private void v1_31_0(int oldVersion) {
