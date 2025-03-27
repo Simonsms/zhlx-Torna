@@ -487,7 +487,8 @@ export default {
       return ids
     },
     onDocNew() {
-      this.goRoute(`/doc/new/${this.moduleId}`)
+      // this.goRoute(`/doc/new/${this.moduleId}`)
+      window.open(`/#/doc/new/${this.moduleId}`, '_blank')
     },
     onFolderAdd() {
       this.$prompt(this.$t('inputFolderMsg'), this.$t('newFolderTitle'), {
@@ -554,7 +555,10 @@ export default {
     },
     onDocAdd(row) {
       this.pmsNextOrderIndex(row.children).then(order => {
-        this.goRoute(`/doc/new/${this.moduleId}/${row.id}?order=${order}`)
+        let url = ''
+        // this.goRoute(`/doc/new/${this.moduleId}/${row.id}?order=${order}`)
+        url = `/#/doc/new/${this.moduleId}/${row.id}?order=${order}`
+        window.open(url, '_blank')
       })
     },
     onDocFolderAdd(row) {
@@ -580,18 +584,26 @@ export default {
       if (row.isFolder) {
         this.onFolderUpdate(row)
       } else {
+        let url = ''
         if (row.type !== this.getEnums().DOC_TYPE.HTTP) {
-          this.goRoute(`/doc/edit_custom/${this.moduleId}/${row.id}`)
+          // this.goRoute(`/doc/edit_custom/${this.moduleId}/${row.id}`)
+
+          url = `/#/doc/edit_custom/${this.moduleId}/${row.id}`
         } else {
-          this.goRoute(`/doc/edit/${this.moduleId}/${row.id}`)
+         // this.goRoute(`/doc/edit/${this.moduleId}/${row.id}`)
+         url = `/#/doc/edit/${this.moduleId}/${row.id}`
         }
+        window.open(url, '_blank')
       }
     },
     onDocCopy(row) {
       if (row.type === this.getEnums().DOC_TYPE.CUSTOM || row.type === this.getEnums().DOC_TYPE.MARKDOWN) {
-        this.goRoute(`/doc/copy_custom/${this.moduleId}/${row.id}`)
+        // this.goRoute(`/doc/copy_custom/${this.moduleId}/${row.id}`)
+        window.open(`/#/doc/copy_custom/${this.moduleId}/${row.id}`, '_blank')
       } else {
-        this.goRoute(`/doc/copy/${this.moduleId}/${row.id}`)
+        // this.goRoute(`/doc/copy/${this.moduleId}/${row.id}`)
+        const url = `/#/doc/copy/${this.moduleId}/${row.id}`
+        window.open(url, '_blank')
       }
     },
     onExport() {
