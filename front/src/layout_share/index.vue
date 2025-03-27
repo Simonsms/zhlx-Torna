@@ -186,8 +186,6 @@ export default {
     height: 100%;
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     &.mobile.openSidebar{
       position: fixed;
       top: 0;
@@ -215,10 +213,17 @@ export default {
     width: 100%;
   }
   .encrypt-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin-top: 0;
     width: 600px;
     padding: 40px;
     box-sizing: border-box;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
   }
 
   .share-name {
