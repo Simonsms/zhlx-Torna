@@ -481,6 +481,8 @@ export default {
   'randomPassword': ' 随机密码',
   'passwordNotEmpty': '密码不能为空',
   'shareName': '分享名称',
+  "emailFormatError": '邮箱校验失败',
+  "suggestPassword": '不填会生成默认密码',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {

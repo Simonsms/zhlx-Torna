@@ -79,13 +79,18 @@ public class UserController {
     @PostMapping("create")
     public Result<UserCreateVO> create(@RequestBody UserCreateParam param) {
         UserAddDTO userAddDTO = CopyUtil.copyBean(param, UserAddDTO::new);
-        userAddDTO.setPassword(DigestUtils.md5DigestAsHex(initPassword.getBytes(StandardCharsets.UTF_8)));
+        String password = param.getPassword();
+        if (org.apache.commons.lang3.StringUtils.isEmpty(password)) {
+            password = initPassword;
+        }
+        userAddDTO.setPassword(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)));
         userAddDTO.setStatus(UserStatusEnum.SET_PASSWORD.getStatus());
         userAddDTO.setSourceEnum(UserInfoSourceEnum.BACKEND);
+        userAddDTO.setEmail(param.getEmail());
         userInfoService.addUser(userAddDTO);
         UserCreateVO userCreateVO = new UserCreateVO();
         userCreateVO.setUsername(param.getUsername());
-        userCreateVO.setPassword(initPassword);
+        userCreateVO.setPassword(password);
         return Result.ok(userCreateVO);
     }
 

@@ -153,16 +153,29 @@
         size="mini"
       >
         <el-form-item
+          prop="nickname"
+          :label="$t('nickname')"
+        >
+          <el-input v-model="dialogFormData.nickname" :placeholder="$t('suggestUseRealName')"/>
+        </el-form-item>
+        <el-form-item
           prop="username"
           :label="$t('loginAccount')"
         >
           <el-input v-model="dialogFormData.username" :placeholder="$t('loginAccount')"/>
         </el-form-item>
         <el-form-item
-          prop="nickname"
-          :label="$t('nickname')"
+          prop="password"
+          :label="$t('password')"
+          v-if="!isUpdate"
         >
-          <el-input v-model="dialogFormData.nickname" :placeholder="$t('suggestUseRealName')"/>
+          <el-input v-model="dialogFormData.password" :placeholder="$t('suggestPassword')"/>
+        </el-form-item>
+        <el-form-item
+          prop="email"
+          :label="$t('email')"
+        >
+          <el-input v-model="dialogFormData.email" :placeholder="$t('suggestUseEmail')"/>
         </el-form-item>
         <el-form-item
           prop="isSuperAdmin"
@@ -241,6 +254,8 @@ export default {
       dialogFormData: {
         username: '',
         nickname: '',
+        password: '',
+        email: '',
         isSuperAdmin: 0
       },
       dialogFormRules: {
@@ -249,12 +264,17 @@ export default {
         ],
         nickname: [
           { required: true, message: $t('notEmpty'), trigger: 'blur' }
+        ],
+        email: [
+          { required: false, message: $t('notEmpty'), trigger: 'blur' },
+          { validator: this.validateEmail, trigger: 'blur' }
         ]
       },
       currentUserId: 0,
       chooseProjectShow: false,
       projectRole: 'dev',
-      currentUserNick: ''
+      currentUserNick: '',
+      isUpdate: false
     }
   },
   created() {
@@ -295,8 +315,9 @@ export default {
     },
     onUserUpdate(row) {
       this.dialogTitle = $t('update')
-      Object.assign(this.dialogFormData, row)
+      this.dialogFormData = JSON.parse(JSON.stringify(row));
       this.dialogVisible = true
+      this.isUpdate = true
     },
     onAllocateProject(row) {
       this.currentUserId = row.id
@@ -318,6 +339,7 @@ export default {
             this.post(uri, this.dialogFormData, () => {
               this.tipSuccess($t('operateSuccess'))
               this.dialogVisible = false
+              this.isUpdate = false
               this.loadTable()
             })
           } else {
@@ -326,6 +348,7 @@ export default {
               const data = resp.data
               this.alert($t('addUserSuccess', data.username, data.password), $t('createSuccess'))
               this.dialogVisible = false
+              this.isUpdate = false
               this.loadTable()
             })
           }
@@ -345,6 +368,7 @@ export default {
         nickname: '',
         isSuperAdmin: 0
       }
+      this.isUpdate = false
     },
     onPageIndexChange(pageIndex) {
       this.searchFormData.pageIndex = pageIndex
@@ -375,6 +399,17 @@ export default {
         this.tipSuccess($t('operateSuccess'))
         this.chooseProjectShow = false
       })
+    },
+    validateEmail(rule, value, callback) {
+      if (!value) {
+        return callback();
+      }
+      const emailPattern = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
+      if (!emailPattern.test(value)) {
+        callback(new Error($t('emailFormatError')));
+      } else {
+        callback();
+      }
     }
   }
 }

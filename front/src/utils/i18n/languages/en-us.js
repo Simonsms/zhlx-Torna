@@ -480,6 +480,8 @@ export default {
   'randomPassword': ' Random Password',
   'passwordNotEmpty': 'Password not empty',
   'shareName': 'Share Name',
+  "emailFormatError": 'Email format error',
+  "suggestPassword": 'Empty generate a default password',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
