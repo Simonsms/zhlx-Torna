@@ -1,5 +1,13 @@
 # 更新日志
 
+## 1.32.0
+
+- 【优化】新增接口在新窗口打开 [PR](https://gitee.com/durcframework/torna/pulls/78)
+- 【优化】枚举字段默认不展开 [PR](https://gitee.com/durcframework/torna/pulls/79)
+- 【优化】创建分享增加自定义密码;分享页增加分享名称 [PR](https://gitee.com/durcframework/torna/pulls/80)
+- 【优化】宽屏显示文档显示居中问题 [PR](https://gitee.com/durcframework/torna/pulls/81)
+- 【优化】创建用户新增邮箱和密码设置 [PR](https://gitee.com/durcframework/torna/pulls/82)
+
 ## 1.31.3
 
 - 【新增】跨域配置开关torna.cors.enable=false可关闭跨域配置

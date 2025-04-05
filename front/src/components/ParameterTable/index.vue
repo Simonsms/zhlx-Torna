@@ -58,14 +58,28 @@
     />
     <el-table-column
       v-if="isColumnShow('description')"
+      :key="Math.random()"
       prop="description"
       :label="descriptionLabel"
     >
       <template slot-scope="scope">
         <div v-if="scope.row.enumId" style="display: inline-block;">
           <div v-html="scope.row.description"></div>
-          <el-tag v-show="rowId === scope.row.id" effect="plain" class="enumShow" @click.stop="handleEnumShow(scope.row.id)">{{ enumShow[scope.row.id]? $t('collapse'):$t('expand') }}</el-tag>
-          <enum-item-view v-if="enumShow[scope.row.id]" :ref="`enumRef_${scope.row.id}`" :enum-id="scope.row.enumId" mounted-load />
+          <el-tag
+            :ref="`enumTagRef_${scope.row.id}`"
+            effect="plain"
+            class="enumShow"
+            style="cursor: pointer"
+            @click.stop="handleEnumShow(scope.row.id)"
+          >
+            {{ $t('expand') }}
+          </el-tag>
+          <enum-item-view
+            :ref="`enumRef_${scope.row.id}`"
+            :enum-id="scope.row.enumId"
+            style="display: none"
+            mounted-load
+          />
         </div>
         <div v-else style="display: inline-block;">
           <div v-if="scope.row.description.length < 100" v-html="scope.row.description"></div>
@@ -73,7 +87,15 @@
             <div style="height: 100px;overflow-y: auto" v-html="scope.row.description"></div>
           </div>
         </div>
-        <el-tag v-if="scope.row.description && scope.row.description.length > 0" v-show="rowId === scope.row.id" effect="plain" class="copyBtn" @click.stop="copy(scope.row.description)">{{ $t('copy') }}</el-tag>
+        <el-tag
+          v-if="scope.row.description && scope.row.description.length > 0"
+          v-show="rowId === scope.row.id"
+          effect="plain"
+          class="copyBtn"
+          @click.stop="copy(scope.row.description)"
+        >
+          {{ $t('copy') }}
+        </el-tag>
       </template>
     </el-table-column>
     <el-table-column
@@ -103,6 +125,7 @@
 </style>
 <script>
 import EnumItemView from '../EnumItemView'
+
 export default {
   name: 'ParameterTable',
   components: { EnumItemView },
@@ -176,6 +199,13 @@ export default {
     },
     handleEnumShow(key) {
       this.enumShow[key] = !this.enumShow[key]
+      if (this.$refs[`enumRef_${key}`]) {
+        this.$refs[`enumRef_${key}`].$el.style.display = this.enumShow[key] ? 'block' : 'none'
+        this.$refs[`enumTagRef_${key}`].$el.innerHTML = this.enumShow[key] ? $t('collapse') : $t('expand')
+      }
+    },
+    showEnum(id) {
+      return this.enumShow[id]
     }
   }
 }
