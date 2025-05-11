@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.32.1
+
+- 支持SOP同一模块相同接口名称
+
 ## 1.32.0
 
 - 【优化】新增接口在新窗口打开 [PR](https://gitee.com/durcframework/torna/pulls/78)
