@@ -16,7 +16,7 @@
             <el-button
               type="text"
               class="copy-btn"
-              @click="copyUrl(buildUrl(scope.row))"
+              @click.stop="copy(buildUrl(scope.row))"
             >
               <i class="el-icon-document-copy"></i>
             </el-button>
@@ -30,7 +30,7 @@
             <el-button
               type="text"
               class="copy-btn"
-              @click="copyPassword(scope.row.password)"
+              @click.stop="copy(scope.row.password)"
             >
               <i class="el-icon-document-copy"></i>
             </el-button>
@@ -492,33 +492,8 @@ export default {
         })
       })
     },
-    copyUrl(url) {
-      navigator.clipboard.writeText(url).then(() => {
-        this.$message({
-          message: this.$t('copySuccess'),
-          type: 'success',
-          duration: 2000
-        });
-      }).catch(() => {
-        this.$message({
-          message: this.$t('copyFailed'),
-          type: 'error'
-        });
-      });
-    },
-    copyPassword(password) {
-      navigator.clipboard.writeText(password).then(() => {
-        this.$message({
-          message: this.$t('copySuccess'),
-          type: 'success',
-          duration: 2000
-        });
-      }).catch(() => {
-        this.$message({
-          message: this.$t('copyFailed'),
-          type: 'error'
-        });
-      });
+    copy(text) {
+      this.copyText(text)
     }
   }
 }
