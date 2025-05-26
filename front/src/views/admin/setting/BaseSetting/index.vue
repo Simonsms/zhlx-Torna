@@ -17,6 +17,16 @@
           @change="onConfigChange(config.regEnable)"
         />
       </el-form-item>
+      <el-form-item label="MFA认证">
+        <el-switch
+          v-model="config.MFA.value"
+          active-text="开启"
+          active-value="true"
+          inactive-text=""
+          inactive-value="false"
+          @change="onConfigChange(config.MFA)"
+        />
+      </el-form-item>
       <el-form-item label="文档排序规则">
         <el-radio-group v-model="config.docSortType.value" @change="onDocSortTypeChange">
           <el-radio-button label="by_order">根据排序字段排序</el-radio-button>
@@ -76,7 +86,8 @@ export default {
         uploadDir: { key: 'torna.upload.dir', value: '', remark: '上传文件保存目录' },
         uploadDomain: { key: 'torna.upload.domain', value: '', remark: '上传文件映射' },
         tornaFrontUrl: { key: 'torna.front-url', value: '', remark: 'Torna前端地址' },
-        msEnable: { key: 'metershpere.enable', value: 'false', remark: '开启MeterSphere对接' }
+        msEnable: { key: 'metershpere.enable', value: 'false', remark: '开启MeterSphere对接' },
+        MFA: { key: 'torna.mfa.enable', value: 'false', remark: '开启MFA认证' }
       },
       docSortTypeMap: {
         'by_order': '根据排序字段排序',

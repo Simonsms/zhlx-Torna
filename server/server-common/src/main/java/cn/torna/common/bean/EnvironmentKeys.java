@@ -94,6 +94,13 @@ public enum EnvironmentKeys {
     TORNA_SNAPSHOT_SIZE("torna.snapshot-size", "5"),
 
     TORNA_METERSPHERE_MODULE_MAXLEVEL("torna.metersphere.module.maxLevel", "2"),
+
+    /** 是否开启MFA认证 */
+    TORNA_MFA_ENABLE("torna.mfa.enable", "false"),
+    /** MFA密钥发行人 */
+    TORNA_MFA_ISSUER("torna.mfa.issuer", "Torna"),
+    /** MFA密钥生成种子 */
+    TORNA_MFA_SEED("torna.mfa.seed", null),
     ;
 
     private final String key;

@@ -480,8 +480,8 @@ export default {
   'randomPassword': ' Random Password',
   'passwordNotEmpty': 'Password not empty',
   'shareName': 'Share Name',
-  "emailFormatError": 'Email format error',
-  "suggestPassword": 'Empty generate a default password',
+  'emailFormatError': 'Email format error',
+  'suggestPassword': 'Empty generate a default password',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
@@ -574,5 +574,24 @@ export default {
   DocFilter: {
     'all': 'All',
     'filter': 'Filter Empty Folders'
+  },
+  mfa: {
+    bindTitle: 'MFA Binding',
+    loginUser: 'Login User',
+    step1Title: '1. Scan with Google Authenticator',
+    step2Title: '2. Enter 6-digit code to verify',
+    qrCodeLoading: 'Generating QR code...',
+    qrCodeError: 'Failed to get QR code',
+    totpPlaceholder: 'Please enter 6-digit code',
+    submitButton: 'Verify',
+    bindSuccess: 'MFA binding successful',
+    bindFailed: 'MFA binding failed. Please check whether the security code or server time is correct',
+    authTitle: 'MFA Authentication',
+    verifyButton: 'Verify',
+    authSuccess: 'MFA authentication successful',
+    authFailed: 'MFA authentication failed. Please check whether the security code or server time is correct',
+    settingTitle: 'MFA Setting',
+    resetTitle: 'MFA Reseting',
+    resetConfirm: 'Are you sure you want to reset the MFA certification? You need to scan the code again to obtain the new token.'
   }
 }
