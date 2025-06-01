@@ -481,8 +481,8 @@ export default {
   'randomPassword': ' 随机密码',
   'passwordNotEmpty': '密码不能为空',
   'shareName': '分享名称',
-  "emailFormatError": '邮箱校验失败',
-  "suggestPassword": '不填会生成默认密码',
+  'emailFormatError': '邮箱校验失败',
+  'suggestPassword': '不填会生成默认密码',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
@@ -577,5 +577,24 @@ export default {
   DocFilter: {
     'all': '全部',
     'filter': '过滤空文件夹'
+  },
+  mfa: {
+    bindTitle: 'MFA绑定',
+    loginUser: '登录用户',
+    step1Title: '1. 使用Google身份验证器扫码',
+    step2Title: '2. 输入6位安全码完成验证',
+    qrCodeLoading: '二维码生成中...',
+    qrCodeError: '未能获取二维码',
+    totpPlaceholder: '请输入6位安全码',
+    submitButton: '提交验证',
+    bindSuccess: 'MFA绑定成功',
+    bindFailed: 'MFA绑定失败，请检查安全码或服务器时间是否正确',
+    authTitle: 'MFA认证',
+    verifyButton: '验证',
+    authSuccess: 'MFA认证成功',
+    authFailed: 'MFA认证失败，请检查安全码或服务器时间是否正确',
+    settingTitle: 'MFA配置',
+    resetTitle: 'MFA重置',
+    resetConfirm: '确定要重置MFA认证吗？您需要重新扫码获取新的令牌。'
   }
 }

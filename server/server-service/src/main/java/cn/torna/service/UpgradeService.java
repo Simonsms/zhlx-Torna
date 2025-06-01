@@ -1,6 +1,7 @@
 package cn.torna.service;
 
 import cn.torna.common.bean.Booleans;
+import cn.torna.common.bean.EnvironmentKeys;
 import cn.torna.common.enums.DocStatusEnum;
 import cn.torna.common.enums.ModuleConfigTypeEnum;
 import cn.torna.common.util.CopyUtil;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UpgradeService {
 
-    private static final int VERSION = 13103;
+    private static final int VERSION = 13300;
 
     private static final String TORNA_VERSION_KEY = "torna.version";
 
@@ -192,6 +193,27 @@ public class UpgradeService {
         v1_30_1(oldVersion);
         v1_31_0(oldVersion);
         v1_31_3(oldVersion);
+        v1_33_0(oldVersion);
+    }
+
+    private void v1_33_0(int oldVersion) {
+        int version = 13300;
+        if (oldVersion < version) {
+            log.info("Upgrade version to {}", version);
+            addColumn("user_info", "mfa_sk",
+                    "ALTER TABLE `user_info` ADD COLUMN `mfa_sk` varchar(128) NOT NULL DEFAULT '' COMMENT '多因素认证密钥';");
+            // 1.33.0开始随机生成MFA密钥生成种子并保存在数据库中
+            String configKey = EnvironmentKeys.TORNA_MFA_SEED.getKey();
+            String value = systemConfigService.getRawValue(configKey);
+            if (StringUtils.isBlank(value)) {
+                value = EnvironmentKeys.TORNA_MFA_SEED.getValue();
+            }
+            if (StringUtils.isBlank(value)) {
+                value = PasswordUtil.getRandomSimplePassword(16);
+            }
+            systemConfigService.setConfig(configKey, value, "MFA密钥生成种子");
+            log.info("Upgrade {} finished.", version);
+        }
     }
 
     private void v1_31_3(int oldVersion) {

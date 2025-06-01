@@ -290,6 +290,14 @@ Object.assign(Vue.prototype, {
   goSetPassword() {
     this.goRoute('/setPassword')
   },
+  goMFABind(username) {
+    this.$store.commit('user/SET_USERNAME', username)
+    this.goRoute('/mfa/bind')
+  },
+  goMFAAuth(username) {
+    this.$store.commit('user/SET_USERNAME', username)
+    this.goRoute('/mfa/auth')
+  },
   goRoute: function(path) {
     this.$router.push({ path: path })
   },
