@@ -5,6 +5,7 @@
       :model="mfaBindData"
       :rules="bindRules"
       class="center-form"
+      @submit.native.prevent
     >
       <h3 class="form-title">{{ $t('mfa.bindTitle') }}</h3>
 
@@ -49,7 +50,8 @@
             type="primary"
             :loading="bindLoading"
             style="width: 100%"
-            @click.native.prevent="onVerify"
+            native-type="submit"
+            @click="onVerify"
           >
             {{ $t('mfa.submitButton') }}
           </el-button>

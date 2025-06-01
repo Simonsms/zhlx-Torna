@@ -1,10 +1,12 @@
 <template>
   <div class="app-container">
+    <logo no-style :collapse="false" />
     <el-form
       ref="mfaAuthForm"
       :model="mfaAuthData"
       :rules="resetRules"
       class="center-form"
+      @submit.native.prevent
     >
       <h3>{{ $t('mfa.authTitle') }}</h3>
       <el-form-item prop="totpCode">
@@ -20,7 +22,8 @@
           type="primary"
           :loading="verifyLoading"
           style="width: 100%"
-          @click.native.prevent="onVerify"
+          native-type="submit"
+          @click="onVerify"
         >
           {{ $t('mfa.verifyButton') }}
         </el-button>
@@ -33,8 +36,10 @@
 import { mapState } from 'vuex'
 import { setToken } from '@/utils/auth'
 import { Enums } from '@/utils/enums'
+import Logo from '@/components/Logo'
 
 export default {
+  components: { Logo },
   data() {
     return {
       verifyLoading: false,
@@ -61,6 +66,12 @@ export default {
     }
   },
   methods: {
+    handleEnter(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault()
+        this.onVerify()
+      }
+    },
     handleTotpInput(value) {
       this.mfaAuthData.totpCode = value.replace(/[^\d]/g, '').slice(0, 6)
     },

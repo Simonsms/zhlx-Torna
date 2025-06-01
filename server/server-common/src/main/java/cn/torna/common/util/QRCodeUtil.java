@@ -1,13 +1,12 @@
 package cn.torna.common.util;
 
-import cn.hutool.core.codec.Base64;
-import cn.hutool.core.util.StrUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,7 +99,7 @@ public final class QRCodeUtil {
             BufferedImage image = createQRCode(content, width, height, logoUrl, logoWidth, logoHeight);
             if (image != null) {
                 ImageIO.write(image, IMAGE_FORMAT, os);
-                return BASE64_IMAGE_PREFIX + Base64.encode(os.toByteArray());
+                return BASE64_IMAGE_PREFIX + Base64.getEncoder().encodeToString(os.toByteArray());
             }
         } catch (IOException e) {
             log.error("生成二维码失败", e);
@@ -153,7 +153,7 @@ public final class QRCodeUtil {
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             renderQRCode(bitMatrix, image, width, height);
 
-            if (StrUtil.isNotBlank(logoUrl)) {
+            if (StringUtils.isNotBlank(logoUrl)) {
                 addLogo(image, width, height, logoUrl, logoWidth, logoHeight);
             }
             return image;
@@ -201,7 +201,7 @@ public final class QRCodeUtil {
      * 验证内容是否有效
      */
     private static void validateContent(String content) {
-        if (StrUtil.isBlank(content)) {
+        if (StringUtils.isBlank(content)) {
             throw new IllegalArgumentException("二维码内容不能为空");
         }
     }

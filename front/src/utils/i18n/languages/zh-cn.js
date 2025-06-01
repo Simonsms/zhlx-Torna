@@ -581,7 +581,7 @@ export default {
   mfa: {
     bindTitle: 'MFA绑定',
     loginUser: '登录用户',
-    step1Title: '1. 使用Google身份验证器扫码',
+    step1Title: '1. 使用Google或微软身份验证器(Authenticator)扫码',
     step2Title: '2. 输入6位安全码完成验证',
     qrCodeLoading: '二维码生成中...',
     qrCodeError: '未能获取二维码',

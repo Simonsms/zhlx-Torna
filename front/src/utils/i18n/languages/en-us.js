@@ -578,7 +578,7 @@ export default {
   mfa: {
     bindTitle: 'MFA Binding',
     loginUser: 'Login User',
-    step1Title: '1. Scan with Google Authenticator',
+    step1Title: '1. Scan with Google or Microsoft Authenticator',
     step2Title: '2. Enter 6-digit code to verify',
     qrCodeLoading: 'Generating QR code...',
     qrCodeError: 'Failed to get QR code',

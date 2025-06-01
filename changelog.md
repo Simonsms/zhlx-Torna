@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.33.0
+
+- 【新增】Torna登录时新增MFA多因素认证 [PR](https://gitee.com/durcframework/torna/pulls/85)
+- 【新增】Java代码生成模板
+
 ## 1.32.1
 
 - 支持SOP同一模块相同接口名称

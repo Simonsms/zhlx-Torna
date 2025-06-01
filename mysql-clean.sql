@@ -286,17 +286,6 @@ CREATE TABLE `gen_template` (
                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COMMENT='代码生成模板';
 
-DROP TABLE IF EXISTS `gen_template2`;
-CREATE TABLE `gen_template2` (
-                                 `id` bigint(20) NOT NULL AUTO_INCREMENT,
-                                 `name` varchar(64) NOT NULL DEFAULT '' COMMENT '模板名称',
-                                 `content` text NOT NULL COMMENT '模板内容',
-                                 `is_deleted` tinyint(4) NOT NULL DEFAULT '0',
-                                 `group_name` varchar(64) NOT NULL DEFAULT 'Default' COMMENT '分组',
-                                 `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                 `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                 PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COMMENT='代码生成模板';
 
 DROP TABLE IF EXISTS `mock_config`;
 CREATE TABLE `mock_config` (
