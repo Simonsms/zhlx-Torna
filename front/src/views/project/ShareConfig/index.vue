@@ -181,7 +181,15 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item v-show="dialogFormData.isAll === 0">
-          <doc-tree ref="docTreeRef"/>
+          <div class="checked-nodes">
+            <span>选中的菜单：</span>
+            <el-tag v-for="tag in selectParentNodes" :key="tag.id" closable @close="handleClose(tag)"> {{ tag.name }} </el-tag>
+          </div>
+          <doc-tree
+            ref="docTreeRef"
+            message="sharePage"
+            @checkedNodes="handleTreeCheckedNodes"
+            @setNodesChecked="setNodesChecked" />
         </el-form-item>
         <el-form-item :label="$t('remark')">
           <el-input v-model="dialogFormData.remark" :placeholder="$t('optional')" show-word-limit maxlength="50"/>
@@ -254,7 +262,9 @@ export default {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7; // Disable dates before today
         }
-      }
+      },
+      selectNodes: [],
+      selectParentNodes: []
     }
   },
   computed: {
@@ -272,6 +282,26 @@ export default {
     }
   },
   methods: {
+    handleClose(tag) {
+      const nodes = this.selectParentNodes.filter(item => item.id !== tag.id)
+      this.selectParentNodes = [...nodes]
+      this.$refs.docTreeRef.setCheckedKeys([...nodes.map(item => item.id)])
+    },
+    handleTreeCheckedNodes(rows, unIds = []) {
+      const oldRows = this.selectNodes
+      const ids = oldRows.map(item => item.id)
+      const selectRows = rows.filter(item => {
+        if (!ids.includes(item.id)) {
+          return item
+        }
+      })
+      this.selectNodes = [...oldRows, ...selectRows].filter(item => !unIds.includes(item.id))
+      this.selectParentNodes = this.selectNodes.filter(item => !item.children.length)
+    },
+    setNodesChecked() {
+      const rows = this.selectParentNodes.map(item => item.id)
+      this.$refs.docTreeRef.setCheckedKeys([...rows])
+    },
     togglePasswordVisibility() {
       this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
     },
@@ -307,6 +337,8 @@ export default {
       }
     },
     onAdd() {
+      this.selectNodes = []
+      this.selectParentNodes = []
       this.dialogTitle = this.$t('newShare')
       this.dialogVisible = true
       this.dialogFormData = {
@@ -344,9 +376,12 @@ export default {
       this.dialogFormData = this.$data.dialogFormData
     },
     onTableUpdate(row) {
+      this.selectNodes = []
+      this.selectParentNodes = []
       this.dialogTitle = this.$t('updateShare')
       this.dialogVisible = true
       this.$nextTick(() => {
+        this.$refs.docTreeRef.initFilterText()
         Object.assign(this.dialogFormData, row)
 
         if (row.isShowDebug) {
@@ -369,6 +404,9 @@ export default {
               }
             }, tree => {
               tree.setCheckedKeys(idList)
+              this.$nextTick(() => {
+                this.handleTreeCheckedNodes(this.$refs.docTreeRef.getCheckedNodes(), [])
+              })
             })
           })
         } else {
@@ -400,7 +438,8 @@ export default {
     onDialogSave() {
       const data = this.dialogFormData
       data.moduleId = this.moduleId
-      const checkedNodes = this.$refs.docTreeRef.getCheckedNodes()
+       const checkedNodes = [...this.selectNodes]
+      // const checkedNodes = this.$refs.docTreeRef.getCheckedNodes()
       if (!data.isAll && checkedNodes.length === 0) {
         this.tipError(this.$t('pleaseCheckDoc'))
         return
@@ -449,6 +488,8 @@ export default {
       }
       this.post(uri, this.dialogFormData, () => {
         this.dialogVisible = false
+        this.selectNodes = []
+        this.selectParentNodes = []
         this.reload()
       })
     },
@@ -536,5 +577,9 @@ export default {
 
 .password-wrapper:hover .copy-btn {
   opacity: 1;
+}
+
+.checked-nodes {
+  margin-bottom: 15px;
 }
 </style>
