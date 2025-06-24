@@ -691,6 +691,8 @@ CREATE TABLE `user_info` (
                              UNIQUE KEY `uk_username` (`username`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
+ALTER TABLE `user_info` ADD COLUMN `mfa_sk` varchar(128) NOT NULL DEFAULT '' COMMENT '多因素认证密钥';
+
 DROP TABLE IF EXISTS `user_message`;
 CREATE TABLE `user_message` (
                                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
