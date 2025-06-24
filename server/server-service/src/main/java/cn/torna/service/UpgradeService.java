@@ -132,8 +132,10 @@ public class UpgradeService {
     }
 
     public void insertAdmin(String salt) {
-        UserInfo userInfo = userInfoService.getByUsername("admin");
-        if (userInfo != null) {
+        List<Long> list = userInfoService.query()
+                .eq(UserInfo::getUsername, "admin")
+                .listValue(UserInfo::getId);
+        if (!list.isEmpty()) {
             return;
         }
         String username = "admin";
@@ -244,6 +246,7 @@ public class UpgradeService {
                     "ALTER TABLE `project_release` ADD COLUMN `we_com_webhook` varchar(200) NULL DEFAULT '' COMMENT '企业微信机器人webhook';");
         }
     }
+
     private void v1_29_2(int oldVersion) {
         int version = 12902;
         if (oldVersion < version) {
