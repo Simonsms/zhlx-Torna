@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UpgradeService {
 
-    private static final int VERSION = 13300;
+    private static final int VERSION = 13301;
 
     private static final String TORNA_VERSION_KEY = "torna.version";
 
@@ -196,6 +196,16 @@ public class UpgradeService {
         v1_31_0(oldVersion);
         v1_31_3(oldVersion);
         v1_33_0(oldVersion);
+        v1_33_1(oldVersion);
+    }
+
+    private void v1_33_1(int oldVersion) {
+        int version = 13301;
+        if (oldVersion < version) {
+            log.info("Upgrade version to {}", version);
+            addColumn("doc_info", "description_type",
+                    "ALTER TABLE `doc_info` ADD COLUMN `description_type` varchar(12) NULL DEFAULT 'html' COMMENT '文档描述类型,markdown,html' AFTER `name`;");
+        }
     }
 
     private void v1_33_0(int oldVersion) {

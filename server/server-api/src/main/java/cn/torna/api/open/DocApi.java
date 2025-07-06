@@ -23,6 +23,7 @@ import cn.torna.common.bean.EnvironmentKeys;
 import cn.torna.common.bean.HttpHelper;
 import cn.torna.common.bean.User;
 import cn.torna.common.context.SpringContext;
+import cn.torna.common.enums.DescriptionTypeEnum;
 import cn.torna.common.enums.DocTypeEnum;
 import cn.torna.common.enums.ModifySourceEnum;
 import cn.torna.common.enums.UserSubscribeTypeEnum;
@@ -62,6 +63,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -125,6 +127,9 @@ public class DocApi {
 
     @Autowired
     private DocViewService docViewService;
+
+    @Value("${torna.md-flag:|md|}")
+    private String mdFlag = "|md|";
 
 
     @Api(name = "doc.push")
@@ -436,8 +441,16 @@ public class DocApi {
         moduleConfigService.setCommonErrorCodeList(errorCodeParams, moduleId);
     }
 
-    private static DocInfoDTO buildDocInfoDTO(DocPushItemParam param) {
+    private DocInfoDTO buildDocInfoDTO(DocPushItemParam param) {
         DocInfoDTO docInfoDTO = CopyUtil.deepCopy(param, DocInfoDTO.class);
+
+        String description = docInfoDTO.getDescription();
+        if (StringUtils.hasText(description) && description.startsWith(mdFlag)) {
+            description = description.substring(mdFlag.length()).trim();
+            docInfoDTO.setDescription(description);
+            docInfoDTO.setDescriptionType(DescriptionTypeEnum.MARKDOWN.getValue());
+        }
+
         String version = param.getVersion();
         if ("-".equals(version)) {
             version = "";

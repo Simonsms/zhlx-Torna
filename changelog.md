@@ -1,5 +1,18 @@
 # 更新日志
 
+## 1.33.1
+
+升级脚本
+
+```sql
+ALTER TABLE `doc_info` ADD COLUMN `description_type` varchar(12) NULL DEFAULT 'html' COMMENT '文档描述类型,markdown,html' AFTER `name`;
+```
+
+- 文档描述支持Markdown格式
+
+注释编写Markdown内容,在内容最前端添加`|md|`标识符
+
+
 ## 1.33.0
 
 - 【新增】Torna登录时新增MFA多因素认证 [PR](https://gitee.com/durcframework/torna/pulls/85)

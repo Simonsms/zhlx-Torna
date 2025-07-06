@@ -7,7 +7,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -23,6 +22,8 @@ public class DocInfoSaveParam implements DocInfoDataId {
 
     /** 文档概述, 数据库字段：description */
     private String description;
+
+    private String descriptionType;
 
     /** 维护人, 数据库字段：author */
     private String author;
