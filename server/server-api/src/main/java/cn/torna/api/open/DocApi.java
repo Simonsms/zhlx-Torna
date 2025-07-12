@@ -458,6 +458,9 @@ public class DocApi {
         docInfoDTO.setVersion(version);
 
         String url = param.getUrl();
+        if (url == null) {
+            url = "";
+        }
         String[] split = url.split("#");
         if (split.length == 2) {
             // 接口+版本号,格式:url##version, 如:listUser#1.0
