@@ -298,8 +298,20 @@ Object.assign(Vue.prototype, {
     this.$store.commit('user/SET_USERNAME', username)
     this.goRoute('/mfa/auth')
   },
-  goRoute: function(path) {
-    this.$router.push({ path: path })
+  /**
+   * 路由
+   * @param path 路由地址
+   * @param isNewTab 是否新标签页打开
+   */
+  goRoute: function(path, isNewTab) {
+    if (isNewTab) {
+      if (!path.startsWith('/')) {
+        path = '/' + path
+      }
+      window.open(`${this.getBaseUrl()}/#${path}`, '_blank')
+    } else {
+      this.$router.push({ path: path })
+    }
   },
   initDocInfo(data) {
     return init_docInfo(data)
