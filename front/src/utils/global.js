@@ -3,7 +3,7 @@
  */
 import Vue from 'vue'
 import { getToken, removeToken } from './auth'
-import { do_get, get, get_base_url, get_server_url, get_file, post, download } from './http'
+import { do_get, get, get_base_url, get_server_url, get_file, post, download, upload } from './http'
 import {
   convert_tree,
   create_response_example,
@@ -107,7 +107,7 @@ Object.assign(Vue.prototype, {
    * @param callback 错误回调
    */
   download(uri, data, callback) {
-    download(uri, data, callback);
+    download(uri, data, callback)
   },
   getEnums() {
     return Enums
@@ -797,6 +797,14 @@ Object.assign(Vue.prototype, {
       if (object2[key] !== object1[key]) return false
     }
     return true
+  },
+  onImgAdd(ref, pos, file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    upload(formData)
+      .then(url => {
+        this.$refs[ref].$img2Url(pos, url)
+      })
   },
   getTornaVersion() {
     return VERSION

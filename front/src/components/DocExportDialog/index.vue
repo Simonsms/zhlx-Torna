@@ -40,7 +40,11 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item v-show="dialogFormData.isAll === 0">
-          <doc-tree ref="docTreeRef" readonly />
+          <div class="checked-nodes">
+            <span>选中的菜单：</span>
+            <el-tag v-for="tag in selectParentNodes" :key="tag.id" closable @close="handleClose(tag)"> {{ tag.name }} </el-tag>
+          </div>
+          <doc-tree ref="docTreeRef" readonly @checkedNodes="handleTreeCheckedNodes" @setNodesChecked="setNodesChecked" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -75,7 +79,9 @@ export default {
         envIds: []
       },
       envs: [],
-      loading: false
+      loading: false,
+      selectNodes: [],
+      selectParentNodes: []
     }
   },
   computed: {
@@ -94,11 +100,35 @@ export default {
   },
   methods: {
     show(data, moduleId) {
+      this.selectNodes = []
+      this.selectParentNodes = []
       this.loadEnv(moduleId)
       this.dialogVisible = true
       this.$nextTick(() => {
+        this.$refs.docTreeRef.initFilterText()
         this.$refs.docTreeRef.setData(data)
+        this.$refs.docTreeRef.setCheckedKeys([])
       })
+    },
+    handleClose(tag) {
+      const nodes = this.selectParentNodes.filter(item => item.id !== tag.id)
+      this.selectParentNodes = [...nodes]
+      this.$refs.docTreeRef.setCheckedKeys([...nodes.map(item => item.id)])
+    },
+    handleTreeCheckedNodes(rows, unIds = []) {
+      const oldRows = this.selectNodes
+      const ids = oldRows.map(item => item.id)
+      const selectRows = rows.filter(item => {
+        if (!ids.includes(item.id)) {
+          return item
+        }
+      })
+      this.selectNodes = [...oldRows, ...selectRows].filter(item => !unIds.includes(item.id))
+      this.selectParentNodes = this.selectNodes.filter(item => !item.children.length)
+    },
+    setNodesChecked() {
+      const rows = this.selectParentNodes.map(item => item.id)
+      this.$refs.docTreeRef.setCheckedKeys([...rows])
     },
     loadEnv(moduleId) {
       this.get('module/environment/list', { moduleId: moduleId }, resp => {
@@ -111,7 +141,7 @@ export default {
       if (this.dialogFormData.isAll === 1) {
         keys = this.$refs.docTreeRef.getAllKeys()
       } else {
-        keys = this.$refs.docTreeRef.getCheckedAllKeys()
+        keys = this.selectNodes.map(item => item.id)
         if (!keys || keys.length === 0) {
           this.tipError(this.$t('pleaseCheckDoc'))
           return
@@ -179,3 +209,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.checked-nodes {
+  margin-bottom: 15px;
+}
+</style>

@@ -80,7 +80,16 @@
     <h4 v-show="docInfo.description && docInfo.description !== emptyContent" class="doc-descr">
       <span class="doc-label">{{ $t('description') }}</span>
     </h4>
-    <div v-show="docInfo.description" class="rich-editor" v-html="docInfo.description.replace(/\n/g,'<br />')"></div>
+    <div v-show="docInfo.description && docInfo.descriptionType !== 'markdown'" class="rich-editor" v-html="docInfo.description.replace(/\n/g,'<br />')"></div>
+    <mavon-editor
+      v-show="docInfo.description && docInfo.descriptionType === 'markdown'"
+      v-model="docInfo.description"
+      :boxShadow="false"
+      :subfield="false"
+      defaultOpen="preview"
+      :editable="false"
+      :toolbarsFlag="false"
+    />
     <h4 v-show="docInfo.contentType"><span class="doc-label">ContentType</span><span class="content">{{ docInfo.contentType }}</span></h4>
     <div v-if="docInfo.pathParams.length > 0">
       <h4>{{ $t('pathVariable') }}</h4>
@@ -218,6 +227,10 @@ h4 .content {
   cursor: pointer;
   margin-bottom: 5px;
 }
+.v-note-wrapper {
+  min-height: auto !important;
+  border: 0px solid #f2f6fc;
+}
 </style>
 <script>
 import DocStatusTag from '@/components/DocStatusTag'
@@ -230,10 +243,11 @@ import CodeGenDrawer from '@/components/CodeGenDrawer'
 import ExportUtil from '@/utils/export'
 import { generate } from 'json2interface'
 import { get_effective_url, parse_root_array } from '@/utils/common'
+import { mavonEditor } from 'mavon-editor'
 
 export default {
   name: 'DocView',
-  components: { DocStatusTag, ParameterTable, HttpMethod, DocDiff, ConstView, DocChangelogDrawer, CodeGenDrawer },
+  components: { DocStatusTag, ParameterTable, HttpMethod, DocDiff, ConstView, DocChangelogDrawer, CodeGenDrawer, mavonEditor },
   props: {
     docId: {
       type: String,
@@ -284,6 +298,7 @@ export default {
         version: '',
         contentType: '',
         description: '',
+        descriptionType: 'html',
         author: '',
         httpMethod: 'GET',
         deprecated: '$false$',
