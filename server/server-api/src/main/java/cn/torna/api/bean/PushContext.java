@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +15,6 @@ public class PushContext {
     private List<DocMeta> docMetas;
     private List<DocInfoDTO> contentChangedDocs;
     private String author;
-
+    private Set<Long> docIds;
 
 }

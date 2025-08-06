@@ -27,6 +27,7 @@ import cn.torna.common.enums.DescriptionTypeEnum;
 import cn.torna.common.enums.DocTypeEnum;
 import cn.torna.common.enums.ModifySourceEnum;
 import cn.torna.common.enums.UserSubscribeTypeEnum;
+import cn.torna.common.event.PushEvent;
 import cn.torna.common.message.MessageEnum;
 import cn.torna.common.util.CopyUtil;
 import cn.torna.common.util.ThreadPoolUtil;
@@ -69,8 +70,10 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +215,7 @@ public class DocApi {
         long moduleId = module.getId();
         long startTime = System.currentTimeMillis();
         List<DocMeta> docMetas = docInfoService.listDocMeta(moduleId);
-        PushContext pushContext = new PushContext(docMetas, new ArrayList<>(), param.getAuthor());
+        PushContext pushContext = new PushContext(docMetas, new ArrayList<>(), param.getAuthor(), new HashSet<>());
         ThreadLocal<DocPushItemParam> docPushItemParamThreadLocal = new ThreadLocal<>();
         synchronized (lock) {
             Object success = tornaTransactionManager.execute(() -> {
@@ -241,6 +244,8 @@ public class DocApi {
                 processModifiedDocs(pushContext);
                 // 推送到MeterSphere
                 pushToMeterSphere(module);
+                // 发送事件
+                publishEvent(module, pushContext.getDocIds());
                 // 创建默认的mock
                 createDefaultMock(module);
             }
@@ -256,6 +261,10 @@ public class DocApi {
         }
     }
 
+    private void publishEvent(Module module, Collection<Long> docIds) {
+        PushEvent event = new PushEvent(module.getId(), docIds);
+        SpringContext.publishEvent(event);
+    }
 
     private void createDefaultMock(Module module) {
         mockConfigService.createModuleDocDefaultMock(module.getId());
@@ -381,7 +390,10 @@ public class DocApi {
                 return;
             }
             docInfoDTO.setModifierName(pushContext.getAuthor());
-            docInfoService.doPushSaveDocInfo(docInfoDTO, user);
+            Long docId = docInfoService.doPushSaveDocInfo(docInfoDTO, user);
+            if (docId != null && docId > 0) {
+                pushContext.getDocIds().add(docId);
+            }
             doDocModifyProcess(docInfoDTO, pushContext);
         }
     }

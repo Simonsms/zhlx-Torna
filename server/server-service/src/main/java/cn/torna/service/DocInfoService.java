@@ -470,13 +470,14 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         return doUpdateDocInfo(docInfoDTO, user);
     }
 
-    public void doPushSaveDocInfo(DocInfoDTO docInfoDTO, User user) {
+    public Long doPushSaveDocInfo(DocInfoDTO docInfoDTO, User user) {
         // 修改基本信息
         DocInfo docInfo = this.insertDocInfo(docInfoDTO, user);
         // 删除文档对应的参数
         docParamService.deletePushParam(Collections.singletonList(docInfo.getId()));
         // 修改参数
         this.doUpdateParams(docInfo, docInfoDTO, user);
+        return docInfo.getId();
     }
 
     private void createDocMock(DocInfo docInfo) {
