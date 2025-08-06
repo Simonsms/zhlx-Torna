@@ -27,7 +27,6 @@ import cn.torna.common.enums.DescriptionTypeEnum;
 import cn.torna.common.enums.DocTypeEnum;
 import cn.torna.common.enums.ModifySourceEnum;
 import cn.torna.common.enums.UserSubscribeTypeEnum;
-import cn.torna.common.event.PushEvent;
 import cn.torna.common.message.MessageEnum;
 import cn.torna.common.util.CopyUtil;
 import cn.torna.common.util.ThreadPoolUtil;
@@ -51,6 +50,7 @@ import cn.torna.service.dto.DocParamDTO;
 import cn.torna.service.dto.ImportSwaggerV2DTO;
 import cn.torna.service.dto.MessageDTO;
 import cn.torna.service.dto.UpdateDocFolderDTO;
+import cn.torna.service.event.PushEvent;
 import cn.torna.service.metersphere.MeterSpherePushService;
 import com.alibaba.fastjson.JSON;
 import com.gitee.easyopen.ApiContext;
@@ -262,7 +262,7 @@ public class DocApi {
     }
 
     private void publishEvent(Module module, Collection<Long> docIds) {
-        PushEvent event = new PushEvent(module.getId(), docIds);
+        PushEvent event = new PushEvent(module, docIds);
         SpringContext.publishEvent(event);
     }
 
