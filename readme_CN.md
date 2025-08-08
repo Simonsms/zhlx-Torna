@@ -1,5 +1,7 @@
 # Torna
 
+> 企业版已发布，支持MCP调用，[点击查看](https://torna.cn/tutorial/enterprise.html)
+
 [English](readme.md) | 简体中文
 
 接口文档解决方案，目标是让接口文档管理变得更加方便、快捷。Torna采用团队协作的方式管理和维护接口文档，将不同形式的文档纳入进来统一维护。
