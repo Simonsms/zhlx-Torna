@@ -33,6 +33,12 @@
             <el-radio :label="0">{{ $t('partDocs') }}</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item :label="$t('hideMaintainer')">
+          <el-radio-group v-model="dialogFormData.hideMaintainer">
+            <el-radio :label="1">{{ $t('yes') }}</el-radio>
+            <el-radio :label="0">{{ $t('no') }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item :label="$t('selectEnv')">
           <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">{{ $t('selectAll') }}</el-checkbox>
           <el-checkbox-group v-model="dialogFormData.envIds">
@@ -76,6 +82,7 @@ export default {
         style: EXPORT_STYLE.ALL_IN_ONE,
         type: EXPORT_TYPE.HTML,
         isAll: 1,
+        hideMaintainer: 1,
         envIds: []
       },
       envs: [],
@@ -184,23 +191,23 @@ export default {
       switch (type) {
         case EXPORT_TYPE.HTML:
           if (style === EXPORT_STYLE.ALL_IN_ONE) {
-            ExportUtil.exportHtmlAllInOne(docInfoList)
+            ExportUtil.exportHtmlAllInOne(docInfoList, this.dialogFormData)
           } else {
-            ExportUtil.exportHtmlMultiPages(docInfoList)
+            ExportUtil.exportHtmlMultiPages(docInfoList, this.dialogFormData)
           }
           break
         case EXPORT_TYPE.MARKDOWN:
           if (style === EXPORT_STYLE.ALL_IN_ONE) {
-            ExportUtil.exportMarkdownAllInOne(docInfoList)
+            ExportUtil.exportMarkdownAllInOne(docInfoList, this.dialogFormData)
           } else {
-            ExportUtil.exportMarkdownMultiPages(docInfoList)
+            ExportUtil.exportMarkdownMultiPages(docInfoList, this.dialogFormData)
           }
           break
         case EXPORT_TYPE.WORD:
           if (style === EXPORT_STYLE.ALL_IN_ONE) {
-            ExportUtil.exportWordAllInOne(docInfoList)
+            ExportUtil.exportWordAllInOne(docInfoList, this.dialogFormData)
           } else {
-            ExportUtil.exportWordMultiPages(docInfoList)
+            ExportUtil.exportWordMultiPages(docInfoList, this.dialogFormData)
           }
           break
         default:
