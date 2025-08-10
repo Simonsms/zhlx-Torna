@@ -1,5 +1,12 @@
 # 更新日志
 
+## 1.33.4
+
+- 【修复】导出的Postman无响应参数 [#ICP3MI](https://gitee.com/durcframework/torna/issues/ICP3MI)
+- 【修复】文件下载不显示中文问题 [#ICE4CR](https://gitee.com/durcframework/torna/issues/ICE4CR)
+- 【修复】导出的文档里接口定义里没有公共请求头 [#ICAWUD](https://gitee.com/durcframework/torna/issues/ICAWUD)
+- 【优化】导出文档可以选择是否隐藏维护人字段
+
 ## 1.33.3
 
 - 修复配置context-path下无法打开新标签页问题

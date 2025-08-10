@@ -151,6 +151,7 @@ export default {
   'multiPage': '多页',
   'fileType': '格式',
   'selectDoc': '选择文档',
+  'hideMaintainer': '隐藏维护人',
   'selectEnv': '选择环境',
   'allDocs': '全部文档',
   'partDocs': '部分文档',

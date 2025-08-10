@@ -155,6 +155,7 @@ export default {
   'multiPage': 'Multi Pages',
   'fileType': 'File Type',
   'selectDoc': 'Choose Doc',
+  'hideMaintainer': 'Hide Maintainer',
   'selectEnv': 'Select Environment',
   'allDocs': 'All Docs',
   'partDocs': 'Parts Docs',
