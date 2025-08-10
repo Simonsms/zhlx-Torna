@@ -1,5 +1,23 @@
 # 更新日志
 
+## 企业版更新日志
+
+## 2.0.1
+
+- 同步社区版1.33.4
+
+## 2.0.0
+
+- 对接apifox,推送文档时可将文档同步到apifox中
+- 支持MCP功能
+- 导出OpenAPI3,导出为OpenAPI3格式文档
+- 获取OpenAPI3 URL, 请求url可返回OpenAPI3格式文档
+
+---
+
+
+## 社区版更新日志
+
 ## 1.33.4
 
 - 【修复】导出的Postman无响应参数 [#ICP3MI](https://gitee.com/durcframework/torna/issues/ICP3MI)
