@@ -76,7 +76,7 @@ public class UpgradeService {
     private DocSnapshotService docSnapshotService;
 
 
-    @Value("${spring.datasource.driver-class-name}")
+    @Value("${spring.datasource.driver-class-name:${spring.multi-datasource.torna.driver-class-name:com.mysql.cj.jdbc.Driver}}")
     private String driverClass;
 
     @Resource
