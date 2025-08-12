@@ -39,7 +39,7 @@ public class YapiApiTest extends TornaApplicationTests{
         yapiMarkdownDTO.setUser(apiUser);
         yapiMarkdownDTO.setProjectId(project.getId());
 
-        String content = FileUtils.readFileToString(new File("/Users/mac/Downloads/api.md"), StandardCharsets.UTF_8);
+        String content = FileUtils.readFileToString(new File("/Users/thc/Downloads/api.md"), StandardCharsets.UTF_8);
         yapiMarkdownDTO.setContent(content);
 
         yapiApi.importMarkdown(yapiMarkdownDTO);

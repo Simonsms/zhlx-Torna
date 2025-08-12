@@ -18,6 +18,11 @@
 
 ## 社区版更新日志
 
+## 1.33.5
+
+- 支持多数据源配置
+- fastmybatis升级到3.1.4
+
 ## 1.33.4
 
 - 【修复】导出的Postman无响应参数 [#ICP3MI](https://gitee.com/durcframework/torna/issues/ICP3MI)
