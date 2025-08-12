@@ -20,8 +20,8 @@
 
 ## 1.33.5
 
-- 支持多数据源配置
-- fastmybatis升级到3.1.4
+- 支持多数据源配置 [文档](https://torna.cn/dev/multi-datasource.html)
+- [fastmybatis](https://torna.cn/fastmybatis/)升级到3.1.4
 
 ## 1.33.4
 
