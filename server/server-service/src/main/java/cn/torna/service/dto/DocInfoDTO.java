@@ -45,7 +45,7 @@ public class DocInfoDTO implements DocInfoDataId, TreeAware<DocInfoDTO, Long> {
     /**
      * 版本号
      */
-    private String version = "";
+    private String version;
 
     private String docKey;
 
