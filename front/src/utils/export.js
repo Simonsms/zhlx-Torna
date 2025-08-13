@@ -116,12 +116,19 @@ td,th {
 </html>
 `
 
+const exportConfig = {
+  hideMaintainer: 1
+}
+
 const ExportUtil = {
   /**
    * 导出一个页面为markdown
    * @param docInfo
    */
   exportMarkdownSinglePage(docInfo, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     export_single_page(docInfo, (docInfo) => {
       return `${docInfo.name}-${new Date().getTime()}.md`
     }, (docInfo) => {
@@ -133,6 +140,9 @@ const ExportUtil = {
    * @param docInfo
    */
   exportHtmlSinglePage(docInfo, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     export_single_page(docInfo, (docInfo) => {
       return `${docInfo.name}-${new Date().getTime()}.html`
     }, (docInfo) => {
@@ -148,6 +158,9 @@ const ExportUtil = {
    * @param docInfo
    */
   exportWordSinglePage(docInfo, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     export_single_page(docInfo, (docInfo) => {
       return `${docInfo.name}-${new Date().getTime()}.doc`
     }, (docInfo) => {
@@ -163,6 +176,9 @@ const ExportUtil = {
    * @param docInfoList docInfoList
    */
   exportMarkdownAllInOne(docInfoList, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     const content = MarkdownUtil.toMarkdownByData(docInfoList, null, dialogFormData)
     download_text(`export-${new Date().getTime()}.md`, content)
   },
@@ -171,6 +187,9 @@ const ExportUtil = {
    * @param docInfoList docInfoList
    */
   exportMarkdownMultiPages(docInfoList, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     do_export_multi_docs(docInfoList, (docInfo) => {
       return `${docInfo.name}.md`
     }, (docInfo) => {
@@ -182,6 +201,9 @@ const ExportUtil = {
    * @param docInfoList docInfoList
    */
   exportWordAllInOne(docInfoList, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     const content = WordUtil.toWordByData(docInfoList, dialogFormData)
     const html = format_string(word_wrapper, {
       body: content
@@ -193,6 +215,9 @@ const ExportUtil = {
    * @param docInfoList docInfoList
    */
   exportWordMultiPages(docInfoList, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     do_export_multi_docs(docInfoList, docInfo => {
       return `${docInfo.name}.doc`
     }, docInfo => {
@@ -208,6 +233,9 @@ const ExportUtil = {
    * @param docInfoList docInfoList
    */
   exportHtmlAllInOne(docInfoList, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     const content = HtmlUtil.toHtmlByData(docInfoList, null, dialogFormData)
     const html = format_string(html_wrapper, {
       title: '文档',
@@ -220,6 +248,9 @@ const ExportUtil = {
    * @param docInfoList docInfoList
    */
   exportHtmlMultiPages(docInfoList, dialogFormData) {
+    if (dialogFormData === undefined) {
+      dialogFormData = exportConfig
+    }
     do_export_multi_docs(docInfoList, (docInfo) => {
       return `${docInfo.name}.html`
     }, (docInfo) => {
