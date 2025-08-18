@@ -132,7 +132,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
      * @return 返回文档
      */
     public List<DocInfo> listModuleDoc(long moduleId) {
-        List<DocInfo> docInfoList = list(DocInfo::getModuleId, moduleId);
+        List<DocInfo> docInfoList = listByField(DocInfo::getModuleId, moduleId);
         sortDocInfo(docInfoList);
         return docInfoList;
     }
@@ -315,7 +315,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         docInfoDTO.setModuleType(module.getType());
         List<ModuleEnvironment> debugEnvs = moduleEnvironmentService.listModuleEnvironment(moduleId);
         docInfoDTO.setDebugEnvs(CopyUtil.copyList(debugEnvs, ModuleEnvironmentDTO::new));
-        List<DocParam> params = docParamService.list(DocParam::getDocId, docInfo.getId());
+        List<DocParam> params = docParamService.listByField(DocParam::getDocId, docInfo.getId());
         params.sort(Comparator.comparing(DocParam::getOrderIndex));
         Map<Byte, List<DocParam>> paramsMap = params.stream()
                 .collect(Collectors.groupingBy(DocParam::getStyle));
@@ -655,7 +655,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
     }
 
     public DocInfo getByDataId(String dataId) {
-        return get(DocInfo::getDataId, dataId);
+        return getByField(DocInfo::getDataId, dataId);
     }
 
     /**
@@ -882,7 +882,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         if (CollectionUtils.isEmpty(userIds)) {
             return new ArrayList<>(0);
         }
-        List<UserDingtalkInfo> dingtalkInfoList = userDingtalkInfoMapper.list(UserDingtalkInfo::getUserInfoId, userIds);
+        List<UserDingtalkInfo> dingtalkInfoList = userDingtalkInfoMapper.listByField(UserDingtalkInfo::getUserInfoId, userIds);
         if (CollectionUtils.isEmpty(dingtalkInfoList)) {
             // 如果都未绑定钉钉，为了能发送消息，给一个默认值
             return Collections.singletonList("");
@@ -904,7 +904,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         if (CollectionUtils.isEmpty(userIds)) {
             return new ArrayList<>(0);
         }
-        List<UserWeComInfo> userInfoId = userWeComInfoWrapper.list(UserWeComInfo::getUserInfoId, userIds);
+        List<UserWeComInfo> userInfoId = userWeComInfoWrapper.listByField(UserWeComInfo::getUserInfoId, userIds);
         return userInfoId.stream()
                 .map(UserWeComInfo::getMobile)
                 .filter(Objects::nonNull)
@@ -942,7 +942,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
     }
 
     public List<DocInfo> listByDocKey(String docKey) {
-        return list(DocInfo::getDocKey, docKey);
+        return listByField(DocInfo::getDocKey, docKey);
     }
 
     public void fillDocKey() {
@@ -989,7 +989,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
     }
 
     public List<DocInfo> listByParentId(Long parentId) {
-        return list(DocInfo::getParentId, parentId);
+        return listByField(DocInfo::getParentId, parentId);
     }
 
 }

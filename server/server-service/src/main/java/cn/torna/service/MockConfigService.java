@@ -51,7 +51,7 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
 
 
     public List<MockConfig> listMockConfig(Long docId) {
-        return this.list(MockConfig::getDocId, docId);
+        return this.listByField(MockConfig::getDocId, docId);
     }
 
     public MockConfig getByDataId(String dataId) {

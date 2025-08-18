@@ -67,17 +67,17 @@ public class DocDiffRecordService extends BaseLambdaService<DocDiffRecord, DocDi
         List<DocDiffRecord> diffRecordList;
         // 如果有版本号，只能看截止到当前版本的记录
         if (StringUtils.hasText(version) && !"-".equals(version)) {
-            diffRecordList = list(DocDiffRecord::getDocId, docId);
+            diffRecordList = listByField(DocDiffRecord::getDocId, docId);
         } else {
             // 可以查看所有变更记录
             String docKey = docInfoService.getDocKey(docId);
-            diffRecordList = list(DocDiffRecord::getDocKey, docKey);
+            diffRecordList = listByField(DocDiffRecord::getDocKey, docKey);
         }
         if (CollectionUtils.isEmpty(diffRecordList)) {
             return Collections.emptyList();
         }
         List<Long> ids = diffRecordList.stream().map(DocDiffRecord::getId).collect(Collectors.toList());
-        List<DocDiffDetail> docDiffDetails = docDiffDetailService.list(DocDiffDetail::getRecordId, ids);
+        List<DocDiffDetail> docDiffDetails = docDiffDetailService.listByField(DocDiffDetail::getRecordId, ids);
         // KEY:recordId
         Map<Long, List<DocDiffDetail>> recordDetailMap = docDiffDetails.stream()
                 .collect(Collectors.groupingBy(DocDiffDetail::getRecordId));

@@ -276,7 +276,7 @@ public class SpaceService extends BaseLambdaService<Space, SpaceMapper> {
      * @return 返回用户空间
      */
     public List<SpaceUser> listUserSpace(long userId) {
-        return spaceUserMapper.list(SpaceUser::getUserId, userId);
+        return spaceUserMapper.listByField(SpaceUser::getUserId, userId);
     }
 
     /**
@@ -291,7 +291,7 @@ public class SpaceService extends BaseLambdaService<Space, SpaceMapper> {
             return CopyUtil.copyList(list, SpaceDTO::new);
         }
         List<Long> spaceIds;
-        List<SpaceUser> spaceUserList = spaceUserMapper.list(SpaceUser::getUserId, user.getUserId());
+        List<SpaceUser> spaceUserList = spaceUserMapper.listByField(SpaceUser::getUserId, user.getUserId());
         if (CollectionUtils.isEmpty(spaceUserList)) {
             return Collections.emptyList();
         }

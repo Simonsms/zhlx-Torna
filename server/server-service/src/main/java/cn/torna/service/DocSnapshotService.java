@@ -61,7 +61,7 @@ public class DocSnapshotService extends BaseLambdaService<DocSnapshot, DocSnapsh
      * @param docInfoDTO 文档
      */
     public void saveDocSnapshot(DocInfoDTO docInfoDTO) {
-        DocSnapshot snapshot = get(DocSnapshot::getMd5, docInfoDTO.getMd5());
+        DocSnapshot snapshot = getByField(DocSnapshot::getMd5, docInfoDTO.getMd5());
         if (snapshot != null) {
             return;
         }
