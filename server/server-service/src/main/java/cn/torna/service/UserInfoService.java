@@ -105,11 +105,11 @@ public class UserInfoService extends BaseLambdaService<UserInfo, UserInfoMapper>
     }
 
     public UserInfo getByUsername(String username) {
-        return get(UserInfo::getUsername, username);
+        return getByField(UserInfo::getUsername, username);
     }
 
     public void checkEmail(String email) {
-        UserInfo userInfo = get(UserInfo::getUsername, email);
+        UserInfo userInfo = getByField(UserInfo::getUsername, email);
         Assert.isNull(userInfo, () -> "账号已被注册");
     }
 
@@ -351,7 +351,7 @@ public class UserInfoService extends BaseLambdaService<UserInfo, UserInfoMapper>
     }
 
     public List<UserInfo> listSuperAdmin() {
-        return this.list(UserInfo::getIsSuperAdmin, Booleans.TRUE);
+        return this.listByField(UserInfo::getIsSuperAdmin, Booleans.TRUE);
     }
 
 
