@@ -10,11 +10,14 @@ import cn.torna.service.dto.ImportSwaggerV2DTO;
 import com.alibaba.fastjson.JSON;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -36,10 +39,30 @@ public class SwaggerApiTest extends TornaApplicationTests {
 
     @Test
     public void importSwagger() throws IOException, InterruptedException {
-        String content = FileUtils.readFileToString(new File("D:\\downloads\\2023-5-12-1.json"), StandardCharsets.UTF_8);
+        ClassPathResource resource = new ClassPathResource("petstore-openapi3.yaml");
+        InputStream inputStream = resource.getInputStream();
+        String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         User user = new ApiUser();
         ImportSwaggerV2DTO importSwaggerV2DTO = ImportSwaggerV2DTO.builder()
-                .projectId(IdUtil.decode("kpX9MXr1"))
+                .projectId(5L)
+                .content(content)
+                .user(user)
+                .ip("127.0.0.1")
+                .build();
+
+        Module module = swaggerApi.importSwagger(importSwaggerV2DTO);
+        System.out.println(module);
+        Thread.sleep(3000);
+    }
+
+    @Test
+    public void importSwagger2() throws IOException, InterruptedException {
+        ClassPathResource resource = new ClassPathResource("petstore-swagger2.json");
+        InputStream inputStream = resource.getInputStream();
+        String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        User user = new ApiUser();
+        ImportSwaggerV2DTO importSwaggerV2DTO = ImportSwaggerV2DTO.builder()
+                .projectId(6L)
                 .content(content)
                 .user(user)
                 .ip("127.0.0.1")

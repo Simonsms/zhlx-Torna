@@ -34,6 +34,8 @@ import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.parser.OpenAPIV3Parser;
+import io.swagger.v3.parser.core.models.ParseOptions;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -86,6 +88,7 @@ public class SwaggerApi {
 
     /**
      * 导入swagger文档
+     *
      * @param importSwaggerV2DTO importSwaggerV2DTO
      */
     public Module importSwagger(ImportSwaggerV2DTO importSwaggerV2DTO) {
@@ -128,7 +131,15 @@ public class SwaggerApi {
 
 
     public static OpenAPI getOpenAPI(String content) {
-        SwaggerParseResult result = new OpenAPIParser().readContents(content, null, null);
+        SwaggerParseResult result;
+        if (supportsOpenAPI(content)) {
+            result = new OpenAPIV3Parser().readContents(content);
+        } else {
+            ParseOptions parseOptions = new ParseOptions();
+            parseOptions.setResolve(true);
+            parseOptions.setResolveFully(true);
+            result = new OpenAPIParser().readContents(content, null, parseOptions);
+        }
         OpenAPI openAPI = result.getOpenAPI();
         if (result.getMessages() != null) {
             for (String message : result.getMessages()) {
@@ -137,6 +148,23 @@ public class SwaggerApi {
         }
         checkOpenAPI(openAPI);
         return openAPI;
+    }
+
+    public static boolean supportsOpenAPI(String content) {
+        if (content == null || content.trim().isEmpty()) {
+            return false;
+        }
+
+        try {
+            // Check for OpenAPI 3.x indicators
+            String lowerContent = content.toLowerCase();
+            return lowerContent.contains("\"openapi\"") &&
+                    (lowerContent.contains("\"3.") || lowerContent.contains("'3.")) ||
+                    lowerContent.contains("openapi:") && lowerContent.contains("3.");
+        } catch (Exception e) {
+            log.debug("Error checking OpenAPI 3.x support: {}", e.getMessage());
+            return false;
+        }
     }
 
     private static void checkOpenAPI(OpenAPI openAPI) {
@@ -194,8 +222,9 @@ public class SwaggerApi {
 
     /**
      * OpenAPI转换成Torna推送文档参数
+     *
      * @param pushUser 推送人
-     * @param openAPI openAPI对象
+     * @param openAPI  openAPI对象
      * @return 返回Torna需要的参数
      */
     private static DocPushParam convertDocInfo(String pushUser, OpenAPI openAPI) {
@@ -210,6 +239,7 @@ public class SwaggerApi {
 
     /**
      * 构建调试环境
+     *
      * @param openAPI openAPI
      * @return 返回调试环境，没有返回空List
      */
@@ -288,7 +318,7 @@ public class SwaggerApi {
         }
         return paths.entrySet()
                 .stream()
-                .flatMap(entry-> buildItems(entry, openAPI).stream())
+                .flatMap(entry -> buildItems(entry, openAPI).stream())
                 .collect(Collectors.toList());
     }
 
@@ -436,7 +466,18 @@ public class SwaggerApi {
                             Schema<?> items = schema.getItems();
                             if (items != null) {
                                 $ref = items.get$ref();
-                                docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
+                                if ($ref == null) {
+                                    docParamPushParams = buildDocParamPushParams(operation, items.getProperties());
+                                    List<String> required = items.getRequired();
+                                    if (required != null) {
+                                        for (DocParamPushParam docParamPushParam : docParamPushParams) {
+                                            docParamPushParam.setRequired(Booleans.toValue(required.contains(docParamPushParam.getName())));
+                                        }
+                                    }
+                                } else {
+                                    docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
+                                }
+
                             }
                         } else if ($ref != null && !$ref.endsWith("@")/*排除@*/) {
                             docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
@@ -449,6 +490,7 @@ public class SwaggerApi {
         }
         return new ResponseParamsWrapper(docParamPushParams, isResponseArray);
     }
+
 
     private static class BuildObjectParamContext {
         private Set<String> $refSets;
@@ -498,7 +540,7 @@ public class SwaggerApi {
                         children = buildObjectParam(child$ref, openAPI, context);
                     }
                     // 如果直接书写了子对象的内容
-                    if(value.getProperties()!=null){
+                    if (value.getProperties() != null) {
                         type = TYPE_OBJECT;
                         children = buildObjectParam(getJsonSchema(value), openAPI, context);
                     }
@@ -520,7 +562,7 @@ public class SwaggerApi {
                         String itemType = items.getType();
                         if (itemType != null) {
                             type = "array[" + itemType + "]";
-                            if(TYPE_OBJECT.equals(itemType)){
+                            if (TYPE_OBJECT.equals(itemType)) {
                                 children = buildObjectParam(getJsonSchema(items), openAPI, context);
                             }
                         }
@@ -556,7 +598,7 @@ public class SwaggerApi {
                         children = buildObjectParam(child$ref, openAPI, context);
                     }
                     // 如果直接书写了子对象的内容
-                    if(value.getProperties()!=null){
+                    if (value.getProperties() != null) {
                         type = TYPE_OBJECT;
                         children = buildObjectParam(getJsonSchema(value), openAPI, context);
                     }
@@ -578,7 +620,7 @@ public class SwaggerApi {
                         String itemType = items.getType();
                         if (itemType != null) {
                             type = "array[" + itemType + "]";
-                            if(TYPE_OBJECT.equals(itemType)){
+                            if (TYPE_OBJECT.equals(itemType)) {
                                 children = buildObjectParam(getJsonSchema(items), openAPI, context);
                             }
                         }
@@ -670,7 +712,7 @@ public class SwaggerApi {
 
     private static List<DocParamPushParam> buildDocParamPushParams(Operation operation, Map<String, Schema> properties) {
         if (CollectionUtils.isEmpty(properties)) {
-            return null;
+            return Collections.emptyList();
         }
         return properties.entrySet().stream()
                 .map(stringSchemaEntry -> {
@@ -680,12 +722,13 @@ public class SwaggerApi {
                     if ("binary".equals(format)) {
                         type = "file";
                     }
+                    String fieldName = Optional.ofNullable(schema.getName()).orElse(stringSchemaEntry.getKey());
                     return DocParamPushParam.builder()
-                            .name(schema.getName())
+                            .name(fieldName)
                             .type(type)
                             .description(schema.getDescription())
                             .example(toString(schema.getExample()))
-                            .required(Booleans.toValue(isRequired(schema, schema.getName())))
+                            .required(Booleans.toValue(isRequired(schema, fieldName)))
                             .maxLength(getMaxLength(schema))
                             .build();
                 })
@@ -703,7 +746,6 @@ public class SwaggerApi {
                 .map(Schema::getType)
                 .orElse(TYPE_STRING);
     }
-
 
 
     private static String getMaxLength(Parameter parameter) {
@@ -729,7 +771,7 @@ public class SwaggerApi {
 
     /**
      *
-     * @param $ref #/components/schemas/Order
+     * @param $ref    #/components/schemas/Order
      * @param openAPI
      * @return
      */
@@ -743,7 +785,7 @@ public class SwaggerApi {
     }
 
     private static JsonSchema getJsonSchema(Schema<?> schema) {
-        String type= null;
+        String type = null;
         try {
             type = schema.getType();
         } catch (Exception e) {
@@ -751,7 +793,7 @@ public class SwaggerApi {
         }
         if (type == null) {
             Map<String, Object> objectProperties = Optional.ofNullable(schema.getJsonSchema()).orElse(Collections.emptyMap());
-            type =  String.valueOf(objectProperties.getOrDefault("type", TYPE_OBJECT));
+            type = String.valueOf(objectProperties.getOrDefault("type", TYPE_OBJECT));
         }
         Map<String, Object> properties = getProperties(schema);
         return new JsonSchema(type, properties, schema);
@@ -764,7 +806,7 @@ public class SwaggerApi {
             for (Map.Entry<String, Schema> entry : properties.entrySet()) {
                 Schema value = entry.getValue();
                 Map<String, Object> val = new LinkedHashMap<>(8);
-                putVal(val,"required", value.getRequired());
+                putVal(val, "required", value.getRequired());
                 putVal(val, "format", value.getFormat());
                 putVal(val, "type", value.getType());
                 putVal(val, "description", value.getDescription());
