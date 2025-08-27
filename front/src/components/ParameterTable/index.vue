@@ -21,7 +21,7 @@
     >
       <template slot-scope="scope">
         <span :class="hasNoParentAndChildren(scope.row) ? 'el-table--row-no-parent-children' : ''" style="white-space: nowrap">
-          {{ scope.row.name }}<el-tag v-show="rowId === scope.row.id" effect="plain" class="copyBtn" @click.stop="copy(scope.row.name)">{{ $t('copy') }}</el-tag>
+          <copy-text :copy-content="scope.row.name" :show-content="scope.row.name" placement="left" />
         </span>
       </template>
     </el-table-column>
@@ -64,7 +64,7 @@
     >
       <template slot-scope="scope">
         <div v-if="scope.row.enumId" style="display: inline-block;">
-          <div v-html="scope.row.description"></div>
+          <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="left" />
           <el-tag
             :ref="`enumTagRef_${scope.row.id}`"
             effect="plain"
@@ -82,20 +82,15 @@
           />
         </div>
         <div v-else style="display: inline-block;">
-          <div v-if="scope.row.description.length < 100" v-html="scope.row.description"></div>
+          <div v-if="scope.row.description.length < 100">
+            <copy-text :copy-content="scope.row.name" :show-content-html="scope.row.name" placement="left" />
+          </div>
           <div v-else>
-            <div style="height: 100px;overflow-y: auto" v-html="scope.row.description"></div>
+            <div style="height: 100px;overflow-y: auto">
+              <copy-text :copy-content="scope.row.name" :show-content-html="scope.row.name" placement="left" />
+            </div>
           </div>
         </div>
-        <el-tag
-          v-if="scope.row.description && scope.row.description.length > 0"
-          v-show="rowId === scope.row.id"
-          effect="plain"
-          class="copyBtn"
-          @click.stop="copy(scope.row.description)"
-        >
-          {{ $t('copy') }}
-        </el-tag>
       </template>
     </el-table-column>
     <el-table-column
@@ -125,10 +120,11 @@
 </style>
 <script>
 import EnumItemView from '../EnumItemView'
+import CopyText from "@/components/CopyText";
 
 export default {
   name: 'ParameterTable',
-  components: { EnumItemView },
+  components: { CopyText, EnumItemView },
   props: {
     data: {
       type: Array,

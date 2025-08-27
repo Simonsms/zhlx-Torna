@@ -58,13 +58,14 @@
     <h4 class="tip"><span class="doc-label">URL</span></h4>
     <ul v-if="docInfo.debugEnvs.length > 0" class="debug-url">
       <li v-for="hostConfig in docInfo.debugEnvs" :key="hostConfig.name" @mouseenter="onMouseEnter(hostConfig.name)" @mouseleave="onMouseLeave()">
-        {{ hostConfig.name }}: <http-method :method="docInfo.httpMethod" /> {{ buildRequestUrl(hostConfig) }}
+        {{ hostConfig.name }}: <http-method :method="docInfo.httpMethod" />
+        <copy-text :copy-content="docInfo.url" :show-content="buildRequestUrl(hostConfig)" />
         <el-tag
           v-show="hostConfigName === hostConfig.name"
           size="small"
           effect="plain"
           class="copyBtn"
-          @click.stop="copy(docInfo.url)">{{ $t('copy') }}</el-tag>
+          @click.stop="copyCurl(buildRequestUrl(hostConfig))">{{ $t('copy') + 'CURL' }}</el-tag>
       </li>
     </ul>
     <div v-else class="debug-url" @mouseenter="isShowDebugUrlCopy=true" @mouseleave="isShowDebugUrlCopy=false">
@@ -240,14 +241,15 @@ import HttpMethod from '@/components/HttpMethod'
 import DocDiff from '@/components/DocDiff'
 import ConstView from '@/components/ConstView'
 import CodeGenDrawer from '@/components/CodeGenDrawer'
+import CopyText from '@/components/CopyText'
 import ExportUtil from '@/utils/export'
 import { generate } from 'json2interface'
-import { get_effective_url, parse_root_array } from '@/utils/common'
+import {get_effective_url, parse_root_array, StringBuilder} from '@/utils/common'
 import { mavonEditor } from 'mavon-editor'
 
 export default {
   name: 'DocView',
-  components: { DocStatusTag, ParameterTable, HttpMethod, DocDiff, ConstView, DocChangelogDrawer, CodeGenDrawer, mavonEditor },
+  components: { DocStatusTag, ParameterTable, HttpMethod, DocDiff, ConstView, DocChangelogDrawer, CodeGenDrawer, mavonEditor, CopyText },
   props: {
     docId: {
       type: String,
@@ -504,6 +506,48 @@ export default {
     },
     copy(text) {
       this.copyText(text)
+    },
+    copyCurl(url) {
+      /*
+      curl --location '${doc.url}?${doc.queryString}' \
+      #foreach($param in ${doc.headerParams})
+      --header '${param.name}: ${param.example}' \
+      #end
+      #if(${doc.httpMethod} == 'POST' || ${doc.httpMethod} == 'PUT')
+      --data '${doc.requestExample}'
+      #end
+       */
+      let fullUrl = url
+      const queryParams = this.docInfo.queryParams || [];
+      const queryParamArr = []
+      for (const queryParam of queryParams) {
+        queryParamArr.push(`${queryParam.name}=${queryParam.example}`)
+      }
+      if (queryParamArr.length > 0) {
+        fullUrl = fullUrl + '?' + queryParamArr.join('&')
+      }
+
+      // --location --globoff
+      const str = new StringBuilder(`curl -L -g `)
+      const httpMethod = this.docInfo.httpMethod;
+      if (httpMethod === 'POST' || httpMethod === 'PUT') {
+        str.append(`-X ${httpMethod} `)
+      }
+
+      str.append(`'${fullUrl}' \\\n`)
+
+      // headers
+      const headers = this.docInfo.headerParams || [];
+      for (const header of headers) {
+        str.append(`-H '${header.name}: ${header.example}' \\\n`)
+      }
+
+      const requestExample = this.formatJson(this.requestExample) || '';
+      if (this.docInfo.requestParams.length > 0) {
+        str.append(`-d '${requestExample}'`)
+      }
+
+      this.copyText(str.toString());
     },
     showConst() {
       this.$refs.constView.show(this.docInfo.moduleId)
