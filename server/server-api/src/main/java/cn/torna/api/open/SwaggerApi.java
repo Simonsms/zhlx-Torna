@@ -404,6 +404,9 @@ public class SwaggerApi {
                     } else if (properties != null) {
                         docParamPushParams = buildDocParamPushParams(operation, properties);
                     }
+                } else if (key.contains("octet-stream")) {
+                    // 上传文件
+                    contentType = "multipart/form-data";
                 } else if (key.contains("form")) {
                     contentType = key.contains("multipart") ? "multipart/form-data" : "application/x-www-form-urlencoded";
                     MediaType mediaType = entry.getValue();
@@ -420,6 +423,13 @@ public class SwaggerApi {
     }
 
     private static String getType(Schema<?> schema) {
+        if (schema == null) {
+            return TYPE_STRING;
+        }
+        String format = schema.getFormat();
+        if (format != null) {
+            return format;
+        }
         String type = schema.getType();
         if (type == null) {
             Set<String> types = schema.getTypes();
@@ -530,7 +540,7 @@ public class SwaggerApi {
                             .example(getExample(value))
                             .maxLength(getMaxLength(jsonSchema.getSchema(), value))
                             .build();
-                    String type = value.getType();
+                    String type = getType(value);
                     List<DocParamPushParam> children = null;
                     // 如果有子对象的ref
                     if (value.get$ref() != null) {
@@ -716,17 +726,19 @@ public class SwaggerApi {
         return properties.entrySet().stream()
                 .map(stringSchemaEntry -> {
                     Schema schema = stringSchemaEntry.getValue();
-                    String type = schema.getType();
+                    String type = getType(schema);
                     String format = schema.getFormat();
+                    String example = getExample(schema);
                     if ("binary".equals(format)) {
                         type = "file";
+                        example = "";
                     }
                     String fieldName = Optional.ofNullable(schema.getName()).orElse(stringSchemaEntry.getKey());
                     return DocParamPushParam.builder()
                             .name(fieldName)
                             .type(type)
                             .description(schema.getDescription())
-                            .example(getExample(schema))
+                            .example(example)
                             .required(Booleans.toValue(isRequired(schema, fieldName)))
                             .maxLength(getMaxLength(schema))
                             .build();
