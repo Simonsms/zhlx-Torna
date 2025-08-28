@@ -20,11 +20,13 @@ import cn.torna.manager.doc.DataType;
 import cn.torna.service.ModuleService;
 import cn.torna.service.ModuleSwaggerConfigService;
 import cn.torna.service.dto.ImportSwaggerV2DTO;
+import com.fasterxml.jackson.databind.node.TextNode;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
@@ -47,6 +49,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -142,23 +145,6 @@ public class SwaggerApi {
         }
         checkOpenAPI(openAPI);
         return openAPI;
-    }
-
-    public static boolean supportsOpenAPI(String content) {
-        if (content == null || content.trim().isEmpty()) {
-            return false;
-        }
-
-        try {
-            // Check for OpenAPI 3.x indicators
-            String lowerContent = content.toLowerCase();
-            return lowerContent.contains("\"openapi\"") &&
-                    (lowerContent.contains("\"3.") || lowerContent.contains("'3.")) ||
-                    lowerContent.contains("openapi:") && lowerContent.contains("3.");
-        } catch (Exception e) {
-            log.debug("Error checking OpenAPI 3.x support: {}", e.getMessage());
-            return false;
-        }
     }
 
     private static void checkOpenAPI(OpenAPI openAPI) {
@@ -366,7 +352,7 @@ public class SwaggerApi {
                             .name(parameter.getName())
                             .required(Booleans.toValue(isRequired(parameter)))
                             .description(parameter.getDescription())
-                            .example(toString(parameter.getExample()))
+                            .example(getExample(parameter))
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -445,7 +431,7 @@ public class SwaggerApi {
     }
 
     private static List<DocParamPushParam> buildSingleArray(String type, Schema<?> items) {
-        String example = toString(items.getExample());
+        String example = getExample(items);
         if (StringUtils.isEmpty(example)) {
             example = MockUtil.buildMockArrayValue(type);
         }
@@ -541,7 +527,7 @@ public class SwaggerApi {
                             .name(name)
                             .required(Booleans.toValue(jsonSchema.getRequired(name) || Objects.equals("true", String.valueOf(value.getRequired()))))
                             .description(value.getDescription())
-                            .example(toString(value.getExample()))
+                            .example(getExample(value))
                             .maxLength(getMaxLength(jsonSchema.getSchema(), value))
                             .build();
                     String type = value.getType();
@@ -599,7 +585,7 @@ public class SwaggerApi {
                             .name(name)
                             .required(Booleans.toValue(Objects.equals("true", String.valueOf(value.getRequired()))))
                             .description(value.getDescription())
-                            .example(toString(value.getExample()))
+                            .example(getExample(value))
                             .maxLength(getMaxLength(schema, value))
                             .build();
                     String type = getType(value);
@@ -630,7 +616,7 @@ public class SwaggerApi {
                             children = buildObjectParam(child$ref, openAPI, context);
                             type = "array[object]";
                         }
-                        String itemType = items.getType();
+                        String itemType = getType(items);
                         if (itemType != null) {
                             type = "array[" + itemType + "]";
                             if (TYPE_OBJECT.equals(itemType)) {
@@ -691,7 +677,7 @@ public class SwaggerApi {
                             .required(Booleans.toValue(isRequired(parameter)))
                             .description(parameter.getDescription())
                             .maxLength(getMaxLength(parameter))
-                            .example(toString(parameter.getExample()))
+                            .example(getExample(parameter))
                             .build();
                     Schema<?> schema = parameter.getSchema();
                     if (schema != null) {
@@ -740,7 +726,7 @@ public class SwaggerApi {
                             .name(fieldName)
                             .type(type)
                             .description(schema.getDescription())
-                            .example(toString(schema.getExample()))
+                            .example(getExample(schema))
                             .required(Booleans.toValue(isRequired(schema, fieldName)))
                             .maxLength(getMaxLength(schema))
                             .build();
@@ -816,7 +802,7 @@ public class SwaggerApi {
                 putVal(val, "format", value.getFormat());
                 putVal(val, "type", value.getType());
                 putVal(val, "description", value.getDescription());
-                putVal(val, "example", value.getExample());
+                putVal(val, "example", getExample(value));
                 putVal(val, "maxLength", value.getMaxLength());
                 putVal(val, "$ref", value.get$ref());
                 props.put(entry.getKey(), val);
@@ -847,6 +833,38 @@ public class SwaggerApi {
 
     private static String toString(Object o) {
         return o == null ? "" : String.valueOf(o);
+    }
+
+    private static String getExample(Schema<?> schema) {
+        Object example = schema.getExample();
+        if (example == null) {
+            List<?> examples = schema.getExamples();
+            if (examples != null) {
+                example = examples.stream()
+                        .map(data -> {
+                            if (data instanceof TextNode) {
+                                return ((TextNode) data).textValue();
+                            }
+                            return String.valueOf(data);
+                        })
+                        .collect(Collectors.joining("/"));
+            }
+        }
+        return example == null ? "" : example.toString();
+    }
+
+    private static String getExample(Parameter schema) {
+        Object example = schema.getExample();
+        if (example == null) {
+            Map<String, Example> examplesMap = schema.getExamples();
+            if (examplesMap != null) {
+                Collection<Example> examples = examplesMap.values();
+                example = examples.stream()
+                        .map(String::valueOf)
+                        .collect(Collectors.joining("/"));
+            }
+        }
+        return example == null ? "" : example.toString();
     }
 
     private static boolean isRequired(Schema<?> schema, String name) {
