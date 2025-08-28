@@ -4,7 +4,6 @@ import cn.torna.api.bean.ApiUser;
 import cn.torna.api.open.SwaggerApi;
 import cn.torna.api.open.param.DocPushParam;
 import cn.torna.common.bean.User;
-import cn.torna.common.util.IdUtil;
 import cn.torna.dao.entity.Module;
 import cn.torna.service.dto.ImportSwaggerV2DTO;
 import com.alibaba.fastjson.JSON;
@@ -58,6 +57,42 @@ public class SwaggerApiTest extends TornaApplicationTests {
     @Test
     public void importSwagger2() throws IOException, InterruptedException {
         ClassPathResource resource = new ClassPathResource("petstore-swagger2.json");
+        InputStream inputStream = resource.getInputStream();
+        String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        User user = new ApiUser();
+        ImportSwaggerV2DTO importSwaggerV2DTO = ImportSwaggerV2DTO.builder()
+                .projectId(6L)
+                .content(content)
+                .user(user)
+                .ip("127.0.0.1")
+                .build();
+
+        Module module = swaggerApi.importSwagger(importSwaggerV2DTO);
+        System.out.println(module);
+        Thread.sleep(3000);
+    }
+
+    @Test
+    public void importSwagger3() throws IOException, InterruptedException {
+        ClassPathResource resource = new ClassPathResource("商品中心11.openapi.json");
+        InputStream inputStream = resource.getInputStream();
+        String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        User user = new ApiUser();
+        ImportSwaggerV2DTO importSwaggerV2DTO = ImportSwaggerV2DTO.builder()
+                .projectId(6L)
+                .content(content)
+                .user(user)
+                .ip("127.0.0.1")
+                .build();
+
+        Module module = swaggerApi.importSwagger(importSwaggerV2DTO);
+        System.out.println(module);
+        Thread.sleep(3000);
+    }
+
+    @Test
+    public void importSwaggerPet() throws IOException, InterruptedException {
+        ClassPathResource resource = new ClassPathResource("petstore.yaml");
         InputStream inputStream = resource.getInputStream();
         String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         User user = new ApiUser();

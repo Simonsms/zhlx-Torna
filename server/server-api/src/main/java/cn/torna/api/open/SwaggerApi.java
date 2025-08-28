@@ -34,7 +34,6 @@ import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.servers.Server;
-import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.ParseOptions;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import lombok.AllArgsConstructor;
@@ -131,15 +130,10 @@ public class SwaggerApi {
 
 
     public static OpenAPI getOpenAPI(String content) {
-        SwaggerParseResult result;
-        if (supportsOpenAPI(content)) {
-            result = new OpenAPIV3Parser().readContents(content);
-        } else {
-            ParseOptions parseOptions = new ParseOptions();
-            parseOptions.setResolve(true);
-            parseOptions.setResolveFully(true);
-            result = new OpenAPIParser().readContents(content, null, parseOptions);
-        }
+        ParseOptions parseOptions = new ParseOptions();
+        parseOptions.setResolve(true);
+        parseOptions.setResolveFully(true);
+        SwaggerParseResult result = new OpenAPIParser().readContents(content, null, parseOptions);
         OpenAPI openAPI = result.getOpenAPI();
         if (result.getMessages() != null) {
             for (String message : result.getMessages()) {
@@ -394,27 +388,35 @@ public class SwaggerApi {
                     MediaType mediaType = entry.getValue();
                     Schema<?> schema = mediaType.getSchema();
                     String $ref = schema.get$ref();
-                    String type = schema.getType();
+                    String type = getType(schema);
+                    Map<String, Schema> properties = schema.getProperties();
+                    Schema<?> items = schema.getItems();
                     // 如果是数组参数
-                    if ("array".equals(type)) {
+                    if ("array".equals(type) || items != null) {
                         isRequestArray = true;
-                        Schema<?> items = schema.getItems();
                         $ref = items.get$ref();
+                        String itemType = getType(items);
                         if ($ref != null) {
                             docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
                         } else {
-                            String itemType = items.getType();
                             if (StringUtils.hasText(itemType)) {
                                 String format = items.getFormat();
                                 if ("int64".equals(format)) {
                                     itemType = "long";
                                 }
                                 requestArrayType = itemType;
-                                docParamPushParams = buildSingleArray(itemType, items);
+                                if (DataType.OBJECT.equals(requestArrayType)) {
+                                    Map<String, Schema> prop = items.getProperties();
+                                    docParamPushParams = buildDocParamPushParams(operation, prop);
+                                } else {
+                                    docParamPushParams = buildSingleArray(itemType, items);
+                                }
                             }
                         }
                     } else if ($ref != null) {
                         docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
+                    } else if (properties != null) {
+                        docParamPushParams = buildDocParamPushParams(operation, properties);
                     }
                 } else if (key.contains("form")) {
                     contentType = key.contains("multipart") ? "multipart/form-data" : "application/x-www-form-urlencoded";
@@ -429,6 +431,17 @@ public class SwaggerApi {
             docParamPushParams = buildDocParamPushParams(openAPI, operation, parameter -> "formData".equals(parameter.getIn()));
         }
         return new RequestParamsWrapper(docParamPushParams, isRequestArray, requestArrayType, contentType);
+    }
+
+    private static String getType(Schema<?> schema) {
+        String type = schema.getType();
+        if (type == null) {
+            Set<String> types = schema.getTypes();
+            if (!CollectionUtils.isEmpty(types)) {
+                type = types.iterator().next();
+            }
+        }
+        return type == null ? TYPE_STRING : type;
     }
 
     private static List<DocParamPushParam> buildSingleArray(String type, Schema<?> items) {
@@ -459,7 +472,7 @@ public class SwaggerApi {
                         MediaType mediaType = entry.getValue();
                         Schema<?> schema = mediaType.getSchema();
                         String $ref = schema.get$ref();
-                        String type = schema.getType();
+                        String type = getType(schema);
                         // 如果是数组参数
                         if ("array".equals(type)) {
                             isResponseArray = true;
@@ -589,7 +602,7 @@ public class SwaggerApi {
                             .example(toString(value.getExample()))
                             .maxLength(getMaxLength(schema, value))
                             .build();
-                    String type = value.getType();
+                    String type = getType(value);
                     List<DocParamPushParam> children = null;
                     // 如果有子对象的ref
                     if (value.get$ref() != null) {
@@ -741,12 +754,6 @@ public class SwaggerApi {
         return getType(schema);
     }
 
-    private static String getType(Schema<?> schema) {
-        return Optional.ofNullable(schema)
-                .map(Schema::getType)
-                .orElse(TYPE_STRING);
-    }
-
 
     private static String getMaxLength(Parameter parameter) {
         return Optional.ofNullable(parameter)
@@ -770,7 +777,6 @@ public class SwaggerApi {
     }
 
     /**
-     *
      * @param $ref    #/components/schemas/Order
      * @param openAPI
      * @return
