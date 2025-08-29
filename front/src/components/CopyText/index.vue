@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-tooltip effect="dark" :content="$t('clickCopy')" :placement="placement" :open-delay="openDelay">
+    <el-tooltip effect="light" :content="$t('clickCopy')" :placement="placement" :open-delay="openDelay">
       <el-link :underline="false" class="copy-text" @click.stop="onCopy">
         <div v-if="showContentHtml">
           <div v-html="showContentHtml"></div>
@@ -15,6 +15,8 @@
 <style>
 .copy-text {
   vertical-align: text-top;
+  font-size: 14px !important;
+  font-weight: normal !important;
 }
 </style>
 <script>

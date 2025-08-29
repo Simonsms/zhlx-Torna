@@ -83,11 +83,11 @@
         </div>
         <div v-else style="display: inline-block;">
           <div v-if="scope.row.description.length < 100">
-            <copy-text :copy-content="scope.row.name" :show-content-html="scope.row.name" placement="left" />
+            <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="left" />
           </div>
           <div v-else>
             <div style="height: 100px;overflow-y: auto">
-              <copy-text :copy-content="scope.row.name" :show-content-html="scope.row.name" placement="left" />
+              <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="left" />
             </div>
           </div>
         </div>
