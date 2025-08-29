@@ -1,6 +1,7 @@
 export default {
   'weComMobile': '企业微信手机号码',
   'clickCopy': '点击复制',
+  'success': '成功',
   'bindAccount': '绑定账号',
   'dingdingAccount': '钉钉账号',
   'requestArrayType': '请求数组元素类型',

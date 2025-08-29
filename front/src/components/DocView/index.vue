@@ -518,7 +518,7 @@ export default {
       #end
        */
       let fullUrl = url
-      const queryParams = this.docInfo.queryParams || [];
+      const queryParams = this.docInfo.queryParams || []
       const queryParamArr = []
       for (const queryParam of queryParams) {
         queryParamArr.push(`${queryParam.name}=${queryParam.example}`)
@@ -537,17 +537,37 @@ export default {
       str.append(`'${fullUrl}' \\\n`)
 
       // headers
-      const headers = this.docInfo.headerParams || [];
+      const headers = this.docInfo.headerParams || []
+      let hasContentType = false
       for (const header of headers) {
+        if (header.name.toLowerCase() === 'content-type') {
+          hasContentType = true
+        }
         str.append(`-H '${header.name}: ${header.example}' \\\n`)
       }
-
-      const requestExample = this.formatJson(this.requestExample) || '';
-      if (this.docInfo.requestParams.length > 0) {
-        str.append(`-d '${requestExample}'`)
+      const contentType = this.docInfo.contentType.toLowerCase()
+      const isJsonBody = contentType.indexOf('json') > -1
+      const isFormBody = contentType.indexOf('form') > -1
+      if (!hasContentType) {
+        if (isJsonBody || isFormBody) {
+          str.append(`-H 'Content-Type: ${this.docInfo.contentType}' \\\n`)
+        }
       }
 
-      this.copyText(str.toString());
+      if (this.docInfo.requestParams.length > 0) {
+        if (isJsonBody) {
+          const requestExample = this.formatJson(this.requestExample) || ''
+          str.append(`-d '${requestExample}'`)
+        }
+        if (isFormBody) {
+          const arr = []
+          for (const row of this.docInfo.requestParams) {
+            arr.push(`-d '${row.name}=${encodeURIComponent(row.example)}'`)
+          }
+          str.append(arr.join(' \\\n'))
+        }
+      }
+      this.copyText(str.toString())
     },
     showConst() {
       this.$refs.constView.show(this.docInfo.moduleId)

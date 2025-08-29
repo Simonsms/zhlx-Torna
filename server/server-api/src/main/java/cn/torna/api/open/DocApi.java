@@ -338,6 +338,7 @@ public class DocApi {
         messageDTO.setType(UserSubscribeTypeEnum.PUSH_DOC);
         messageDTO.setLocale(ApiContext.getLocal());
         messageDTO.setSourceId(0L);
+        messageDTO.setIsRead(Booleans.TRUE);
         userMessageService.sendMessageToAdmin(messageDTO, msg);
         if (!(user instanceof ApiUser)) {
             userMessageService.sendMessageToUser(messageDTO, msg, user.getUserId());
@@ -614,7 +615,8 @@ public class DocApi {
         List<Long> docIds = param.getDocIds();
         List<DocInfoDTO> docDetailsView = docInfoService.getDocDetailsView(docIds);
         String json = gson.toJson(docDetailsView);
-        Type listType = new TypeToken<List<DocInfoDetailResult>>(){}.getType();
+        Type listType = new TypeToken<List<DocInfoDetailResult>>() {
+        }.getType();
         return gson.fromJson(json, listType);
     }
 

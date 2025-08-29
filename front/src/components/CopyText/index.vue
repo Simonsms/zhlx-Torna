@@ -1,9 +1,14 @@
 <template>
   <span>
-    <el-tooltip effect="light" :content="$t('clickCopy')" :placement="placement" :open-delay="openDelay">
+    <el-tooltip
+      effect="light"
+      :content="$t('clickCopy')"
+      :placement="placement"
+      :open-delay="openDelay"
+    >
       <el-link :underline="false" class="copy-text" @click.stop="onCopy">
         <div v-if="showContentHtml">
-          <div v-html="showContentHtml"></div>
+          <div v-html="showContentHtml" />
         </div>
         <span v-else>
           {{ showContent }}
@@ -20,7 +25,6 @@
 }
 </style>
 <script>
-
 export default {
   name: 'CopyText',
   props: {
@@ -30,11 +34,13 @@ export default {
     },
     showContent: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     showContentHtml: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     placement: {
       type: String,

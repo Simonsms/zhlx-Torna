@@ -1,6 +1,7 @@
 export default {
   'weComMobile': 'WeCom Mobile',
   'clickCopy': 'Click copy',
+  'success': 'Success',
   'bindAccount': 'Bind account',
   'dingdingAccount': 'DingDing Account',
   'requestArrayType': 'Request array type',
