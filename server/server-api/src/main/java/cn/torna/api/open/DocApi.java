@@ -1,6 +1,8 @@
 package cn.torna.api.open;
 
 import cn.torna.api.bean.ApiUser;
+import cn.torna.api.bean.GsonLocalDateAdapter;
+import cn.torna.api.bean.GsonLocalDateTimeAdapter;
 import cn.torna.api.bean.PushContext;
 import cn.torna.api.bean.RequestContext;
 import cn.torna.api.open.param.CategoryAddParam;
@@ -61,6 +63,7 @@ import com.gitee.easyopen.doc.annotation.ApiDocMethod;
 import com.gitee.easyopen.exception.ApiException;
 import com.gitee.fastmybatis.core.query.LambdaQuery;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +72,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -98,7 +103,10 @@ public class DocApi {
 
     private final Object lock = new Object();
 
-    private Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeAdapter())
+            .registerTypeAdapter(LocalDate.class, new GsonLocalDateAdapter())
+            .create();
 
 
     @Autowired
