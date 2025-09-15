@@ -567,7 +567,8 @@ export default {
           str.append(arr.join(' \\\n'))
         }
       }
-      this.copyText(str.toString())
+      const copyUrl = str.toString().trim().replace(/\\$/, '').trim()
+      this.copyText(copyUrl)
     },
     showConst() {
       this.$refs.constView.show(this.docInfo.moduleId)
