@@ -7,7 +7,7 @@
 # 如重启1.18.2版本：sh restart-torna.sh 1.18.2
 # 不指定version将下载最新版本
 
-version="1.34.1"
+version="1.34.2"
 
 if [ -n "${1}" ];then
   version="${1}"
