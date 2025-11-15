@@ -133,7 +133,8 @@ public class MeterSpherePushService {
 
     private void uploadToServer(MsSpaceConfig msSpaceConfig, MsModuleConfig msModuleConfig, File file) {
         try (CloseableHttpClient httpclient = HttpConfig.getOneHttpClient(msSpaceConfig.getMsAddress())) {
-            String url = msSpaceConfig.getMsAddress() + URLConstants.API_IMPORT;
+            String msAddress = msSpaceConfig.getMsAddress().replace("http://", "https://");
+            String url = msAddress + URLConstants.API_IMPORT;
             HttpPost httpPost = new HttpPost(url);
 
             AppSettingState state = new AppSettingState();

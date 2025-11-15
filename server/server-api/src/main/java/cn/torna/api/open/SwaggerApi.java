@@ -681,9 +681,14 @@ public class SwaggerApi {
         return parameters.stream()
                 .filter(predicate)
                 .flatMap(parameter -> {
+                    String paramType = getType(parameter);
+                    if (Objects.equals(paramType, TYPE_OBJECT)) {
+                        Schema<?> schema = parameter.getSchema();
+                        return buildBySchema(schema, openAPI, operation);
+                    }
                     DocParamPushParam param = DocParamPushParam.builder()
                             .name(parameter.getName())
-                            .type(getType(parameter))
+                            .type(paramType)
                             .required(Booleans.toValue(isRequired(parameter)))
                             .description(parameter.getDescription())
                             .maxLength(getMaxLength(parameter))
@@ -701,12 +706,23 @@ public class SwaggerApi {
                             List<?> list = items.getEnum();
                             setEnumDescription(list, param);
                         } else if ($ref != null) {
-                            return buildObjectParam($ref, openAPI, new BuildObjectParamContext()).stream();
+                            List<DocParamPushParam> docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
+                            return docParamPushParams == null ? Stream.empty() : docParamPushParams.stream();
                         }
                     }
                     return Stream.of(param);
                 })
                 .collect(Collectors.toList());
+    }
+
+    private static Stream<DocParamPushParam> buildBySchema(Schema<?> schema, OpenAPI openAPI, Operation operation) {
+        String $ref = schema.get$ref();
+        if ($ref != null) {
+            List<DocParamPushParam> docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
+            return docParamPushParams == null ? Stream.empty() : docParamPushParams.stream();
+        }
+        Map<String, Schema> properties = schema.getProperties();
+        return buildDocParamPushParams(operation, properties).stream();
     }
 
     private static void setEnumDescription(List<?> list, DocParamPushParam param) {
