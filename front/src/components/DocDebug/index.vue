@@ -586,12 +586,32 @@ export default {
           this.postActive = 'multipart'
         } else if (contentType.indexOf('json') > -1) {
           this.postActive = 'text'
+          this.textRadio = 'application/json'
+        } else if (contentType.indexOf('plain') > -1) {
+          this.textRadio = 'text/plain'
+          this.postActive = 'text'
+          this.loadTextBody()
         } else {
           this.postActive = 'form'
+        }
+        if (contentType.indexOf('html') > -1) {
+          this.textRadio = 'text/html'
+          this.loadTextBody()
+        }
+        if (contentType.indexOf('xml') > -1) {
+          this.textRadio = 'application/xml'
+          this.loadTextBody()
         }
       } else {
         this.requestActive = 'query'
         this.postActive = ''
+      }
+    },
+    loadTextBody() {
+      const requestParams = this.currentItem.requestParams || []
+      if (requestParams.length === 1) {
+        const row = requestParams[0]
+        this.bodyText = row.example
       }
     },
     isUploadRequest(contentType, requestParameters) {
