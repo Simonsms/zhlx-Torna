@@ -87,6 +87,8 @@ public enum EnvironmentKeys {
     TORNA_NAME_VERSION_TPL("torna.name-version-tpl", "{_name_} {_version_}"),
     /** 是否开启对接MeterSphere */
     ENABLE_METER_SPHERE("metershpere.enable", "false"),
+    /** MeterSphere是否开启https */
+    METER_SPHERE_ENABLE_HTTPS("metershpere.enable-https", "false"),
     /** torna推送处理器数量 */
     TORNA_PUSH_PROCESS_NUM("torna.push-process-num", "4"),
     TORNA_PUSH_EXECUTE_SIZE("torna.push-execute-size", "50"),
