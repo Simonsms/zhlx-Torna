@@ -42,6 +42,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -320,12 +321,12 @@ public class SwaggerApi {
                     .deprecated(Optional.ofNullable(operation.getDeprecated()).orElse(false) ? "" : null)
                     .orderIndex(threadLocal.get().getAndIncrement())
                     .headerParams(buildHeaderParamPushParams(operation))
-                    .pathParams(buildDocParamPushParams(openAPI, operation, parameter -> Objects.equals("path", parameter.getIn())))
-                    .queryParams(buildDocParamPushParams(openAPI, operation, parameter -> Objects.equals("query", parameter.getIn())))
+                    .pathParams(buildDocParamPushParams(openAPI, operationEntry, parameter -> Objects.equals("path", parameter.getIn())))
+                    .queryParams(buildDocParamPushParams(openAPI, operationEntry, parameter -> Objects.equals("query", parameter.getIn())))
                     .tag(CollectionUtils.isEmpty(operation.getTags()) ? "" : operation.getTags().get(0))
                     .build();
 
-            RequestParamsWrapper requestParamsWrapper = buildRequestParamsWrapper(operation, openAPI);
+            RequestParamsWrapper requestParamsWrapper = buildRequestParamsWrapper(operationEntry, openAPI);
             docPushItemParam.setRequestParams(requestParamsWrapper.getDocParamPushParams());
             docPushItemParam.setIsRequestArray(Booleans.toValue(requestParamsWrapper.isRequestArray()));
             docPushItemParam.setRequestArrayType(requestParamsWrapper.getRequestArrayType());
@@ -358,7 +359,8 @@ public class SwaggerApi {
                 .collect(Collectors.toList());
     }
 
-    private static RequestParamsWrapper buildRequestParamsWrapper(Operation operation, OpenAPI openAPI) {
+    private static RequestParamsWrapper buildRequestParamsWrapper(Map.Entry<PathItem.HttpMethod, Operation> operationEntry, OpenAPI openAPI) {
+        Operation operation = operationEntry.getValue();
         RequestBody requestBody = operation.getRequestBody();
         boolean isRequestArray = false;
         String requestArrayType = DataType.OBJECT;
@@ -402,7 +404,7 @@ public class SwaggerApi {
                     } else if ($ref != null) {
                         docParamPushParams = buildObjectParam($ref, openAPI, new BuildObjectParamContext());
                     } else if (properties != null) {
-                        docParamPushParams = buildDocParamPushParams(operation, properties);
+                        docParamPushParams = buildObjectParam0(schema, openAPI, new BuildObjectParamContext());
                     }
                 } else if (key.contains("octet-stream")) {
                     // 上传文件
@@ -417,7 +419,7 @@ public class SwaggerApi {
             }
         } else {
             // 表单结构
-            docParamPushParams = buildDocParamPushParams(openAPI, operation, parameter -> "formData".equals(parameter.getIn()));
+            docParamPushParams = buildDocParamPushParams(openAPI, operationEntry, parameter -> "formData".equals(parameter.getIn()));
         }
         return new RequestParamsWrapper(docParamPushParams, isRequestArray, requestArrayType, contentType);
     }
@@ -673,14 +675,19 @@ public class SwaggerApi {
         return enumInfoCreateParam;
     }
 
-    private static List<DocParamPushParam> buildDocParamPushParams(OpenAPI openAPI, Operation operation, Predicate<Parameter> predicate) {
+    private static List<DocParamPushParam> buildDocParamPushParams(OpenAPI openAPI, Map.Entry<PathItem.HttpMethod, Operation> operationEntry, Predicate<Parameter> predicate) {
+        Operation operation = operationEntry.getValue();
         List<Parameter> parameters = operation.getParameters();
         if (CollectionUtils.isEmpty(parameters)) {
             return null;
         }
+        String methodName = operationEntry.getKey().name();
         return parameters.stream()
                 .filter(predicate)
                 .flatMap(parameter -> {
+                    if (parameter.getSchema() == null && HttpMethod.POST.name().equalsIgnoreCase(methodName)) {
+                        return Stream.empty();
+                    }
                     String paramType = getType(parameter);
                     if (Objects.equals(paramType, TYPE_OBJECT)) {
                         Schema<?> schema = parameter.getSchema();
