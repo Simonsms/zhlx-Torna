@@ -21,7 +21,7 @@
     >
       <template slot-scope="scope">
         <span :class="hasNoParentAndChildren(scope.row) ? 'el-table--row-no-parent-children' : ''" style="white-space: nowrap">
-          <copy-text :copy-content="scope.row.name" :show-content="scope.row.name" placement="left" />
+          <copy-text :copy-content="scope.row.name" :show-content="scope.row.name" placement="top" :show-tip="false" />
         </span>
       </template>
     </el-table-column>
@@ -34,7 +34,7 @@
       <template slot-scope="scope">
         <span>{{ scope.row.type }}</span>
         <span v-show="scope.row.type === 'array' && scope.row.elementType">
-          <el-tooltip effect="dark" :content="$t('elType', scope.row.elementType)" placement="top">
+          <el-tooltip effect="dark" :content="$t('elType', scope.row.elementType)" placement="top" :show-tip="false">
             <i class="el-icon-info"></i>
           </el-tooltip>
         </span>
@@ -64,7 +64,7 @@
     >
       <template slot-scope="scope">
         <div v-if="scope.row.enumId" style="display: inline-block;">
-          <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="left" />
+          <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="top" :show-tip="false" />
           <el-tag
             :ref="`enumTagRef_${scope.row.id}`"
             effect="plain"
@@ -83,11 +83,11 @@
         </div>
         <div v-else style="display: inline-block;">
           <div v-if="scope.row.description.length < 100">
-            <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="left" />
+            <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="top" :show-tip="false" />
           </div>
           <div v-else>
             <div style="height: 100px;overflow-y: auto">
-              <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="left" />
+              <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="top" :show-tip="false" />
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@
 </style>
 <script>
 import EnumItemView from '../EnumItemView'
-import CopyText from "@/components/CopyText";
+import CopyText from '@/components/CopyText'
 
 export default {
   name: 'ParameterTable',

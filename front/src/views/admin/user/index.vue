@@ -2,20 +2,23 @@
   <div class="app-container">
     <el-form :inline="true" :model="searchFormData" class="demo-form-inline" size="mini">
       <el-form-item label="UserId">
-        <el-input v-model="searchFormData.id" :clearable="true" style="width: 250px;"/>
+        <el-input v-model="searchFormData.id" :clearable="true" style="width: 120px;"/>
       </el-form-item>
       <el-form-item :label="$t('loginAccount')">
         <el-input v-model="searchFormData.username" :clearable="true" style="width: 250px;"/>
       </el-form-item>
+      <el-form-item :label="$t('nickname')">
+        <el-input v-model="searchFormData.nickname" :clearable="true" style="width: 250px;"/>
+      </el-form-item>
       <el-form-item :label="$t('status')">
-        <el-select v-model="searchFormData.status" :clearable="true">
+        <el-select v-model="searchFormData.status" :clearable="true" style="width: 120px;">
           <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
             {{ item.label }}
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('isSuperAdmin')">
-        <el-select v-model="searchFormData.isSuperAdmin" :clearable="true">
+        <el-select v-model="searchFormData.isSuperAdmin" :clearable="true" style="width: 120px;">
           <el-option v-for="item in isSuperAdminOptions" :key="item.value" :label="item.label" :value="item.value">
             {{ item.label }}
           </el-option>
@@ -240,6 +243,7 @@ export default {
       searchFormData: {
         id: '',
         username: '',
+        nickname: '',
         status: '',
         isSuperAdmin: '',
         pageIndex: 1,

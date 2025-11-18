@@ -59,6 +59,12 @@ public class UserController {
     @Value("${torna.user.initial-password}")
     private String initPassword;
 
+    /**
+     * 分页查询用户
+     *
+     * @param userSearch 查询参数
+     * @return 用户列表
+     */
     @PostMapping("page")
     public Result<PageInfo<UserInfoDTO>> page(@RequestBody UserSearch userSearch) {
         LambdaQuery<UserInfo> query = userSearch.toLambdaQuery(UserInfo.class);

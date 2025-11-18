@@ -1,6 +1,7 @@
 <template>
   <span>
     <el-tooltip
+      v-if="showTip"
       effect="light"
       :content="$t('clickCopy')"
       :placement="placement"
@@ -15,6 +16,16 @@
         </span>
       </el-link>
     </el-tooltip>
+    <span v-else>
+      <el-link :underline="false" class="copy-text" @click.stop="onCopy">
+        <div v-if="showContentHtml">
+          <div v-html="showContentHtml" />
+        </div>
+        <span v-else>
+          {{ showContent }}
+        </span>
+      </el-link>
+    </span>
   </span>
 </template>
 <style>
@@ -28,6 +39,10 @@
 export default {
   name: 'CopyText',
   props: {
+    showTip: {
+      type: Boolean,
+      default: true
+    },
     copyContent: {
       type: String,
       required: true
