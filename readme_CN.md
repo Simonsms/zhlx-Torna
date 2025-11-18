@@ -1,9 +1,5 @@
 # Torna
 
-👉🏻 Torna正在参加 Gitee 2025 最受欢迎的开源软件投票活动，快来给我投票吧！[https://gitee.com/activity/2025opensource?ident=IBZMRE](https://gitee.com/activity/2025opensource?ident=IBZMRE)
-
----
-
 > 企业版已发布，支持MCP调用，[点击查看](https://torna.cn/tutorial/enterprise.html)
 
 [English](readme.md) | 简体中文
