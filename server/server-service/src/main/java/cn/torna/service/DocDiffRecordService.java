@@ -1,6 +1,7 @@
 package cn.torna.service;
 
 import cn.torna.common.bean.User;
+import cn.torna.common.bean.UserCacheManager;
 import cn.torna.common.enums.ModifySourceEnum;
 import cn.torna.common.enums.ModifyType;
 import cn.torna.common.util.CopyUtil;
@@ -15,8 +16,6 @@ import cn.torna.service.dto.DocDiffDetailWrapperDTO;
 import cn.torna.service.dto.DocDiffRecordDTO;
 import cn.torna.service.dto.DocInfoDTO;
 import com.alibaba.fastjson.JSON;
-import com.gitee.fastmybatis.core.query.LambdaQuery;
-import com.gitee.fastmybatis.core.query.LambdaQuery;
 import com.gitee.fastmybatis.core.query.Query;
 import com.gitee.fastmybatis.core.support.BaseLambdaService;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +52,8 @@ public class DocDiffRecordService extends BaseLambdaService<DocDiffRecord, DocDi
 
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private UserCacheManager userCacheManager;
 
 
     /**
@@ -145,17 +146,24 @@ public class DocDiffRecordService extends BaseLambdaService<DocDiffRecord, DocDi
         if (contentChanged) {
             // 保存新md5内容
             docSnapshotService.saveDocSnapshot(docInfoDTO);
-            consumer.accept(new DocDiffDTO(oldMd5, newMd5, LocalDateTime.now(), user, sourceEnum));
+            consumer.accept(new DocDiffDTO(docInfoDTO.getId(), oldMd5, newMd5, LocalDateTime.now(), user, sourceEnum));
         }
     }
 
     public void processDocDiff(DocDiffDTO docDiffDTO) {
-        String md5New = docDiffDTO.getMd5New();
+        Long docId = docDiffDTO.getDocId();
+        DocInfoDTO docDetail = docInfoService.getDocDetail(docId);
+        String md5New = docDetail.getMd5();
+        docDiffDTO.setMd5New(md5New);
         String md5Old = docDiffDTO.getMd5Old();
         if (existRecord(md5Old, md5New)) {
             log.debug("变更记录已存在, md5Old={}, md5New={}", md5Old, md5New);
             return;
         }
+
+        User user = userCacheManager.getUser(docDetail.getModifierId());
+        docDiffDTO.setUser(user);
+
         DocSnapshot snapshotOld = docSnapshotService.getByMd5(md5Old);
         DocSnapshot snapshotNew = docSnapshotService.getByMd5(md5New);
 
@@ -197,6 +205,7 @@ public class DocDiffRecordService extends BaseLambdaService<DocDiffRecord, DocDi
 
     private DocDiffRecord createRecord(DocInfoDTO docInfoDTO, DocDiffDTO docDiffDTO, ModifyType modifyType) {
         User user = docDiffDTO.getUser();
+
         DocDiffRecord docDiffRecord = new DocDiffRecord();
         docDiffRecord.setDocId(docInfoDTO.getId());
         docDiffRecord.setDocKey(docInfoDTO.buildDocKey());

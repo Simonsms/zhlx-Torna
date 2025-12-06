@@ -395,7 +395,7 @@ public class SwaggerApi {
                                 requestArrayType = itemType;
                                 if (DataType.OBJECT.equals(requestArrayType)) {
                                     Map<String, Schema> prop = items.getProperties();
-                                    docParamPushParams = buildDocParamPushParams(operation, prop);
+                                    docParamPushParams = buildDocParamPushParams(schema, operation, prop);
                                 } else {
                                     docParamPushParams = buildSingleArray(itemType, items);
                                 }
@@ -414,7 +414,7 @@ public class SwaggerApi {
                     MediaType mediaType = entry.getValue();
                     Schema<?> schema = mediaType.getSchema();
                     Map<String, Schema> properties = schema.getProperties();
-                    docParamPushParams = buildDocParamPushParams(operation, properties);
+                    docParamPushParams = buildDocParamPushParams(schema, operation, properties);
                 }
             }
         } else {
@@ -478,7 +478,7 @@ public class SwaggerApi {
                             if (items != null) {
                                 $ref = items.get$ref();
                                 if ($ref == null) {
-                                    docParamPushParams = buildDocParamPushParams(operation, items.getProperties());
+                                    docParamPushParams = buildDocParamPushParams(schema, operation, items.getProperties());
                                     List<String> required = items.getRequired();
                                     if (required != null) {
                                         for (DocParamPushParam docParamPushParam : docParamPushParams) {
@@ -587,15 +587,17 @@ public class SwaggerApi {
 
     private static List<DocParamPushParam> buildObjectParam0(Schema<?> schema, OpenAPI openAPI, BuildObjectParamContext context) {
         final Map<String, Schema> properties = schema.getProperties();
+        List<String> requireList = Optional.ofNullable(schema.getRequired()).orElse(Collections.emptyList());
         return Optional.ofNullable(properties)
                 .orElse(Collections.emptyMap()).entrySet()
                 .stream()
                 .map(entry -> {
                     String name = entry.getKey();
                     Schema value = entry.getValue();
+                    boolean require = requireList.contains(name);
                     DocParamPushParam param = DocParamPushParam.builder()
                             .name(name)
-                            .required(Booleans.toValue(Objects.equals("true", String.valueOf(value.getRequired()))))
+                            .required(Booleans.toValue(require || Objects.equals("true", String.valueOf(value.getRequired()))))
                             .description(value.getDescription())
                             .example(getExample(value))
                             .maxLength(getMaxLength(schema, value))
@@ -729,7 +731,7 @@ public class SwaggerApi {
             return docParamPushParams == null ? Stream.empty() : docParamPushParams.stream();
         }
         Map<String, Schema> properties = schema.getProperties();
-        return buildDocParamPushParams(operation, properties).stream();
+        return buildDocParamPushParams(schema, operation, properties).stream();
     }
 
     private static void setEnumDescription(List<?> list, DocParamPushParam param) {
@@ -742,10 +744,13 @@ public class SwaggerApi {
         }
     }
 
-    private static List<DocParamPushParam> buildDocParamPushParams(Operation operation, Map<String, Schema> properties) {
+    private static List<DocParamPushParam> buildDocParamPushParams(Schema<?> parentSchema, Operation operation, Map<String, Schema> properties) {
         if (CollectionUtils.isEmpty(properties)) {
             return Collections.emptyList();
         }
+        List<String> requireList = Optional.ofNullable(parentSchema)
+                .map(Schema::getRequired)
+                .orElse(Collections.emptyList());
         return properties.entrySet().stream()
                 .map(stringSchemaEntry -> {
                     Schema schema = stringSchemaEntry.getValue();
@@ -757,12 +762,13 @@ public class SwaggerApi {
                         example = "";
                     }
                     String fieldName = Optional.ofNullable(schema.getName()).orElse(stringSchemaEntry.getKey());
+                    boolean require = requireList.contains(fieldName);
                     return DocParamPushParam.builder()
                             .name(fieldName)
                             .type(type)
                             .description(schema.getDescription())
                             .example(example)
-                            .required(Booleans.toValue(isRequired(schema, fieldName)))
+                            .required(Booleans.toValue(require || isRequired(schema, fieldName)))
                             .maxLength(getMaxLength(schema))
                             .build();
                 })

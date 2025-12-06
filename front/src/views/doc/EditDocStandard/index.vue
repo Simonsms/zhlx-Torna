@@ -315,7 +315,7 @@ export default {
         requestArrayType: 'object',
         responseArrayType: 'object',
         isShow: 1,
-        isLocked: 0,
+        isLocked: 1,
         pathParams: [],
         headerParams: [],
         queryParams: [],

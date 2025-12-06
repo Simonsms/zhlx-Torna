@@ -37,6 +37,7 @@
             <if test="remark != null">remark,</if>
             <if test="isShow != null">is_show,</if>
             <if test="status != null">`status`,</if>
+            <if test="isLocked != null">`is_locked`,</if>
             gmt_create,
             gmt_modified,
         </trim>
@@ -74,6 +75,7 @@
             <if test="remark != null">#{remark},</if>
             <if test="isShow != null">#{isShow},</if>
             <if test="status != null">#{status},</if>
+            <if test="isLocked != null">#{isLocked},</if>
             now(),
             now(),
         </trim>
@@ -109,6 +111,7 @@
         <if test="orderIndex != null">order_index = VALUES(order_index),</if>
         <if test="remark != null">remark = VALUES(remark),</if>
         <if test="isShow != null">is_show = VALUES(is_show),</if>
+        <if test="isLocked != null">is_locked = VALUES(is_locked),</if>
         is_deleted = 0,
         gmt_modified = now()
     </insert>

@@ -124,7 +124,6 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
     @Autowired
     private MockConfigService mockConfigService;
 
-
     /**
      * 查询模块下的所有文档
      *
@@ -905,10 +904,14 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
             return new ArrayList<>(0);
         }
         List<UserWeComInfo> userInfoId = userWeComInfoWrapper.listByField(UserWeComInfo::getUserInfoId, userIds);
-        return userInfoId.stream()
+        List<String> mobileList = userInfoId.stream()
                 .map(UserWeComInfo::getMobile)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+        if (mobileList.isEmpty()) {
+            log.info("【获取文档所有的关注人员的企业微信用户手机号码】没有绑定手机号，请前往个人中心设置");
+        }
+        return mobileList;
     }
 
     public DocRefDTO getDocRefInfo(long docId) {

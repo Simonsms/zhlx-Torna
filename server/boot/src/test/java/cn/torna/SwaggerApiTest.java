@@ -38,7 +38,7 @@ public class SwaggerApiTest extends TornaApplicationTests {
 
     @Test
     public void importSwagger0() throws IOException, InterruptedException {
-        String content = FileUtils.readFileToString(new File("/Users/thc/Downloads/bbb.txt"), StandardCharsets.UTF_8);
+        String content = FileUtils.readFileToString(new File("/Users/thc/Downloads/test.json"), StandardCharsets.UTF_8);
         User user = new ApiUser();
         ImportSwaggerV2DTO importSwaggerV2DTO = ImportSwaggerV2DTO.builder()
                 .projectId(5L)
@@ -70,7 +70,7 @@ public class SwaggerApiTest extends TornaApplicationTests {
 
     @Test
     public void importSwagger() throws IOException, InterruptedException {
-        ClassPathResource resource = new ClassPathResource("/Users/thc/Downloads/bbb.txt");
+        ClassPathResource resource = new ClassPathResource("/Users/thc/Downloads/test.json");
         InputStream inputStream = resource.getInputStream();
         String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         User user = new ApiUser();
