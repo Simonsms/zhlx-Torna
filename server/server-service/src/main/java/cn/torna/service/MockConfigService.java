@@ -27,7 +27,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +53,20 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
         return this.listByField(MockConfig::getDocId, docId);
     }
 
+    public List<MockConfig> listAdvancedMockConfig(Long docId) {
+       return this.query()
+                .eq(MockConfig::getDocId, docId)
+                .eq(MockConfig::getIsAdvancedMock, Booleans.TRUE)
+                .list();
+    }
+
+    public long getAdvancedMockConfigCount(Long docId) {
+        return this.query()
+                .eq(MockConfig::getDocId, docId)
+                .eq(MockConfig::getIsAdvancedMock, Booleans.TRUE)
+                .getCount();
+    }
+
     public MockConfig getByDataId(String dataId) {
         return this.query()
                 .eq(MockConfig::getDataId, dataId)
@@ -65,7 +78,6 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
         if (CollectionUtils.isEmpty(dataKv)) {
             return "[]";
         }
-        dataKv.sort(Comparator.comparing(NameValueDTO::getName));
         return JSON.toJSONString(dataKv);
     }
 
@@ -89,6 +101,15 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
     public int getNextVersion(Long docId) {
         Query query = this.query()
                 .eq(MockConfig::getDocId, docId)
+                .orderByDesc(MockConfig::getVersion);
+        MockConfig mockConfig = get(query);
+        return Optional.ofNullable(mockConfig).map(MockConfig::getVersion).orElse(0) + 1;
+    }
+
+    public int getAdvancedNextVersion(Long docId) {
+        Query query = this.query()
+                .eq(MockConfig::getDocId, docId)
+                .eq(MockConfig::getIsAdvancedMock, Booleans.TRUE)
                 .orderByDesc(MockConfig::getVersion);
         MockConfig mockConfig = get(query);
         return Optional.ofNullable(mockConfig).map(MockConfig::getVersion).orElse(0) + 1;
@@ -228,4 +249,11 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
         return buildDataId(path, "", "");
     }
 
+    public List<MockConfig> listAdvancedMockByPath(String httpMethod, String path) {
+        return this.query()
+                .eq(MockConfig::getPath, path)
+                .eq(MockConfig::getHttpMethod, httpMethod.toUpperCase())
+                .eq(MockConfig::getIsAdvancedMock, Booleans.TRUE)
+                .list();
+    }
 }

@@ -15,10 +15,20 @@ import java.util.List;
 @Data
 public class MockConfigVO extends MockBaseVO {
     private List<NameValueVO> dataKv;
+
     private String dataJson;
 
     /**  数据库字段：path */
     private String path;
+
+    private String httpMethod;
+
+    /**
+     * 是否过滤ip
+     */
+    private Byte isFilterIp;
+
+    private String ip;
 
     /** 参数类型，0：KV形式，1：json形式, 数据库字段：request_data_type */
     private Byte requestDataType;

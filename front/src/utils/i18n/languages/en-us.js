@@ -376,6 +376,7 @@ export default {
   'no': 'No',
   'yes': 'Yes',
   'newConfig': 'New Config',
+  'addExpect': 'New Expect',
   'helpDoc': 'Help Doc',
   'copyCurrentConfig': 'Copy current config',
   'deleteConfigConfirm': 'Delete current config?',
@@ -485,6 +486,7 @@ export default {
   'shareName': 'Share Name',
   'emailFormatError': 'Email format error',
   'suggestPassword': 'Empty generate a default password',
+  'advancedMock': 'Advanced Mock',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
@@ -495,7 +497,11 @@ export default {
     'constInfo': 'Constant Info'
   },
   Mock: {
-    'backMockScript': 'Response mock script'
+    'backMockScript': 'Response mock script',
+    'ipFilter': 'IP Filter',
+    'ipFilterTip': 'ip address split with \',\'',
+    'paramFilter': '参数过滤',
+    'countTip': 'Max config size is {0}'
   },
   SwaggerSetting: {
     'syncConfirm': 'Save success, synchronize documents now?',

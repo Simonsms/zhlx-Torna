@@ -373,6 +373,7 @@ export default {
   'no': '否',
   'yes': '是',
   'newConfig': '新建配置',
+  'addExpect': '添加期望',
   'helpDoc': '帮助文档',
   'copyCurrentConfig': '复制当前配置',
   'deleteConfigConfirm': '确定要当前配置删除吗？',
@@ -486,6 +487,7 @@ export default {
   'shareName': '分享名称',
   'emailFormatError': '邮箱校验失败',
   'suggestPassword': '不填会生成默认密码',
+  'advancedMock': '高级Mock',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
@@ -496,7 +498,11 @@ export default {
     'constInfo': '常量信息'
   },
   Mock: {
-    'backMockScript': '获取脚本内容'
+    'backMockScript': '获取脚本内容',
+    'ipFilter': 'IP过滤',
+    'ipFilterTip': 'IP地址，多个用英文逗号隔开',
+    'paramFilter': '参数过滤',
+    'countTip': '最多添加{0}个'
   },
   SwaggerSetting: {
     'syncConfirm': '保存成功，是否立即同步文档？',

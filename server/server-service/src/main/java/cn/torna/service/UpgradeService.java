@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UpgradeService {
 
-    private static final int VERSION = 13301;
+    private static final int VERSION = 13500;
 
     private static final String TORNA_VERSION_KEY = "torna.version";
 
@@ -197,6 +197,21 @@ public class UpgradeService {
         v1_31_3(oldVersion);
         v1_33_0(oldVersion);
         v1_33_1(oldVersion);
+        v1_35_0(oldVersion);
+    }
+
+    private void v1_35_0(int oldVersion) {
+        int version = 13500;
+        if (oldVersion < version) {
+            log.info("Upgrade version to {}", version);
+            addColumn("mock_config", "is_filter_ip",
+                    "ALTER TABLE `mock_config` ADD COLUMN `is_filter_ip` tinyint NULL DEFAULT '0' COMMENT '是否过滤ip' AFTER `path`;");
+            addColumn("mock_config", "is_advanced_mock",
+                    "ALTER TABLE `mock_config` ADD COLUMN `is_advanced_mock` tinyint NULL DEFAULT '0' COMMENT '是否高级mock';");
+            addColumn("mock_config", "http_method",
+                    "ALTER TABLE `mock_config` ADD COLUMN `http_method` varchar(16) NULL DEFAULT 'GET' COMMENT 'http method';");
+            runSqlIgnoreError("ALTER TABLE `mock_config` ADD INDEX `idx_path_method` (`path`,`http_method`) USING BTREE;");
+        }
     }
 
     private void v1_33_1(int oldVersion) {

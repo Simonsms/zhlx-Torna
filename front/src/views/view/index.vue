@@ -13,6 +13,10 @@
         <span slot="label"><i class="el-icon-s-marketing"></i> Mock</span>
         <mock :item="mockItem" />
       </el-tab-pane>
+      <el-tab-pane name="mock2">
+        <span slot="label"><i class="el-icon-takeaway-box"></i> {{ $t('advancedMock') }}</span>
+        <mock2 :item="mock2Item" />
+      </el-tab-pane>
     </el-tabs>
     <el-tabs v-if="showDubbo" v-model="active" @tab-click="onTabSelect">
       <el-tab-pane name="info">
@@ -30,10 +34,11 @@ import DocView from '@/components/DocView'
 import DubboView from '@/components/DubboView'
 import DocDebug from '@/components/DocDebug'
 import Mock from '@/components/Mock'
+import Mock2 from '@/components/Mock2'
 import DocViewCustom from '@/components/DocViewCustom'
 
 export default {
-  components: { DocView, DocDebug, Mock, DubboView, DocViewCustom },
+  components: { DocView, DocDebug, Mock, Mock2, DubboView, DocViewCustom },
   data() {
     return {
       active: 'info',
@@ -42,7 +47,8 @@ export default {
       },
       infoItem: {},
       debugItem: {},
-      mockItem: {}
+      mockItem: {},
+      mock2Item: {}
     }
   },
   computed: {
