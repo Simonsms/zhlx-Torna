@@ -488,6 +488,7 @@ export default {
   'emailFormatError': '邮箱校验失败',
   'suggestPassword': '不填会生成默认密码',
   'advancedMock': '高级Mock',
+  'mockTabTip': '已废弃，请使用【高级Mock】',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
@@ -632,6 +633,7 @@ export default {
     'uploadDirRemark': '上传文件保存目录',
     'uploadDomainRemark': '上传文件映射',
     'msEnableRemark': '开启MeterSphere对接',
+    'hideOldMock': '隐藏旧版Mock',
     'MFARemark': '开启MFA认证',
     'docSortRuleRemark': '文档排序规则',
     'uploadDir': '上传目录',

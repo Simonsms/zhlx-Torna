@@ -69,6 +69,17 @@
           @change="onConfigChange(config.msEnable)"
         />
       </el-form-item>
+
+      <!-- 隐藏旧版mock -->
+      <el-form-item :label="$t('BasicConfig.hideOldMock')">
+        <el-switch
+          v-model="config.hideOldMock.value"
+          active-value="true"
+          inactive-text=""
+          inactive-value="false"
+          @change="onConfigChange(config.hideOldMock)"
+        />
+      </el-form-item>
     </el-form>
     <help ref="help" />
   </div>
@@ -90,6 +101,7 @@ export default {
         uploadDomain: { key: 'torna.upload.domain', value: '', remark: this.$t('BasicConfig.uploadDomainRemark') },
         tornaFrontUrl: { key: 'torna.front-url', value: '', remark: this.$t('BasicConfig.tornaFrontUrlRemark') },
         msEnable: { key: 'metershpere.enable', value: 'false', remark: this.$t('BasicConfig.msEnableRemark') },
+        hideOldMock: { key: 'torna.hideOldMock', value: 'false', remark: this.$t('BasicConfig.hideOldMock') },
         MFA: { key: 'torna.mfa.enable', value: 'false', remark: this.$t('BasicConfig.MFARemark') }
       },
       docSortTypeMap: {

@@ -87,6 +87,7 @@ public enum EnvironmentKeys {
     TORNA_NAME_VERSION_TPL("torna.name-version-tpl", "{_name_} {_version_}"),
     /** 是否开启对接MeterSphere */
     ENABLE_METER_SPHERE("metershpere.enable", "false"),
+    HIDE_OLD_MOCK("torna.hideOldMock", "false"),
     /** MeterSphere是否开启https */
     METER_SPHERE_ENABLE_HTTPS("metershpere.enable-https", "false"),
     /** torna推送处理器数量 */

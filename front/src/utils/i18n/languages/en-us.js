@@ -487,6 +487,7 @@ export default {
   'emailFormatError': 'Email format error',
   'suggestPassword': 'Empty generate a default password',
   'advancedMock': 'Advanced Mock',
+  'mockTabTip': 'Not recommended, please use advanced mock',
   // ---- common end ----
   // ---- 组件特有的，key表示组件名称(文件夹名称) ----
   RichTextEditor: {
@@ -629,6 +630,7 @@ export default {
     'uploadDirRemark': 'Upload file storage directory',
     'uploadDomainRemark': 'Upload file mapping',
     'msEnableRemark': 'Enable MeterSphere integration',
+    'hideOldMock': 'Hide old mock',
     'MFARemark': 'Enable MFA authentication',
     'docSortRuleRemark': 'Document sort rule',
     'uploadDir': 'Upload Directory',

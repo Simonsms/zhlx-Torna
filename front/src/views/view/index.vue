@@ -9,8 +9,12 @@
         <span slot="label"><i class="el-icon-s-promotion"></i> {{ $t('debugApi') }}</span>
         <doc-debug :item="debugItem" />
       </el-tab-pane>
-      <el-tab-pane name="mock">
-        <span slot="label"><i class="el-icon-s-marketing"></i> Mock</span>
+      <el-tab-pane v-if="showOldMock" name="mock">
+        <span slot="label" style="text-decoration-line: line-through">
+          <el-tooltip placement="top" :content="$t('mockTabTip')">
+            <span><i class="el-icon-s-marketing"></i> Mock</span>
+          </el-tooltip>
+        </span>
         <mock :item="mockItem" />
       </el-tab-pane>
       <el-tab-pane name="mock2">
@@ -48,7 +52,8 @@ export default {
       infoItem: {},
       debugItem: {},
       mockItem: {},
-      mock2Item: {}
+      mock2Item: {},
+      showOldMock: false
     }
   },
   computed: {
@@ -63,6 +68,10 @@ export default {
     }
   },
   created() {
+    this.pmsConfig().then(config => {
+      this.showOldMock = !config.hideOldMock
+    })
+
     const docId = this.$route.params.docId
     if (docId) {
       this.$nextTick(() => {
