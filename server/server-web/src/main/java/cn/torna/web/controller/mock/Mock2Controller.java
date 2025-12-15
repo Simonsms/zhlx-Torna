@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,18 +34,16 @@ import java.util.Objects;
  */
 @Slf4j
 @Controller
-@RequestMapping("mock2")
 public class Mock2Controller {
 
     public static final int ONE_MINUTE_MILLS = 60000;
 
-    private static final String PREFIX = "/mock2/";
-
     @Autowired
     private MockConfigService mockConfigService;
 
-    @RequestMapping("/**")
+    @RequestMapping("/mock-{moduleId}/**")
     public void mock(
+            @PathVariable String moduleId,
             HttpServletRequest req,
             HttpServletResponse response) {
         try {
@@ -69,10 +67,7 @@ public class Mock2Controller {
     }
 
     private String getPath(HttpServletRequest request) {
-        String servletPath = request.getServletPath();
-        String path = servletPath.substring(PREFIX.length());
-        path = StringUtils.trimLeadingCharacter(path, '/');
-        return '/' + path;
+        return request.getServletPath();
     }
 
     private MockConfig findMockConfig(HttpServletRequest request) {

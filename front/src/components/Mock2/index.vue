@@ -1,9 +1,11 @@
 <template>
   <div>
     <div>
-      <div style="margin: 20px 0">
+      <div class="tip" style="margin: 20px 0">
         <span>{{ $t('mockUrl') }}</span>
-        <span>{{ mockUrl }}</span>
+        <span style="font-size: 15px">
+          <span>{{ mockBaseUrl }}</span><span>{{ getPath() }}</span>
+        </span>
       </div>
       <el-button
         type="primary"
@@ -193,8 +195,7 @@ const FORM_DATA = {
   mockResult: '',
   remark: '',
   creatorName: '',
-  httpMethod: 'GET',
-  isNew: true
+  httpMethod: 'GET'
 }
 
 export default {
@@ -248,10 +249,10 @@ export default {
       return this.mockConfigs.length > 0
     },
     mockBaseUrl() {
-      return `${this.getBaseUrl()}/mock2`
+      return `${this.getBaseUrl()}`
     },
     mockUrl() {
-      return this.mockBaseUrl + this.item.url
+      return this.mockBaseUrl + this.getPath()
     },
     backMockScriptUrl() {
       return `${this.getBaseUrl()}/mockjs/script/${this.formData.path}`
@@ -290,7 +291,10 @@ export default {
     },
     loadTab(item) {
       this.get('/doc/mock2/list', { docId: item.id }, resp => {
-        this.mockConfigs = resp.data
+        this.mockConfigs = resp.data || []
+        for (const mockConfig of this.mockConfigs) {
+          mockConfig.isNew = false
+        }
         let find
         const active = this.activeMock
         if (active && active !== '0') {
@@ -399,7 +403,7 @@ export default {
       })
     },
     getPath() {
-      return this.item.url
+      return `/mock-${this.item.moduleId}${this.wrapUrl(this.item.url)}`
     },
     getNextVersion(docId, callback) {
       this.get('/doc/mock2/version/next', { docId: docId }, resp => {
@@ -448,7 +452,7 @@ export default {
           this.activeMock = resp.data.id
           this.formData.isNew = false
           this.reload()
-        });
+        })
       })
     },
     validate(callback) {

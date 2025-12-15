@@ -120,6 +120,17 @@ Object.assign(Vue.prototype, {
     return get_base_url()
   },
   /**
+   * 给url添加/
+   * @param url
+   * @returns {*|string}
+   */
+  wrapUrl(url) {
+    if (url && !url.startsWith('/')) {
+      return '/' + url
+    }
+    return url
+  },
+  /**
    * 获取服务端接口基础路径
    * @returns {*|string}
    */
