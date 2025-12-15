@@ -185,7 +185,6 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
-    display: flex;
     &.mobile.openSidebar{
       position: fixed;
       top: 0;
@@ -212,6 +211,7 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+
   .encrypt-form {
     position: fixed;
     top: 50%;
