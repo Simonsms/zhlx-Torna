@@ -1,6 +1,6 @@
 package cn.torna.api.open;
 
-import cn.torna.api.bean.ApiUser;
+import cn.torna.common.bean.ApiUser;
 import cn.torna.api.bean.GsonLocalDateAdapter;
 import cn.torna.api.bean.GsonLocalDateTimeAdapter;
 import cn.torna.api.bean.PushContext;

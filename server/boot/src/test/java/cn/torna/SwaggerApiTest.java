@@ -1,6 +1,6 @@
 package cn.torna;
 
-import cn.torna.api.bean.ApiUser;
+import cn.torna.common.bean.ApiUser;
 import cn.torna.api.open.SwaggerApi;
 import cn.torna.api.open.param.DocPushParam;
 import cn.torna.common.bean.User;

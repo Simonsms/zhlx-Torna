@@ -1,6 +1,6 @@
 package cn.torna;
 
-import cn.torna.api.bean.ApiUser;
+import cn.torna.common.bean.ApiUser;
 import cn.torna.api.open.YapiApi;
 import cn.torna.dao.entity.Project;
 import cn.torna.service.ProjectService;
