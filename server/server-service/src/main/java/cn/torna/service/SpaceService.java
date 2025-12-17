@@ -3,6 +3,7 @@ package cn.torna.service;
 import cn.torna.common.bean.Booleans;
 import cn.torna.common.bean.User;
 import cn.torna.common.enums.RoleEnum;
+import cn.torna.common.exception.BizException;
 import cn.torna.common.util.CopyUtil;
 import cn.torna.dao.entity.ProjectUser;
 import cn.torna.dao.entity.Space;
@@ -189,6 +190,9 @@ public class SpaceService extends BaseLambdaService<Space, SpaceMapper> {
 
     public SpaceInfoDTO getSpaceInfo(long spaceId) {
         Space space = getById(spaceId);
+        if (space == null) {
+            throw new BizException("空间不存在");
+        }
         SpaceInfoDTO spaceInfoDTO = CopyUtil.copyBean(space, SpaceInfoDTO::new);
         List<UserInfoDTO> leaders = this.listSpaceAdmin(spaceId);
         spaceInfoDTO.setLeaders(leaders);
