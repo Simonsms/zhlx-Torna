@@ -117,7 +117,7 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
 
     @Async
     public void createDocDefaultMock(Long docId) {
-        DocInfoDTO docInfoDTO = docInfoService.getDocDetail(docId);
+        /*DocInfoDTO docInfoDTO = docInfoService.getDocDetail(docId);
         Query query = this.query()
                 .eq(MockConfig::getDocId, docId)
                 .eq(MockConfig::getDataId, DEFAULT_DATA_ID);
@@ -154,7 +154,7 @@ public class MockConfigService extends BaseLambdaService<MockConfig, MockConfigM
             this.save(mockConfig);
         } else {
             this.update(mockConfig);
-        }
+        }*/
     }
 
     private String buildResponseJson(DocInfoDTO docInfoDTO) {
