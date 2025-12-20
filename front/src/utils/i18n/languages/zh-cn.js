@@ -503,6 +503,8 @@ export default {
     'ipFilter': 'IP过滤',
     'ipFilterTip': 'IP地址，多个用英文逗号隔开',
     'paramFilter': '参数过滤',
+    'queryFilter': 'Query过滤',
+    'headerFilter': 'Header过滤',
     'countTip': '最多添加{0}个'
   },
   SwaggerSetting: {

@@ -44,6 +44,10 @@ public class MockConfigVO extends MockBaseVO {
 
     private Byte resultType;
 
+    private List<NameValueVO> headers;
+
+    private List<NameValueVO> query;
+
     /** 响应结果, 数据库字段：response_body */
     private String responseBody;
 

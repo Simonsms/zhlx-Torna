@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -77,8 +79,28 @@ public class Mock2Controller {
             return null;
         }
         String ip = RequestUtil.getIP(request);
+
+
+        for (MockConfig mockConfig : mockConfigs) {
+            List<Boolean> result = Arrays.asList(
+                    matchIp(ip, mockConfig),
+                    matchHeader(request, mockConfig),
+                    matchQuery(request, mockConfig),
+                    matchRequestData(request, mockConfig)
+            );
+            for (Boolean b : result) {
+                if (!b) {
+                    return null;
+                }
+            }
+            return mockConfig;
+        }
+        return null;
+    }
+
+    private boolean matchRequestData(HttpServletRequest request, MockConfig mockConfig) {
         // 查询字段，query+form
-        Map<String, String> paramMap = RequestUtil.getQueryString(request);
+        Map<String, String> paramMap = new LinkedHashMap<>();
         String contentType = request.getContentType();
         if (contentType == null) {
             contentType = "";
@@ -92,29 +114,42 @@ public class Mock2Controller {
         if (contentType.contains("json")) {
             body = RequestUtil.getBodyText(request);
         }
+        String requestData = mockConfig.getRequestData();
+        if (MockRequestDataTypeEnum.of(mockConfig.getRequestDataType()) == MockRequestDataTypeEnum.KV) {
+            List<NameValueVO> params = JSON.parseArray(requestData, NameValueVO.class);
+            return match(params, paramMap);
+        } else {
+            if (ObjectUtils.isEmpty(body) && ObjectUtils.isEmpty(requestData)) {
+                return true;
+            }
 
-        for (MockConfig mockConfig : mockConfigs) {
-            String requestData = mockConfig.getRequestData();
-            if (MockRequestDataTypeEnum.of(mockConfig.getRequestDataType()) == MockRequestDataTypeEnum.KV) {
-                List<NameValueVO> params = JSON.parseArray(requestData, NameValueVO.class);
-                if (match(params, paramMap) && matchIp(ip, mockConfig)) {
-                    return mockConfig;
-                }
-            } else {
-                if (ObjectUtils.isEmpty(body) && ObjectUtils.isEmpty(requestData)) {
-                    return mockConfig;
-                }
-
-                if (body != null && JSONValidator.from(body).getType() == JSONValidator.Type.Object && !ObjectUtils.isEmpty(requestData)) {
-                    JSONObject reqMap = JSON.parseObject(body);
-                    JSONObject configMap = JSON.parseObject(requestData);
-                    if (match(configMap, reqMap) && matchIp(ip, mockConfig)) {
-                        return mockConfig;
-                    }
-                }
+            if (body != null && JSONValidator.from(body).getType() == JSONValidator.Type.Object && !ObjectUtils.isEmpty(requestData)) {
+                JSONObject reqMap = JSON.parseObject(body);
+                JSONObject configMap = JSON.parseObject(requestData);
+                return match(configMap, reqMap);
             }
         }
-        return null;
+        return false;
+    }
+
+    private boolean matchQuery(HttpServletRequest request, MockConfig mockConfig) {
+        String queryData = mockConfig.getQueryData();
+        if (ObjectUtils.isEmpty(queryData) || "[]".equals(queryData)) {
+            return true;
+        }
+        List<NameValueVO> nameValueList = JSON.parseArray(queryData, NameValueVO.class);
+        Map<String, String> paramMap = RequestUtil.parseQueryString(request.getQueryString());
+        return match(nameValueList, paramMap);
+    }
+
+    private boolean matchHeader(HttpServletRequest request, MockConfig mockConfig) {
+        String headerData = mockConfig.getHeaderData();
+        if (ObjectUtils.isEmpty(headerData) || "[]".equals(headerData)) {
+            return true;
+        }
+        Map<String, String> headerMap = RequestUtil.getHeader(request);
+        List<NameValueVO> nameValueList = JSON.parseArray(headerData, NameValueVO.class);
+        return match(nameValueList, headerMap);
     }
 
     private boolean matchIp(String requestIp, MockConfig mockConfig) {

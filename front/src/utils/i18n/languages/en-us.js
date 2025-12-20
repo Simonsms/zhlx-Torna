@@ -501,7 +501,9 @@ export default {
     'backMockScript': 'Response mock script',
     'ipFilter': 'IP Filter',
     'ipFilterTip': 'ip address split with \',\'',
-    'paramFilter': '参数过滤',
+    'paramFilter': 'Parameter Filter',
+    'queryFilter': 'Query Filter',
+    'headerFilter': 'Header Filter',
     'countTip': 'Max config size is {0}'
   },
   SwaggerSetting: {

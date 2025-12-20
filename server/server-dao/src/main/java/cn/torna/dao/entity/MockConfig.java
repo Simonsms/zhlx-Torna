@@ -46,6 +46,16 @@ public class MockConfig {
     /** 请求参数, 数据库字段：request_data */
     private String requestData;
 
+    /**
+     * 请求header
+     */
+    private String headerData;
+
+    /**
+     * 请求query
+     */
+    private String queryData;
+
     /** 参数类型，0：KV形式，1：json形式, 数据库字段：request_data_type */
     private Byte requestDataType;
 

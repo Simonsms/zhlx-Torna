@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -57,6 +59,20 @@ public class RequestUtil {
 
     public static Map<String, String> getQueryString(HttpServletRequest request) {
         return parseQueryString(request.getQueryString());
+    }
+
+    public static Map<String, String> getHeader(HttpServletRequest request) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        if (headerNames == null) {
+            return Collections.emptyMap();
+        }
+        Map<String, String> headerMap = new LinkedHashMap<>();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            String value = request.getHeader(name);
+            headerMap.put(name, value);
+        }
+        return headerMap;
     }
 
     public static Map<String, String> parseQueryString(String query) {

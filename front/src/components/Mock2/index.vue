@@ -77,6 +77,12 @@
             </template>
           </el-input>
         </el-form-item>
+        <el-form-item :label="$t('Mock.queryFilter')">
+          <name-value-table :data="formData.query" />
+        </el-form-item>
+        <el-form-item :label="$t('Mock.headerFilter')">
+          <name-value-table :data="formData.headers" />
+        </el-form-item>
         <el-form-item :label="$t('Mock.paramFilter')">
           <el-switch
             v-model="formData.requestDataType"
@@ -85,7 +91,7 @@
             :active-value="1"
             :inactive-value="0"
           />
-          <name-value-table v-if="formData.requestDataType === 0" ref="dataKvRef" :data="formData.dataKv" />
+          <name-value-table v-if="formData.requestDataType === 0" :data="formData.dataKv" />
           <editor
             v-if="formData.requestDataType === 1"
             v-model="formData.dataJson"
@@ -179,6 +185,8 @@ const Random = require('mockjs')
 
 const FORM_DATA = {
   dataKv: [],
+  query: [],
+  headers: [],
   dataJson: '',
   name: '',
   path: '',
@@ -320,7 +328,6 @@ export default {
       if (!node.dataKv) {
         node.dataKv = []
       }
-      node.isFilterIp = node.ip ? 1 : 0
       Object.assign(this.formData, node)
       this.activeMock = node.id
     },
@@ -470,7 +477,9 @@ export default {
       const filter = row => {
         return row.isDeleted === undefined || row.isDeleted === 0
       }
-      // this.formData.dataKv = this.formData.dataKv.filter(filter)
+      this.formData.query = this.formData.query.filter(filter)
+      this.formData.headers = this.formData.headers.filter(filter)
+      this.formData.dataKv = this.formData.dataKv.filter(filter)
       this.formData.responseHeaders = this.formData.responseHeaders.filter(filter)
     }
   }

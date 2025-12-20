@@ -60,6 +60,12 @@ public class Mock2ConfigController {
         } else {
             mockConfigVO.setDataJson(mockConfig.getRequestData());
         }
+        if (mockConfig.getQueryData() != null) {
+            mockConfigVO.setQuery(JSON.parseArray(mockConfig.getQueryData(), NameValueVO.class));
+        }
+        if (mockConfig.getHeaderData() != null) {
+            mockConfigVO.setHeaders(JSON.parseArray(mockConfig.getHeaderData(), NameValueVO.class));
+        }
         MockResultTypeEnum mockResponseBodyTypeEnum = StringUtils.hasText(mockConfig.getMockScript()) ?
                 MockResultTypeEnum.SCRIPT : MockResultTypeEnum.CUSTOM;
         mockConfigVO.setResponseBodyType(mockResponseBodyTypeEnum.getType());
@@ -94,6 +100,8 @@ public class Mock2ConfigController {
         mockConfig.setIsFilterIp(param.getIsFilterIp());
         mockConfig.setIp(param.getIp());
         mockConfig.setRequestData(getRequestData(param));
+        mockConfig.setQueryData(JSON.toJSONString(param.getQuery()));
+        mockConfig.setHeaderData(JSON.toJSONString(param.getHeaders()));
         mockConfig.setHttpStatus(param.getHttpStatus());
         mockConfig.setDelayMills(param.getDelayMills());
         mockConfig.setResultType(param.getResultType());

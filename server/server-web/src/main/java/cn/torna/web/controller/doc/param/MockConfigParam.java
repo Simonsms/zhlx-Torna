@@ -30,6 +30,10 @@ public class MockConfigParam {
 
     private String ip;
 
+    private List<NameValueDTO> headers;
+
+    private List<NameValueDTO> query;
+
     private List<NameValueDTO> dataKv;
 
     private String dataJson;
