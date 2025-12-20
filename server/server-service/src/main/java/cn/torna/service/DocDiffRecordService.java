@@ -1,5 +1,7 @@
 package cn.torna.service;
 
+import cn.torna.common.bean.ApiUser;
+import cn.torna.common.bean.DocChangeContext;
 import cn.torna.common.bean.User;
 import cn.torna.common.bean.UserCacheManager;
 import cn.torna.common.enums.ModifySourceEnum;
@@ -20,8 +22,10 @@ import com.gitee.fastmybatis.core.query.Query;
 import com.gitee.fastmybatis.core.support.BaseLambdaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -124,6 +128,25 @@ public class DocDiffRecordService extends BaseLambdaService<DocDiffRecord, DocDi
                 .collect(Collectors.toList());
     }
 
+    @Async
+    public void processDiff(List<DocChangeContext> docChangeContexts, String author) {
+        if (ObjectUtils.isEmpty(docChangeContexts)) {
+            return;
+        }
+        ApiUser apiUser = new ApiUser();
+        apiUser.setNickname(author);
+
+        for (DocChangeContext docChangeContext : docChangeContexts) {
+            String oldMd5 = docChangeContext.getMd5Old();
+            DocInfoDTO docDetail = docInfoService.getDocDetail(docChangeContext.getDocId());
+            if (docDetail == null) {
+                continue;
+            }
+            doDocDiff(oldMd5, docDetail, ModifySourceEnum.PUSH, apiUser);
+        }
+
+
+    }
 
     public void doDocDiff(String oldMd5, DocInfoDTO docInfoDTO, ModifySourceEnum sourceEnum, User user) {
         doDocDiffNow(oldMd5, docInfoDTO, sourceEnum, user, DocDiffContext::addQueue);

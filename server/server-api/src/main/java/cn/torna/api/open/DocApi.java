@@ -1,6 +1,5 @@
 package cn.torna.api.open;
 
-import cn.torna.common.bean.ApiUser;
 import cn.torna.api.bean.GsonLocalDateAdapter;
 import cn.torna.api.bean.GsonLocalDateTimeAdapter;
 import cn.torna.api.bean.PushContext;
@@ -19,15 +18,14 @@ import cn.torna.api.open.result.DocCategoryResult;
 import cn.torna.api.open.result.DocInfoDetailResult;
 import cn.torna.api.open.result.DocInfoResult;
 import cn.torna.api.open.result.DocResult;
+import cn.torna.common.bean.ApiUser;
 import cn.torna.common.bean.Booleans;
-import cn.torna.common.bean.DingdingWebHookBody;
+import cn.torna.common.bean.DocChangeContext;
 import cn.torna.common.bean.EnvironmentKeys;
-import cn.torna.common.bean.HttpHelper;
 import cn.torna.common.bean.User;
 import cn.torna.common.context.SpringContext;
 import cn.torna.common.enums.DescriptionTypeEnum;
 import cn.torna.common.enums.DocTypeEnum;
-import cn.torna.common.enums.ModifySourceEnum;
 import cn.torna.common.enums.UserSubscribeTypeEnum;
 import cn.torna.common.message.MessageEnum;
 import cn.torna.common.util.CopyUtil;
@@ -85,7 +83,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+
 
 /**
  * @author tanghc
@@ -403,23 +401,27 @@ public class DocApi {
             if (docId != null && docId > 0) {
                 pushContext.getDocIds().add(docId);
             }
-            doDocModifyProcess(docInfoDTO, pushContext);
+            markChangeDoc(docInfoDTO, pushContext);
         }
     }
 
     /**
-     * 处理变更情况
+     * 标记文档变更
      *
-     * @param docInfoDTO  最新的文档内容
-     * @param pushContext 推送上下文
+     * @param docInfoDTO
+     * @param pushContext
      */
-    protected void doDocModifyProcess(DocInfoDTO docInfoDTO, PushContext pushContext) {
-        DocInfoDTO docDetailView = docInfoService.getDocDetail(docInfoDTO.getId());
-        Optional<String> md5Opt = getOldMd5(docDetailView.getDocKey(), pushContext.getDocMetas());
-        ApiUser apiUser = new ApiUser();
-        apiUser.setNickname(pushContext.getAuthor());
-        String oldMd5 = md5Opt.orElse(null);
-        docDiffRecordService.doDocDiff(oldMd5, docDetailView, ModifySourceEnum.PUSH, apiUser);
+    private void markChangeDoc(DocInfoDTO docInfoDTO, PushContext pushContext) {
+        Optional<String> md5Opt = getOldMd5(docInfoDTO.buildDocKey(), pushContext.getDocMetas());
+        String md5Old = md5Opt.orElse(null);
+        if (!Objects.equals(md5Old, docInfoDTO.getMd5())) {
+            DocChangeContext docChangeContext = new DocChangeContext();
+            docChangeContext.setDocId(docInfoDTO.getId());
+            docChangeContext.setMd5Old(md5Old);
+            docChangeContext.setMd5New(docInfoDTO.getMd5());
+
+            pushContext.getContentChangedDocs().add(docChangeContext);
+        }
     }
 
     public static Optional<String> getOldMd5(String docKey, List<DocMeta> docMetas) {
@@ -433,24 +435,8 @@ public class DocApi {
     }
 
     private void processModifiedDocs(PushContext pushContext) {
-        String url = EnvironmentKeys.PUSH_DINGDING_WEBHOOK_URL.getValue();
-        List<DocInfoDTO> contentChangedDocs = pushContext.getContentChangedDocs();
-        if (StringUtils.hasText(url) && !CollectionUtils.isEmpty(contentChangedDocs)) {
-            String names = contentChangedDocs.stream()
-                    .map(DocInfoDTO::getName)
-                    .collect(Collectors.joining("、"));
-            String content = String.format(EnvironmentKeys.PUSH_DINGDING_WEBHOOK_CONTENT.getValue(), names);
-            DingdingWebHookBody dingdingWebHookBody = DingdingWebHookBody.create(content);
-            try {
-                // 推送钉钉机器人
-                String result = HttpHelper.postJson(url, JSON.toJSONString(dingdingWebHookBody))
-                        .execute()
-                        .asString();
-                log.info("文档变更，推送钉钉机器人, url:{}, content:{}, 推送结果:{}", url, content, result);
-            } catch (Exception e) {
-                log.error("推送钉钉失败, url:{}", url, e);
-            }
-        }
+        List<DocChangeContext> contentChangedDocs = pushContext.getContentChangedDocs();
+        docDiffRecordService.processDiff(contentChangedDocs, pushContext.getAuthor());
     }
 
 
