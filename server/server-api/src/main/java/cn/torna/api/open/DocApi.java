@@ -29,6 +29,7 @@ import cn.torna.common.enums.DocTypeEnum;
 import cn.torna.common.enums.UserSubscribeTypeEnum;
 import cn.torna.common.message.MessageEnum;
 import cn.torna.common.util.CopyUtil;
+import cn.torna.common.util.MarkdownUtil;
 import cn.torna.common.util.ThreadPoolUtil;
 import cn.torna.dao.entity.DocInfo;
 import cn.torna.dao.entity.DocParam;
@@ -65,7 +66,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -136,10 +136,6 @@ public class DocApi {
 
     @Autowired
     private DocViewService docViewService;
-
-    @Value("${torna.md-flag:|md|}")
-    private String mdFlag = "|md|";
-
 
     @Api(name = "doc.push")
     @ApiDocMethod(description = "推送文档", order = 0, remark = "把第三方文档推送给Torna服务器")
@@ -452,9 +448,7 @@ public class DocApi {
         DocInfoDTO docInfoDTO = CopyUtil.deepCopy(param, DocInfoDTO.class);
 
         String description = docInfoDTO.getDescription();
-        if (StringUtils.hasText(description) && description.startsWith(mdFlag)) {
-            description = description.substring(mdFlag.length()).trim();
-            docInfoDTO.setDescription(description);
+        if (MarkdownUtil.isMarkdown(description)) {
             docInfoDTO.setDescriptionType(DescriptionTypeEnum.MARKDOWN.getValue());
         }
 

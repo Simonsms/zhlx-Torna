@@ -53,17 +53,18 @@ public class Mock2ConfigController {
     }
 
     private MockConfigVO convert(MockConfig mockConfig) {
-        MockConfigVO mockConfigVO = CopyUtil.copyBean(mockConfig, MockConfigVO::new);
+        MockConfigVO mockConfigVO = new MockConfigVO();
+        CopyUtil.copyPropertiesIgnoreNull(mockConfig, mockConfigVO);
         mockConfigVO.setResponseHeaders(JSON.parseArray(mockConfig.getResponseHeaders(), NameValueVO.class));
         if (mockConfig.getRequestDataType() == MockRequestDataTypeEnum.KV.getType()) {
             mockConfigVO.setDataKv(JSON.parseArray(mockConfig.getRequestData(), NameValueVO.class));
         } else {
             mockConfigVO.setDataJson(mockConfig.getRequestData());
         }
-        if (mockConfig.getQueryData() != null) {
+        if (StringUtils.hasText(mockConfig.getQueryData())) {
             mockConfigVO.setQuery(JSON.parseArray(mockConfig.getQueryData(), NameValueVO.class));
         }
-        if (mockConfig.getHeaderData() != null) {
+        if (StringUtils.hasText(mockConfig.getHeaderData())) {
             mockConfigVO.setHeaders(JSON.parseArray(mockConfig.getHeaderData(), NameValueVO.class));
         }
         MockResultTypeEnum mockResponseBodyTypeEnum = StringUtils.hasText(mockConfig.getMockScript()) ?

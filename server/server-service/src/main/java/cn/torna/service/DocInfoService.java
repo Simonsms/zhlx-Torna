@@ -4,6 +4,7 @@ import cn.torna.common.bean.Booleans;
 import cn.torna.common.bean.EnvironmentKeys;
 import cn.torna.common.bean.User;
 import cn.torna.common.context.SpringContext;
+import cn.torna.common.enums.DescriptionTypeEnum;
 import cn.torna.common.enums.DocSortType;
 import cn.torna.common.enums.DocTypeEnum;
 import cn.torna.common.enums.ModifySourceEnum;
@@ -15,6 +16,7 @@ import cn.torna.common.exception.BizException;
 import cn.torna.common.util.CopyUtil;
 import cn.torna.common.util.IdGen;
 import cn.torna.common.util.Markdown2HtmlUtil;
+import cn.torna.common.util.MarkdownUtil;
 import cn.torna.common.util.TreeUtil;
 import cn.torna.dao.entity.DocInfo;
 import cn.torna.dao.entity.DocParam;
@@ -337,7 +339,29 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         bindEnumInfo(docInfoDTO.getRequestParams());
         DubboInfoDTO dubboInfoDTO = buildDubboInfoDTO(docInfo);
         docInfoDTO.setDubboInfo(dubboInfoDTO);
+
+        checkMarkdown(docInfoDTO);
         return docInfoDTO;
+    }
+
+    private void checkMarkdown(DocInfoDTO docInfoDTO) {
+        String description = docInfoDTO.getDescription();
+        if (ObjectUtils.isEmpty(description)) {
+            return;
+        }
+        if (MarkdownUtil.isMarkdown(description)) {
+            docInfoDTO.setDescriptionType(DescriptionTypeEnum.MARKDOWN.getValue());
+        }
+    }
+
+    private void checkMarkdown(DocInfo docInfoDTO) {
+        String description = docInfoDTO.getDescription();
+        if (ObjectUtils.isEmpty(description)) {
+            return;
+        }
+        if (MarkdownUtil.isMarkdown(description)) {
+            docInfoDTO.setDescriptionType(DescriptionTypeEnum.MARKDOWN.getValue());
+        }
     }
 
     private DubboInfoDTO buildDubboInfoDTO(DocInfo docInfo) {
@@ -650,6 +674,7 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         if (pushIgnoreFieldService.isPushIgnore(docInfoDTO.getModuleId(), docInfoDTO.buildDataId(), "description")) {
             docInfo.setDescription(null);
         }
+        checkMarkdown(docInfo);
         return docInfo;
     }
 

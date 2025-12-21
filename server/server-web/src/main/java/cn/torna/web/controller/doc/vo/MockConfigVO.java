@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,9 +45,9 @@ public class MockConfigVO extends MockBaseVO {
 
     private Byte resultType;
 
-    private List<NameValueVO> headers;
+    private List<NameValueVO> headers = Collections.emptyList();
 
-    private List<NameValueVO> query;
+    private List<NameValueVO> query = Collections.emptyList();
 
     /** 响应结果, 数据库字段：response_body */
     private String responseBody;

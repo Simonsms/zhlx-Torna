@@ -80,7 +80,6 @@ public class Mock2Controller {
         }
         String ip = RequestUtil.getIP(request);
 
-
         for (MockConfig mockConfig : mockConfigs) {
             List<Boolean> result = Arrays.asList(
                     matchIp(ip, mockConfig),
@@ -88,12 +87,16 @@ public class Mock2Controller {
                     matchQuery(request, mockConfig),
                     matchRequestData(request, mockConfig)
             );
+            boolean bool = true;
             for (Boolean b : result) {
                 if (!b) {
-                    return null;
+                    bool = false;
+                    break;
                 }
             }
-            return mockConfig;
+            if (bool) {
+                return mockConfig;
+            }
         }
         return null;
     }
