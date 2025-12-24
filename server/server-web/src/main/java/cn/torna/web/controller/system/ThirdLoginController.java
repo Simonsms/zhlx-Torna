@@ -12,6 +12,7 @@ import cn.torna.web.controller.system.param.ThirdLoginForm;
 import cn.torna.web.controller.system.vo.LoginResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +30,16 @@ public class ThirdLoginController {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Value("${torna.third-login:false}")
+    private Boolean enable = false;
+
     @GetMapping("thirdLogin")
     @NoLogin
     public void thirdLogin(@Valid ThirdLoginForm param, HttpServletResponse response) {
         try {
+            if (!enable) {
+                throw new RuntimeException("service not supported.");
+            }
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setUsername(param.getUsername());
             String password = param.getPassword();
