@@ -1,4 +1,4 @@
-插件的作用是将本地项目中的Swagger文档内容推送到Torna服务器。[参考文档](http://torna.cn/dev/swagger-plugin.html)
+插件的作用是将本地项目中的Swagger文档内容推送到Torna服务器。[参考文档](https://torna.cn/tutorial/swagger.html)
 
 **使用步骤：**
 
