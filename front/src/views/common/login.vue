@@ -29,7 +29,7 @@
         <h3 class="title">{{ $t('userLogin') }}</h3>
       </div>
       <el-tabs v-show="showLoginTab" v-model="loginForm.source" type="card">
-        <el-tab-pane :label="$t('accountLogin')" name="register"></el-tab-pane>
+        <el-tab-pane v-if="!serverConfig.hideRegisterLogin" :label="$t('accountLogin')" name="register"></el-tab-pane>
         <el-tab-pane v-if="serverConfig.enableThirdPartyForm" :label="$t('thirdpartyLogin')" name="form"></el-tab-pane>
         <el-tab-pane v-if="serverConfig.enableLdap" :label="$t('ldapLogin')" name="ldap"></el-tab-pane>
       </el-tabs>
@@ -97,6 +97,7 @@ export default {
     return {
       serverConfig: {
         enableReg: false,
+        hideRegisterLogin: false,
         enableThirdPartyForm: false,
         enableThirdPartyOauth: false,
         enableLdap: false,
@@ -126,7 +127,7 @@ export default {
   },
   computed: {
     showLoginTab() {
-      return this.serverConfig.enableThirdPartyForm || this.serverConfig.enableLdap
+      return this.serverConfig.enableThirdPartyForm || this.serverConfig.enableLdap || !this.serverConfig.hideRegisterLogin
     }
   },
   watch: {
@@ -148,6 +149,7 @@ export default {
   },
   mounted() {
     this.systemSettingData.language = get_lang()
+    console.log('source', this.loginForm.source)
   },
   methods: {
     onReg: function() {
@@ -168,6 +170,7 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        console.log('source', this.loginForm.source)
         if (valid) {
           this.doSubmit()
         }

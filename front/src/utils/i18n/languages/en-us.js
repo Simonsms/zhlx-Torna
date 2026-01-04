@@ -615,6 +615,7 @@ export default {
   BasicConfig: {
     'tornaFrontUrl': 'Torna Frontend URL',
     'regEnable': 'Allow Registration',
+    'hideRegisterLogin': 'Hide Login',
     'allow': 'Allow',
     'MFA': 'MFA Authentication',
     'enable': 'Enable',

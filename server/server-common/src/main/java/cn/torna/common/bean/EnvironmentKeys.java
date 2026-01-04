@@ -88,6 +88,8 @@ public enum EnvironmentKeys {
     /** 是否开启对接MeterSphere */
     ENABLE_METER_SPHERE("metershpere.enable", "false"),
     HIDE_OLD_MOCK("torna.hideOldMock", "false"),
+    /** 隐藏默认登录 */
+    HIDE_REGISTER_LOGIN("torna.hideRegisterLogin", "false"),
     /** MeterSphere是否开启https */
     METER_SPHERE_ENABLE_HTTPS("metershpere.enable-https", "false"),
     /** torna推送处理器数量 */

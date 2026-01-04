@@ -618,6 +618,7 @@ export default {
   BasicConfig: {
     'tornaFrontUrl': 'Torna根地址',
     'regEnable': '允许注册',
+    'hideRegisterLogin': '隐藏默认登录',
     'allow': '允许',
     'MFA': 'MFA认证',
     'enable': '开启',

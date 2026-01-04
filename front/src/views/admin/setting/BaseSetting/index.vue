@@ -17,6 +17,16 @@
           @change="onConfigChange(config.regEnable)"
         />
       </el-form-item>
+      <el-form-item :label="$t('BasicConfig.hideRegisterLogin')">
+        <el-switch
+          v-model="config.hideRegisterLogin.value"
+          :active-text="$t('yes')"
+          active-value="true"
+          :inactive-text="$t('no')"
+          inactive-value="false"
+          @change="onConfigChange(config.hideRegisterLogin)"
+        />
+      </el-form-item>
       <el-form-item :label="$t('BasicConfig.MFA')">
         <el-switch
           v-model="config.MFA.value"
@@ -96,6 +106,7 @@ export default {
     return {
       config: {
         regEnable: { key: 'torna.register.enable', value: 'false' },
+        hideRegisterLogin: { key: 'torna.hideRegisterLogin', value: 'false' },
         docSortType: { key: 'torna.doc-sort-type', value: 'by_order', remark: this.$t('BasicConfig.docSortRuleRemark') },
         uploadDir: { key: 'torna.upload.dir', value: '', remark: this.$t('BasicConfig.uploadDirRemark') },
         uploadDomain: { key: 'torna.upload.domain', value: '', remark: this.$t('BasicConfig.uploadDomainRemark') },

@@ -35,5 +35,6 @@ public class TornaViewProperties {
     private boolean enableMeterSphere;
 
     private boolean hideOldMock;
+    private boolean hideRegisterLogin;
 
 }

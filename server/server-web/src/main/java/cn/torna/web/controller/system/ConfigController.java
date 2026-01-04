@@ -74,6 +74,7 @@ public class ConfigController {
         tornaViewProperties.setEnableReg(EnvironmentKeys.REGISTER_ENABLE.getBoolean());
         tornaViewProperties.setEnableMeterSphere(EnvironmentKeys.ENABLE_METER_SPHERE.getBoolean());
         tornaViewProperties.setHideOldMock(EnvironmentKeys.HIDE_OLD_MOCK.getBoolean());
+        tornaViewProperties.setHideRegisterLogin(EnvironmentKeys.HIDE_REGISTER_LOGIN.getBoolean());
         return Result.ok(tornaViewProperties);
     }
 
