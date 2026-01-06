@@ -173,7 +173,7 @@ public class DocApi {
         // key:分类名称，value:相同文档数量
         Map<String, AtomicInteger> folderCount = new HashMap<>(8);
         for (DocPushItemParam api : apis) {
-            if (api.getIsFolder() == Booleans.TRUE) {
+            if (Objects.equals(api.getIsFolder(), Booleans.TRUE)) {
                 AtomicInteger count = folderCount.computeIfAbsent(api.getName(), (k) -> new AtomicInteger(0));
                 count.incrementAndGet();
             }
@@ -200,7 +200,7 @@ public class DocApi {
         // key:分类名称， value:分类下的文档
         Map<DocPushItemParam, List<DocPushItemParam>> folderItems = new LinkedHashMap<>(8);
         for (DocPushItemParam api : apis) {
-            if (api.getIsFolder() == Booleans.TRUE) {
+            if (Objects.equals(api.getIsFolder(), Booleans.TRUE)) {
                 List<DocPushItemParam> docItemList = folderItems.computeIfAbsent(api, (k) -> new ArrayList<>());
                 docItemList.addAll(api.getItems());
             }
