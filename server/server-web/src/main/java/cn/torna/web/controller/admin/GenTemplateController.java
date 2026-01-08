@@ -5,6 +5,7 @@ import cn.torna.common.bean.Result;
 import cn.torna.common.bean.TreeData;
 import cn.torna.common.exception.BizException;
 import cn.torna.common.util.CopyUtil;
+import cn.torna.common.util.IdUtil;
 import cn.torna.dao.entity.GenTemplate;
 import cn.torna.service.gen.GenTemplateService;
 import cn.torna.web.controller.admin.param.GenTemplateParam;
@@ -76,12 +77,12 @@ public class GenTemplateController {
      * @return
      */
     @PostMapping("/save")
-    public Result<Long> save(@Valid @RequestBody GenTemplateParam param) {
+    public Result<String> save(@Valid @RequestBody GenTemplateParam param) {
         this.check(param);
         GenTemplate genTemplate = CopyUtil.copyBean(param, GenTemplate::new);
         genTemplateService.save(genTemplate);
         // 返回添加后的主键值
-        return Result.ok(genTemplate.getId());
+        return Result.ok(IdUtil.encode(genTemplate.getId()));
     }
 
     /**
