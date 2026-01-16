@@ -149,8 +149,8 @@
     </div>
     <h4><span class="doc-label">{{ $t('responseParam') }}</span></h4>
     <el-alert v-if="docInfo.isResponseArray" :closable="false" show-icon :title="$t('objectArrayRespTip')" />
-    <parameter-table v-show="!isResponseSingleValue" :data="docInfo.responseParams" :hidden-columns="responseParamHiddenColumns" />
-    <div v-if="isResponseSingleValue">{{ responseSingleValue }}</div>
+    <parameter-table :data="docInfo.responseParams" :hidden-columns="responseParamHiddenColumns" />
+<!--    <div v-if="isResponseSingleValue">{{ responseSingleValue }}</div>-->
     <h4><span class="doc-label">{{ $t('responseExample') }}</span></h4>
     <el-link type="primary" @click.stop="copy(formatJson(responseSuccessExample))">{{ $t('copy') }}</el-link>
     <span class="split">|</span>
@@ -377,7 +377,7 @@ export default {
       const responseParams = this.docInfo.responseParams
       if (responseParams && responseParams.length === 1 && !this.docInfo.isResponseArray) {
         const responseParam = responseParams[0]
-        return responseParam.type
+        return responseParam.example || responseParam.type
       }
       return ''
     }

@@ -83,7 +83,8 @@
         show-overflow-tooltip
       >
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          <span v-if="isFolder(scope.row)">{{ scope.row.name }}</span>
+          <el-link v-else type="primary" :underline="false" @click="openLink(getViewUrl(scope.row))">{{ scope.row.name || scope.row.url }}</el-link>
           <div v-if="isDoc(scope.row)" class="el-table-cell-icon">
             <div v-if="!scope.row.isShow">
               <el-tooltip placement="top" :content="$t('hidden')">
@@ -334,7 +335,7 @@ export default {
       },
       searchForm: {
         status: null,
-        filterEmptyFolder: null
+        filterEmptyFolder: 1
       },
       token: ''
     }

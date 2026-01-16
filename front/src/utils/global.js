@@ -328,7 +328,7 @@ Object.assign(Vue.prototype, {
     return init_docInfo(data)
   },
   initDocInfoView(data) {
-    this.$store.state.settings.docTitle = data.name
+    this.$store.state.settings.docTitle = data.name || data.url
     return init_docInfo_view(data)
   },
   initDocInfoCompleteView(data) {
