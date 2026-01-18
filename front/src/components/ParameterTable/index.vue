@@ -29,7 +29,7 @@
       v-if="isColumnShow('type')"
       prop="type"
       :label="$t('type')"
-      width="100"
+      width="130"
     >
       <template slot-scope="scope">
         <span>{{ scope.row.type }}</span>

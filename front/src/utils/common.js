@@ -95,23 +95,32 @@ function get_default_example(type) {
       example = []
       break
     case 'array[string]':
+    case 'array<string>':
       example = ['string']
       break
     case 'array[byte]':
     case 'array[short]':
     case 'array[integer]':
+    case 'array<number>':
+    case 'array<int32>':
+    case 'array<int64>':
     case 'array[long]':
     case 'array[decimal]':
       example = [0]
       break
     case 'array[float]':
+    case 'array<float>':
     case 'array[double]':
-      example = [0.0]
+    case 'array<double>':
+    case 'array<bigdecimal>':
+      example = [1.1]
       break
     case 'array[boolean]':
+    case 'array<boolean>':
       example = [false]
       break
     case 'array[object]':
+    case 'array<object>':
       example = [{}]
       break
     default:
@@ -164,6 +173,9 @@ function is_number_type(type) {
  * @returns {boolean}
  */
 function is_num_array(type, example) {
+  if (type.indexOf('array<int') || type.indexOf('array<num')) {
+    return true
+  }
   if (is_array_string(example) || (type === 'array' && typeof (example) === 'string')) {
     example = example.substring(1, example.length - 1)
     const arr = example.split(',')
