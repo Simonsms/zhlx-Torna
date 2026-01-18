@@ -51,6 +51,7 @@ export function create_response_example(params) {
           example = get_nest_array_value(type, example)
         }
       }
+      console.log(example)
       val = example
     }
     responseJson[row.name] = val
@@ -173,7 +174,7 @@ function is_number_type(type) {
  * @returns {boolean}
  */
 function is_num_array(type, example) {
-  if (type.indexOf('array<int') || type.indexOf('array<num')) {
+  if (type.indexOf('array<int') > -1 || type.indexOf('array<num') > -1) {
     return true
   }
   if (is_array_string(example) || (type === 'array' && typeof (example) === 'string')) {
