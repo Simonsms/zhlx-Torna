@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UpgradeService {
 
-    private static final int VERSION = 13502;
+    private static final int VERSION = 13505;
 
     private static final String TORNA_VERSION_KEY = "torna.version";
 
@@ -199,6 +199,16 @@ public class UpgradeService {
         v1_33_1(oldVersion);
         v1_35_0(oldVersion);
         v1_35_2(oldVersion);
+        v1_35_5(oldVersion);
+    }
+
+    private void v1_35_5(int oldVersion) {
+        int version = 13505;
+        if (oldVersion < version) {
+            runSqlIgnoreError("ALTER TABLE `doc_info`\n" +
+                    "CHANGE `request_array_type` `request_array_type` varchar(128) NOT NULL DEFAULT 'object' COMMENT '请求数组时元素类型',\n" +
+                    "CHANGE `response_array_type` `response_array_type` varchar(128) NOT NULL DEFAULT 'object' COMMENT '返回数组时元素类型';");
+        }
     }
 
     private void v1_35_2(int oldVersion) {
