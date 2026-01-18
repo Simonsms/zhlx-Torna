@@ -208,6 +208,8 @@ public class UpgradeService {
             runSqlIgnoreError("ALTER TABLE `doc_info`\n" +
                     "CHANGE `request_array_type` `request_array_type` varchar(128) NOT NULL DEFAULT 'object' COMMENT '请求数组时元素类型',\n" +
                     "CHANGE `response_array_type` `response_array_type` varchar(128) NOT NULL DEFAULT 'object' COMMENT '返回数组时元素类型';");
+
+            runSqlIgnoreError("ALTER TABLE `doc_param` CHANGE `type` `type` varchar(128) NOT NULL DEFAULT 'String' COMMENT '字段类型';");
         }
     }
 
