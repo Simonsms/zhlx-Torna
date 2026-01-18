@@ -45,6 +45,8 @@ export function create_response_example(params) {
           example = parse_boolean(example)
         } else if (is_num_array(type, example)) {
           example = parse_num_array(example)
+        } else if (is_boolean_array(type, example)) {
+          example = parse_boolean_array(type, example)
         } else if (is_str_array(type, example)) {
           example = parse_str_array(example)
         } else if (is_nest_array_type(type)) {
@@ -190,6 +192,29 @@ function is_num_array(type, example) {
   return type === 'num_array'
 }
 
+/**
+ * 是否布尔数组
+ * @param type 类型
+ * @param example 值
+ * @returns {boolean}
+ */
+function is_boolean_array(type, example) {
+  if (type.indexOf('array<bool') > -1) {
+    return true
+  }
+  if (is_array_string(example) || (type === 'array' && typeof (example) === 'string')) {
+    example = example.substring(1, example.length - 1)
+    const arr = example.split(',')
+    for (const num of arr) {
+      if (num !== 'true' && num !== 'false') {
+        return false
+      }
+    }
+    return true
+  }
+  return false
+}
+
 export function is_array_string(example) {
   return typeof (example) === 'string' && example.startsWith('[') && example.endsWith(']')
 }
@@ -207,7 +232,7 @@ function parse_num_array(val) {
   if (is_array_string(str)) {
     str = str.substring(1, str.length - 1)
   }
-  const arr = str.split(/\D+/)
+  const arr = str.split(',')
   return arr.map(el => parse_number(el))
 }
 
