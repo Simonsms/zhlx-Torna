@@ -361,6 +361,9 @@ public class DocInfoService extends BaseLambdaService<DocInfo, DocInfoMapper> {
         }
         if (MarkdownUtil.isMarkdown(description)) {
             docInfoDTO.setDescriptionType(DescriptionTypeEnum.MARKDOWN.getValue());
+            if (description.startsWith(MarkdownUtil.MD_PREFIX)) {
+                docInfoDTO.setDescription(description.substring(MarkdownUtil.MD_PREFIX.length()));
+            }
         }
     }
 

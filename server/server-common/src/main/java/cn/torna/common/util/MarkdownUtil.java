@@ -2,6 +2,8 @@ package cn.torna.common.util;
 
 public class MarkdownUtil {
 
+    public static final String MD_PREFIX = "|md|";
+
     // 检查常见的Markdown语法特征
     static String[] markdownPatterns = {
             "^#{1,6}\\s",           // 标题
@@ -14,6 +16,9 @@ public class MarkdownUtil {
             "^\\s*[-+*]\\s",        // 无序列表
             "^\\s*\\d+\\.\\s",      // 有序列表
             "`[^`]+`",              // 行内代码
+            "^\\s*>\\s",            // 引用块
+            "\\|.*\\|.*\\|",        // 表格行
+            "^\\s*\\|?[-:]+\\|[-:|\\s]+\\|?",  // 表格分隔符
     };
 
     /**
@@ -25,6 +30,9 @@ public class MarkdownUtil {
     public static boolean isMarkdown(String content) {
         if (content == null || content.trim().isEmpty()) {
             return false;
+        }
+        if (content.startsWith(MD_PREFIX)) {
+            return true;
         }
 
         try {
