@@ -67,7 +67,7 @@ mkdir /etc/torna && wget https://gitee.com/durcframework/torna/raw/master/instal
 wget https://gitee.com/durcframework/torna/raw/master/install/restart-torna.sh && sh restart-torna.sh
 ``` 
 
-后续更新版本只需执行`sh restart-torna.sh 版本号`, 如:`sh restart-torna.sh 1.35.4`
+后续更新版本只需执行`sh restart-torna.sh 版本号`, 如:`sh restart-torna.sh 1.35.5`
 
 ### 方式2：docker运行
 
@@ -75,7 +75,7 @@ wget https://gitee.com/durcframework/torna/raw/master/install/restart-torna.sh &
 
 下载公共镜像
 
-`docker pull registry.cn-hangzhou.aliyuncs.com/tanghc/torna:1.35.4`
+`docker pull registry.cn-hangzhou.aliyuncs.com/tanghc/torna:1.35.5`
 
 创建配置文件，执行命令：
 
@@ -92,7 +92,7 @@ docker run --name torna --restart=always \
   -p 7700:7700 \
   -e JAVA_OPTS="-server -Xms512m -Xmx512m" \
   -v /etc/torna/application.properties:/torna/config/application.properties \
-  -d registry.cn-hangzhou.aliyuncs.com/tanghc/torna:1.35.4
+  -d registry.cn-hangzhou.aliyuncs.com/tanghc/torna:1.35.5
 ```
 
 浏览器访问`http://ip:7700`，ip对应docker宿主机器ip，非docker容器ip
