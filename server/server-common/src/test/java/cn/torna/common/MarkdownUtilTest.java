@@ -71,6 +71,35 @@ public class MarkdownUtilTest {
     }
 
     @Test
+    void testIsMarkdown_withBlockquotes() {
+        assertTrue(MarkdownUtil.isMarkdown("> 这是一个引用块"));
+        assertFalse(MarkdownUtil.isMarkdown(">引用文本"));
+        assertTrue(MarkdownUtil.isMarkdown("  > 带缩进的引用"));
+    }
+
+    @Test
+    void testIsMarkdown_withTables() {
+        // 标准表格
+        String table1 = "| 列1 | 列2 | 列3 |\n" +
+                        "|---|---|---|\n" +
+                        "| 数据1 | 数据2 | 数据3 |";
+        assertTrue(MarkdownUtil.isMarkdown(table1));
+
+        // 带对齐的表格
+        String table2 = "| 左对齐 | 居中 | 右对齐 |\n" +
+                        "|:---|:---:|---:|\n" +
+                        "| A | B | C |";
+        assertTrue(MarkdownUtil.isMarkdown(table2));
+
+        // 简单表格行
+        assertTrue(MarkdownUtil.isMarkdown("| Header 1 | Header 2 |"));
+        
+        // 表格分隔符
+        assertTrue(MarkdownUtil.isMarkdown("|---|---|"));
+        assertTrue(MarkdownUtil.isMarkdown("|:---|---:|"));
+    }
+
+    @Test
     void testIsMarkdown_withComplexMarkdown() {
         String complexMarkdown = "# 标题\n" +
                 "            \n" +
