@@ -281,7 +281,11 @@ public class DocApi {
     }
 
     private void saveDebugEnv(DocPushParam param, long moduleId) {
-        for (DebugEnvParam debugEnv : param.getDebugEnvs()) {
+        List<DebugEnvParam> debugEnvs = param.getDebugEnvs();
+        if (debugEnvs == null) {
+            return;
+        }
+        for (DebugEnvParam debugEnv : debugEnvs) {
             if (StringUtils.isEmpty(debugEnv.getName()) || StringUtils.isEmpty(debugEnv.getUrl())) {
                 continue;
             }
