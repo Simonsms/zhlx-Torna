@@ -556,7 +556,7 @@ export default {
     'printPushContent': '打印推送内容',
     'printPushContentTip': '推送内容在 {安装目录}/log/server.log',
     'contentOverride': '内容覆盖',
-    'contentOverrideTip': '是：局部推送(可推送若干个文档，不影响其它文档)，否：全量替换(默认)',
+    'contentOverrideTip': '是：局部推送(可推送若干个文档，不影响其它文档)，否：全量替换',
     'defaultStatus': '默认状态',
     'defaultStatusTip': '文档推送后默认状态'
   },

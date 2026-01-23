@@ -7,7 +7,6 @@
     <el-table-column
       :label="$t('value')"
       prop="value"
-      fixed
       :width="flexColumnWidth($t('value'),'value')"
     >
       <template slot-scope="scope">
@@ -22,13 +21,11 @@
     <el-table-column
       :label="$t('type')"
       prop="type"
-      fixed
       :width="flexColumnWidth($t('type'),'type')"
     />
     <el-table-column
       :label="$t('description')"
       prop="description"
-      fixed
       :width="flexColumnWidth($t('description'),'description')"
     />
   </el-table>

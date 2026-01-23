@@ -79,7 +79,7 @@ public enum EnvironmentKeys {
     TORNA_UPLOAD_DOMAIN("torna.upload.domain", null),
     TORNA_UPLOAD_DIR("torna.upload.dir", null),
     /** 推送是否覆盖 */
-    TORNA_PUSH_OVERRIDE("torna.push.override", String.valueOf(false)),
+    TORNA_PUSH_OVERRIDE("torna.push.override", String.valueOf(true)),
     /** 文档推送后默认状态 */
     TORNA_PUSH_DOC_DEFAULT_STATUS("torna.push.doc-default-status", String.valueOf(DocStatusEnum.DONE.getStatus())),
     /** 系统默认语言 */

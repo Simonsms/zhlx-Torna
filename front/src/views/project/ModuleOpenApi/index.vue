@@ -57,8 +57,6 @@
         <span class="info-tip">{{ $t('OpenApi.defaultStatusTip') }}</span>
       </el-form-item>
     </el-form>
-    <el-link type="primary" :underline="false" href="https://torna.cn/dev/smart-doc.html" target="_blank">[{{ $t('recommend') }}]{{ $t('useSmartDoc') }}</el-link>
-    <span class="split">|</span>
     <el-link type="primary" :underline="false" @click="openLink('/openapi')">{{ $t('openApiLink') }}</el-link>
   </div>
 </template>

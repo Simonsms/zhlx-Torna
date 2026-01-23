@@ -294,7 +294,7 @@ public class DocApi {
     }
 
     private void replaceDoc(DocPushParam param, long moduleId) {
-        if (isOverride(moduleId) || Booleans.isTrue(param.getIsOverride(), false)) {
+        if (isOverride(moduleId) || Booleans.isTrue(param.getIsOverride(), true)) {
             return;
         }
         if (Booleans.isTrue(param.getIsReplace(), true)) {
