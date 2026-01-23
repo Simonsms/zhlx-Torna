@@ -53,7 +53,6 @@ export function create_response_example(params) {
           example = get_nest_array_value(type, example)
         }
       }
-      console.log(example)
       val = example
     }
     responseJson[row.name] = val
