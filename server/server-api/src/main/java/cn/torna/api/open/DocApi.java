@@ -305,7 +305,7 @@ public class DocApi {
 
     private boolean isPrintContent(long moduleId) {
         String value = moduleConfigService.getCommonConfigValue(moduleId, EnvironmentKeys.TORNA_PUSH_PRINT_CONTENT.getKey(),
-                EnvironmentKeys.TORNA_PUSH_OVERRIDE.getDefaultValue());
+                EnvironmentKeys.TORNA_PUSH_PRINT_CONTENT.getDefaultValue());
         return Boolean.parseBoolean(value);
     }
 
