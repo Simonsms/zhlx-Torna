@@ -67,7 +67,7 @@
           <copy-text :copy-content="scope.row.description" :show-content-html="scope.row.description" placement="top" :show-tip="false" />
           <el-popover
             :ref="`enumPopover_${scope.row.id}`"
-            placement="right"
+            placement="left"
             trigger="click"
             @show="onEnumPopoverShow(`enumRef_${scope.row.id}`)"
           >
