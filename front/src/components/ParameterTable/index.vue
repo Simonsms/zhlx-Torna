@@ -71,11 +71,13 @@
             trigger="click"
             @show="onEnumPopoverShow(`enumRef_${scope.row.id}`)"
           >
-            <enum-item-view
-              :ref="`enumRef_${scope.row.id}`"
-              :enum-id="scope.row.enumId"
-              mounted-load
-            />
+            <div style="max-height: 600px;overflow-y: auto">
+              <enum-item-view
+                :ref="`enumRef_${scope.row.id}`"
+                :enum-id="scope.row.enumId"
+                mounted-load
+              />
+            </div>
             <el-tag
               slot="reference"
               effect="plain"
