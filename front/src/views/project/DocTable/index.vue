@@ -84,7 +84,9 @@
       >
         <template slot-scope="scope">
           <span v-if="isFolder(scope.row)">{{ scope.row.name }}</span>
-          <el-link v-else type="primary" :underline="false" @click="openLink(getViewUrl(scope.row))">{{ scope.row.name || scope.row.url }}</el-link>
+          <el-link v-else type="primary" :underline="false" @click="openLink(getViewUrl(scope.row))">
+            {{ scope.row.name || scope.row.url }}
+          </el-link>
           <div v-if="isDoc(scope.row)" class="el-table-cell-icon">
             <div v-if="!scope.row.isShow">
               <el-tooltip placement="top" :content="$t('hidden')">
@@ -104,6 +106,7 @@
           </div>
         </template>
       </u-table-column>
+      <u-table-column prop="id" label="ID" width="110" />
       <u-table-column
         prop="url"
         label="URL"
@@ -137,23 +140,14 @@
         </template>
       </u-table-column>
       <u-table-column
-        prop="author"
-        :label="$t('maintainer')"
-        width="120"
-        show-overflow-tooltip
-      />
-      <u-table-column
-        prop="modifierName"
-        :label="$t('modifierName')"
-        width="120"
-        show-overflow-tooltip
-      />
-      <u-table-column
         prop="gmtModified"
-        :label="$t('updateTime')"
-        width="110"
+        :label="`${$t('maintainer')} / ${$t('modifierName')} / ${$t('updateTime')}`"
+        width="200"
+        show-overflow-tooltip
       >
         <template slot-scope="scope">
+          {{ scope.row.author }} /
+          {{ scope.row.modifierName }} /
           <time-tooltip :time="scope.row.gmtModified" />
         </template>
       </u-table-column>
