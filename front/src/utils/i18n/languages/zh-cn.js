@@ -134,7 +134,7 @@ export default {
   'import': '导入',
   'docName': '文档名称',
   'hidden': '隐藏',
-  'modifierName': '最后修改人',
+  'modifierName': '修改人',
   'updateTime': '修改时间',
   'createDoc': '添加文档',
   'preview': '预览',
