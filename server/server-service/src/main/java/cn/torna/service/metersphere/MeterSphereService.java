@@ -209,19 +209,23 @@ public class MeterSphereService {
         List<MeterSphereModuleDTO> result = new ArrayList<>();
 
         for (MeterSphereModuleDTO module : modules) {
-            if (module.getLevel() <= maxLevel) {
+            Integer level = module.getLevel();
+            if (level != null && level <= maxLevel) {
                 MeterSphereModuleDTO filteredModule = new MeterSphereModuleDTO();
                 filteredModule.setId(module.getId());
                 filteredModule.setName(module.getName());
-                filteredModule.setLevel(module.getLevel());
+                filteredModule.setLevel(level);
                 // 递归获取子节点，确保只获取到指定层级
-                if (module.getChildren() != null && module.getLevel() < maxLevel) {
+                if (module.getChildren() != null && level < maxLevel) {
                     filteredModule.setLeaf(false);
                     filteredModule.setChildren(filterByLevel(module.getChildren(), maxLevel));
                 }else {
                     filteredModule.setLeaf(true);
                 }
                 result.add(filteredModule);
+            } else {
+                module.setLeaf(true);
+                result.add(module);
             }
         }
 

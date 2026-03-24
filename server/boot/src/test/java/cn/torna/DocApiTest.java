@@ -59,4 +59,12 @@ public class DocApiTest {
         System.out.println(body);
     }
 
+    @Test
+    public void test5() throws IOException {
+        String body = HttpHelper.get("https://www.baidu.com")
+                .execute()
+                .asString();
+        System.out.println(body);
+    }
+
 }
