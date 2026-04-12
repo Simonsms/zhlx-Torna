@@ -121,7 +121,7 @@ export default {
       }
     },
     loadConfig(moduleId) {
-      this.contentOverride = false
+      this.contentOverride = true
       const keyPushOverride = this.getEnums().ModuleConfig.TORNA_PUSH_OVERRIDE
       const keyPushPrintContent = this.getEnums().ModuleConfig.TORNA_PUSH_PRINT_CONTENT
       const docDefaultStatus = this.getEnums().ModuleConfig.TORNA_PUSH_DOC_DEFAULT_STATUS
@@ -134,7 +134,7 @@ export default {
         const list = resp.data
         for (const config of list) {
           if (config.configKey === keyPushOverride) {
-            this.contentOverride = config.configValue === 'true'
+            this.contentOverride = config.configValue ? config.configValue === 'true' : true
           } else if (config.configKey === keyPushPrintContent) {
             this.printPushContent = config.configValue === 'true'
           } else if (config.configKey === docDefaultStatus) {
