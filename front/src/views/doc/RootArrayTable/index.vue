@@ -55,7 +55,7 @@
         width="130"
       >
         <template slot-scope="scope">
-          <WeSelect :type="'arr'" :value="scope.row.type" @change="(val) =>onWeChange(val,scope.row,'enumId')" :filterable="false" :allowCreate="false" :list="getTypeConfig()" :clearable="false" :size="'mini'"/>
+          <WeSelect :type="'arr'" :value="scope.row.type" @change="(val) =>onWeChange(val,scope.row,'type')" :filterable="false" :allowCreate="false" :list="configTypes" :clearable="false" :size="'mini'"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -85,7 +85,7 @@
         width="130"
       >
         <template slot-scope="scope">
-          <WeInput :value="`${String(scope.row.maxLength)}`" :size="'mini'" @change="(val) =>onWeChange(val,scope.row,'example')" :placeholder="$t('maxLength')" :maxlength="10" :showWordLimit="true"/>
+          <WeInput :value="`${String(scope.row.maxLength)}`" :size="'mini'" @change="(val) =>onWeChange(val,scope.row,'maxLength')" :placeholder="$t('maxLength')" :maxlength="10" :showWordLimit="true"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -210,6 +210,7 @@ export default {
         'object', 'number', 'string', 'boolean'
       ],
       elementType: 'object',
+      configTypes: [],
       enumData: [],
       paramRowRule: {
       },
@@ -239,6 +240,9 @@ export default {
     if (this.moduleId) {
       this.loadEnumData(this.moduleId, data => {
         this.enumData = data
+      })
+      this.pmsFrontConfig('front.param.type-array').then(value => {
+        this.configTypes = value ? JSON.parse(value) : this.getTypeConfig()
       })
     }
   },
