@@ -129,6 +129,31 @@
 
 ## 社区版更新日志
 
+## 1.35.9
+
+- 推送支持status参数，修改文档状态
+
+使用方式：`@status 已完成`，可选值：`未开始/开发中/已完成`
+
+```java
+    /**
+     * Get user by ID collection
+     *
+     * @param id    User ID|123
+     * @param name  User name | jim
+     * @param token Token|xxxxx
+     * @return User info
+     * @author tanghc
+     * @apiNote This is a note for the API
+     * @status 已完成
+     */
+    @GetMapping("/get-collection/{name}")
+    public Result<List<UserDTO>> getCollect(@RequestParam @NotNull Long id, @PathVariable String name,
+                                            @RequestHeader String token) {
+        return Result.success(null);
+    }
+```
+
 ## 1.35.8
 
 - 修复数组参数类型无法保存问题
