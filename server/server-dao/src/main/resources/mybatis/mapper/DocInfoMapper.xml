@@ -109,6 +109,7 @@
         <if test="modifierId != null">modifier_id = VALUES(modifier_id),</if>
         <if test="modifierName != null">modifier_name = VALUES(modifier_name),</if>
         <if test="orderIndex != null">order_index = VALUES(order_index),</if>
+        <if test="status != null">status = VALUES(status),</if>
         <if test="remark != null">remark = VALUES(remark),</if>
         <if test="isShow != null">is_show = VALUES(is_show),</if>
         <if test="isLocked != null">is_locked = VALUES(is_locked),</if>

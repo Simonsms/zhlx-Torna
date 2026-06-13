@@ -80,6 +80,10 @@ public class DocPushItemParam {
     @ApiDocField(description = "排序, 值小靠前", example = "0")
     private Integer orderIndex;
 
+    /** 排序 */
+    @ApiDocField(description = "状态，0-未开始，5-开发中，10-已完成", example = "0")
+    private Byte status;
+
     // 1.8.1
     @ApiDocField(description = "是否请求数组", example = "0")
     private Byte isRequestArray = 0;
