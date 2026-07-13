@@ -646,3 +646,34 @@ figure.table {
 .v-show-content {
   background-color: #fff !important;
 }
+
+// Unified shell for authenticated console pages.
+.console-shell {
+  .sidebar-logo-container {
+    width: 100%;
+
+    .sidebar-logo-link {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .navbar {
+    flex: 1;
+    height: $consoleHeaderHeight;
+    box-shadow: none;
+
+    .app-breadcrumb.el-breadcrumb,
+    .right-menu {
+      line-height: $consoleHeaderHeight;
+    }
+  }
+
+  .app-main {
+    min-height: calc(100vh - #{$consoleHeaderHeight});
+  }
+
+  .app-container {
+    padding: 20px 24px 32px;
+  }
+}

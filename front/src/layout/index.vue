@@ -1,26 +1,38 @@
 <template>
-  <div class="app-wrapper">
-    <home-menu />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-      </div>
-      <app-main />
-    </div>
-  </div>
+  <console-shell
+    :sidebar-open="sidebar.opened"
+    :mobile="device === 'mobile'"
+    :without-animation="sidebar.withoutAnimation"
+    @toggle-sidebar="toggleSideBar"
+    @close-sidebar="handleClickOutside"
+  >
+    <template slot="brand">
+      <logo :collapse="brandCollapsed" :no-style="true" />
+    </template>
+    <template slot="topbar">
+      <navbar />
+    </template>
+    <template slot="sidebar">
+      <home-menu :collapsed="menuCollapsed" />
+    </template>
+    <app-main />
+  </console-shell>
 </template>
 
 <script>
-import { Navbar, AppMain } from './components'
+import { Navbar, AppMain, ConsoleShell } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import HomeMenu from '@/components/HomeMenu'
+import Logo from '@/components/Logo'
 
 export default {
   name: 'Layout',
   components: {
     Navbar,
     AppMain,
-    HomeMenu
+    ConsoleShell,
+    HomeMenu,
+    Logo
   },
   mixins: [ResizeMixin],
   computed: {
@@ -30,19 +42,17 @@ export default {
     device() {
       return this.$store.state.app.device
     },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
+    brandCollapsed() {
+      return this.device === 'mobile' || !this.sidebar.opened
     },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
+    menuCollapsed() {
+      return this.device !== 'mobile' && !this.sidebar.opened
     }
   },
   methods: {
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar')
+    },
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }

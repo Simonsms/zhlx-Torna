@@ -14,6 +14,19 @@ $sideBarUserWidth: 200px;
 $sideBarViewWidth: 300px;
 $resizeBarWidth: 8px;
 
+// console shell
+$consoleHeaderHeight: 56px;
+$consoleSidebarWidth: 208px;
+$consoleSidebarCollapsedWidth: 64px;
+$consolePageBackground: #f5f7fa;
+$consoleSurface: #ffffff;
+$consoleTextPrimary: #1f2937;
+$consoleTextSecondary: #667085;
+$consoleBorderColor: #e4e7ed;
+$consolePrimary: #2563eb;
+$consolePrimaryLight: #eaf2ff;
+$consoleShadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
@@ -28,4 +41,7 @@ $resizeBarWidth: 8px;
   sideBarViewWidth: $sideBarViewWidth;
   sideBarUserWidth: $sideBarUserWidth;
   resizeBarWidth: $resizeBarWidth;
+  consoleHeaderHeight: $consoleHeaderHeight;
+  consoleSidebarWidth: $consoleSidebarWidth;
+  consoleSidebarCollapsedWidth: $consoleSidebarCollapsedWidth;
 }
