@@ -1,0 +1,35 @@
+{
+  "id": "03-auth-route-tabs",
+  "title": "实现登录态路由工作 Tab",
+  "type": "AFK",
+  "status": "pending",
+  "dependencies": ["02-auth-layout-migration"],
+  "userStories": [6, 7, 8, 9, 10, 11, 18, 22],
+  "scope": {
+    "in": [
+      "为所有登录后工作页面维护路由访问 Tab",
+      "固定首页并支持关闭类操作",
+      "通过现有 Vue Router 切换页面"
+    ],
+    "out": [
+      "组件实例缓存",
+      "刷新恢复和多窗口同步",
+      "复用公开文档端 Tab 状态"
+    ]
+  },
+  "acceptanceCriteria": [
+    "首页 Tab 固定不可关闭",
+    "相同路由资源重复访问时复用 Tab",
+    "关闭当前 Tab 后跳转到合理相邻项",
+    "支持关闭左侧、右侧、其他和全部可关闭项",
+    "Tab 切换不使用 keep-alive 且保持现有页面生命周期",
+    "状态模块和组件行为测试通过"
+  ],
+  "moduleHints": [
+    "front/src/router/index.js",
+    "front/src/store/modules/tabsRouter.js",
+    "front/src/components/TabsRouter/index.vue",
+    "front/src/layout/components/AppMain.vue",
+    "front/src/store/index.js"
+  ]
+}

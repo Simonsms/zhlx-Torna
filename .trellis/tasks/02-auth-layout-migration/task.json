@@ -1,0 +1,37 @@
+{
+  "id": "02-auth-layout-migration",
+  "title": "迁移全部登录态布局到统一外壳",
+  "type": "AFK",
+  "status": "pending",
+  "dependencies": ["01-console-shell-foundation"],
+  "userStories": [1, 2, 3, 4, 5, 17, 18, 19, 22],
+  "scope": {
+    "in": [
+      "迁移空间、项目、用户中心和管理员布局",
+      "统一导航视觉和内容区层级",
+      "保留各布局的数据初始化、权限和业务路由"
+    ],
+    "out": [
+      "公开浏览、分享和聚合布局",
+      "业务页面内部重构",
+      "工作 Tab、搜索和快捷操作"
+    ]
+  },
+  "acceptanceCriteria": [
+    "所有登录态布局使用同一控制台外壳",
+    "空间和项目信息仍按原逻辑初始化",
+    "管理员和普通成员看到的入口符合现有权限",
+    "公开文档相关布局没有行为或样式变化",
+    "相关单元测试、ESLint 和生产构建通过"
+  ],
+  "moduleHints": [
+    "front/src/layout/index_space.vue",
+    "front/src/layout/index_project.vue",
+    "front/src/layout/index_user.vue",
+    "front/src/layout_admin/index.vue",
+    "front/src/components/SpaceMenu",
+    "front/src/components/ProjectMenu",
+    "front/src/components/AdminMenu",
+    "front/src/layout/components/UserCenterMenu.vue"
+  ]
+}
