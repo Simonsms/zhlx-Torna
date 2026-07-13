@@ -1,41 +1,36 @@
 <template>
-  <div class="sidebar-container">
-    <logo />
-    <el-menu
-      class="torna-menu"
-      router
-      :default-active="currentActive"
-    >
-      <el-menu-item :index="getProjectHomeUrl(projectId)">
-        <i class="el-icon-box"></i>
-        <span class="title">{{  $t('applicationManagement') }}</span>
-      </el-menu-item>
-      <el-menu-item :index="`/project/info/${projectId}`">
-        <i class="el-icon-info"></i>
-        <span class="title">{{ $t('projectInfo') }}</span>
-      </el-menu-item>
-      <el-menu-item :index="`/project/member/${projectId}`">
-        <i class="el-icon-user"></i>
-        <span class="title">{{ $t('projectMember') }}</span>
-      </el-menu-item>
-      <el-menu-item v-if="hasRole(`project:${projectId}`, [Role.admin, Role.dev])" :index="`/project/code/${projectId}`">
-        <i class="el-icon-collection"></i>
-        <span class="title">{{ $t('constManager') }}</span>
-      </el-menu-item>
-      <el-menu-item :index="`/project/release/${projectId}`">
-        <i class="el-icon-s-release"></i>
-        <span class="title">{{ $t('releaseManager') }}</span>
-      </el-menu-item>
-    </el-menu>
-  </div>
+  <console-navigation :label="$t('projectInfo')" :collapsed="collapsed" :active-path="currentActive">
+    <el-menu-item :index="getProjectHomeUrl(projectId)">
+      <i class="el-icon-box" />
+      <span slot="title">{{ $t('applicationManagement') }}</span>
+    </el-menu-item>
+    <el-menu-item :index="`/project/info/${projectId}`">
+      <i class="el-icon-info" />
+      <span slot="title">{{ $t('projectInfo') }}</span>
+    </el-menu-item>
+    <el-menu-item :index="`/project/member/${projectId}`">
+      <i class="el-icon-user" />
+      <span slot="title">{{ $t('projectMember') }}</span>
+    </el-menu-item>
+    <el-menu-item v-if="hasRole(`project:${projectId}`, [Role.admin, Role.dev])" :index="`/project/code/${projectId}`">
+      <i class="el-icon-collection" />
+      <span slot="title">{{ $t('constManager') }}</span>
+    </el-menu-item>
+    <el-menu-item :index="`/project/release/${projectId}`">
+      <i class="el-icon-s-release" />
+      <span slot="title">{{ $t('releaseManager') }}</span>
+    </el-menu-item>
+  </console-navigation>
 </template>
 <script>
-import Logo from '@/components/Logo'
+import ConsoleNavigation from '@/layout/components/ConsoleNavigation'
+
 export default {
-  components: { Logo },
-  data() {
-    return {
-      // projectId: ''
+  components: { ConsoleNavigation },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -47,7 +42,13 @@ export default {
     }
   },
   created() {
-    this.$store.state.settings.projectId = this.$route.params.projectId
+    const projectId = this.$route.params.projectId
+    if (projectId) {
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'projectId',
+        value: projectId
+      })
+    }
   }
 }
 </script>

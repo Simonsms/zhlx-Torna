@@ -2,7 +2,7 @@
   "id": "02-auth-layout-migration",
   "title": "迁移全部登录态布局到统一外壳",
   "type": "AFK",
-  "status": "pending",
+  "status": "completed",
   "dependencies": ["01-console-shell-foundation"],
   "userStories": [1, 2, 3, 4, 5, 17, 18, 19, 22],
   "scope": {

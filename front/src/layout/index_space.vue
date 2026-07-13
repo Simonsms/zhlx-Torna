@@ -1,18 +1,17 @@
 <template>
-  <div class="app-wrapper">
-    <space-menu ref="spaceMenu" />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-      </div>
-      <app-main />
-    </div>
-  </div>
+  <authenticated-layout>
+    <template slot="topbar">
+      <navbar />
+    </template>
+    <template slot="sidebar" slot-scope="{ collapsed }">
+      <space-menu ref="spaceMenu" :collapsed="collapsed" />
+    </template>
+    <app-main />
+  </authenticated-layout>
 </template>
 
 <script>
-import { Navbar, AppMain } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+import { Navbar, AppMain, AuthenticatedLayout } from './components'
 import SpaceMenu from '@/components/SpaceMenu'
 
 export default {
@@ -20,17 +19,12 @@ export default {
   components: {
     Navbar,
     AppMain,
+    AuthenticatedLayout,
     SpaceMenu
   },
-  mixins: [ResizeMixin],
   data() {
     return {
       space: ''
-    }
-  },
-  computed: {
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
     }
   },
   created() {

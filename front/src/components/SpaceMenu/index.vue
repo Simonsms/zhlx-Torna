@@ -1,41 +1,40 @@
 <template>
-  <div class="sidebar-container">
-    <logo />
-    <el-menu
-      class="torna-menu"
-      router
-      :default-active="currentActive"
-    >
-      <el-menu-item :index="projectIndex">
-        <i class="el-icon-s-grid"></i>
-        <span class="title">{{ $t('projectList') }}</span>
-      </el-menu-item>
-      <el-menu-item :index="`/space/info/${spaceId}`">
-        <i class="el-icon-info"></i>
-        <span class="title">{{ $t('spaceInfo') }}</span>
-      </el-menu-item>
-      <el-menu-item :index="`/space/member/${spaceId}`">
-        <i class="el-icon-user"></i>
-        <span class="title">{{ $t('spaceMember') }}</span>
-      </el-menu-item>
-      <el-menu-item v-show="enableMeterSphere" v-if="hasRole(`space:${spaceId}`, [Role.admin])" :index="`/space/setting/${spaceId}`">
-        <i class="el-icon-setting"></i>
-        <span class="title">{{ $t('spaceSetting') }}</span>
-      </el-menu-item>
-    </el-menu>
-  </div>
+  <console-navigation :label="$t('spaceInfo')" :collapsed="collapsed" :active-path="currentActive">
+    <el-menu-item :index="projectIndex">
+      <i class="el-icon-s-grid" />
+      <span slot="title">{{ $t('projectList') }}</span>
+    </el-menu-item>
+    <el-menu-item :index="`/space/info/${spaceId}`">
+      <i class="el-icon-info" />
+      <span slot="title">{{ $t('spaceInfo') }}</span>
+    </el-menu-item>
+    <el-menu-item :index="`/space/member/${spaceId}`">
+      <i class="el-icon-user" />
+      <span slot="title">{{ $t('spaceMember') }}</span>
+    </el-menu-item>
+    <el-menu-item v-show="enableMeterSphere" v-if="hasRole(`space:${spaceId}`, [Role.admin])" :index="`/space/setting/${spaceId}`">
+      <i class="el-icon-setting" />
+      <span slot="title">{{ $t('spaceSetting') }}</span>
+    </el-menu-item>
+  </console-navigation>
 </template>
 <script>
-import Logo from '@/components/Logo'
+import ConsoleNavigation from '@/layout/components/ConsoleNavigation'
+
 export default {
-  components: { Logo },
+  components: { ConsoleNavigation },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       spaceData: {
         id: '',
         isCompose: 0
       },
-      currentActive: '',
       enableMeterSphere: false
     }
   },
@@ -49,10 +48,12 @@ export default {
     },
     spaceId() {
       return this.spaceData.id || this.$route.params.spaceId
+    },
+    currentActive() {
+      return this.$route.path
     }
   },
   mounted() {
-    this.currentActive = this.$route.path
     this.pmsConfig().then(config => {
       this.enableMeterSphere = config.enableMeterSphere
     })
