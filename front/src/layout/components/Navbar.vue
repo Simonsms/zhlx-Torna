@@ -4,13 +4,13 @@
     <quick-navigation />
     <command-palette class="navbar-command-palette" />
     <div class="right-menu">
-      <div v-if="isSuperAdmin()" class="right-menu-item">
+      <div v-if="isSuperAdmin()" class="right-menu-item topbar-secondary-action">
         <el-button type="primary" size="mini" @click="goRoute('/admin/users')">{{ $t('adminManage') }}</el-button>
       </div>
-      <div class="right-menu-item">
+      <div class="right-menu-item topbar-secondary-action">
         <el-button type="success" size="mini" icon="el-icon-view" @click="goViewPage">{{ $t('previewModel') }}</el-button>
       </div>
-      <div class="right-menu-item">
+      <div class="right-menu-item topbar-help-action">
         <el-tooltip placement="bottom" :content="$t('helpCenter')">
           <el-button type="text" class="el-icon-question navbar-btn" @click="openLink('/help')" />
         </el-tooltip>

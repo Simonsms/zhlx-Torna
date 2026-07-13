@@ -2,7 +2,7 @@
   "id": "06-console-ui-hardening",
   "title": "完成控制台 UI 兼容性与回归收口",
   "type": "HITL",
-  "status": "pending",
+  "status": "in_progress",
   "dependencies": [
     "03-auth-route-tabs",
     "04-command-navigation-search",

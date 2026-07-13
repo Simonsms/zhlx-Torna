@@ -48,8 +48,11 @@ export default {
     color: $consoleTextSecondary;
     font-weight: 400;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: $consolePrimary;
+      outline: 2px solid rgba($consolePrimary, 0.22);
+      outline-offset: 2px;
     }
   }
 }

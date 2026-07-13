@@ -1,6 +1,12 @@
 <template>
   <div class="command-palette">
-    <button type="button" class="command-palette__trigger" @click="open">
+    <button
+      type="button"
+      class="command-palette__trigger"
+      aria-haspopup="dialog"
+      :aria-label="$t('functionSearch')"
+      @click="open"
+    >
       <i class="el-icon-search" />
       <span>{{ $t('functionSearch') }}</span>
       <kbd>Ctrl K</kbd>
@@ -33,6 +39,8 @@
           type="button"
           class="command-palette__result"
           :class="{ 'is-active': index === activeIndex }"
+          role="option"
+          :aria-selected="index === activeIndex"
           @mouseenter="activeIndex = index"
           @click="execute(command)"
         >
@@ -107,7 +115,7 @@ export default {
       this.activeIndex = 0
     },
     handleGlobalShortcut(event) {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      if ((event.ctrlKey || event.metaKey) && event.key && event.key.toLowerCase() === 'k') {
         event.preventDefault()
         this.open()
       }
@@ -208,9 +216,11 @@ export default {
     }
 
     &:hover,
+    &:focus-visible,
     &.is-active {
       color: $consolePrimary;
       background: $consolePrimaryLight;
+      outline: none;
 
       > i {
         color: $consolePrimary;

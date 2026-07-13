@@ -76,9 +76,12 @@ export default {
       font-size: 18px;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: $consolePrimary;
       background: $consolePrimaryLight;
+      outline: 2px solid rgba($consolePrimary, 0.24);
+      outline-offset: -2px;
 
       i {
         color: $consolePrimary;

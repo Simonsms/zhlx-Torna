@@ -1,6 +1,6 @@
 <template>
   <el-dropdown class="quick-navigation" trigger="click" @command="navigate">
-    <el-button type="text" class="quick-navigation__trigger">
+    <el-button type="text" class="quick-navigation__trigger" :aria-label="$t('quickNavigation')">
       <i class="el-icon-menu" />
       {{ $t('quickNavigation') }}
       <i class="el-icon-arrow-down el-icon--right" />

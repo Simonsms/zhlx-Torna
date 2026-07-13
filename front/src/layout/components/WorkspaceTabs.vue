@@ -12,6 +12,7 @@
           class="workspace-tabs__title"
           role="tab"
           :aria-selected="tab.key === activeKey"
+          :tabindex="tab.key === activeKey ? 0 : -1"
           :title="tab.title"
           @click="activateTab(tab)"
         >
@@ -198,6 +199,11 @@ export default {
 
     i {
       margin-right: 6px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba($consolePrimary, 0.3);
+      outline-offset: -2px;
     }
   }
 
