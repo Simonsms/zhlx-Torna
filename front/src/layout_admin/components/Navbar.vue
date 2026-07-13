@@ -1,5 +1,6 @@
 <template>
   <div class="navbar">
+    <command-palette class="navbar-command-palette" />
     <div class="right-menu">
       <div class="right-menu-item">
         <el-button type="primary" size="mini" @click="goRoute('/')">{{ $t('docManagement') }}</el-button>
@@ -20,25 +21,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import RightDropdown from '@/components/RightDropdown'
 import UserMessage from '@/components/UserMessage'
+import CommandPalette from '@/layout/components/CommandPalette'
 
 export default {
   components: {
-    RightDropdown, UserMessage
-  },
-  data() {
-    return {
-      isShowDefault: false,
-      spaceData: []
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+    RightDropdown,
+    UserMessage,
+    CommandPalette
   }
 }
 </script>

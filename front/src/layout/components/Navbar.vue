@@ -5,6 +5,7 @@
       <el-breadcrumb-item v-if="currentSpace" :to="{ path: spaceRoute }">{{ currentSpace.name }}</el-breadcrumb-item>
       <el-breadcrumb-item v-if="currentProject">{{ currentProject.name }}</el-breadcrumb-item>
     </el-breadcrumb>
+    <command-palette class="navbar-command-palette" />
     <div class="right-menu">
       <div v-if="isSuperAdmin()" class="right-menu-item">
         <el-button type="primary" size="mini" @click="goRoute('/admin/users')">{{ $t('adminManage') }}</el-button>
@@ -28,13 +29,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import RightDropdown from '@/components/RightDropdown'
 import UserMessage from '@/components/UserMessage'
+import CommandPalette from './CommandPalette'
 
 export default {
   components: {
-    RightDropdown, UserMessage
+    RightDropdown,
+    UserMessage,
+    CommandPalette
   },
   props: {
     showBreadcrumb: {
@@ -42,17 +45,7 @@ export default {
       default: true
     }
   },
-  data() {
-    return {
-      isShowDefault: false,
-      spaceData: []
-    }
-  },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ]),
     currentProject() {
       return this.getCurrentProject()
     },

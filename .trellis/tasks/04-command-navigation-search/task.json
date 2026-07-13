@@ -2,7 +2,7 @@
   "id": "04-command-navigation-search",
   "title": "提供功能导航搜索与快捷键",
   "type": "AFK",
-  "status": "pending",
+  "status": "completed",
   "dependencies": ["02-auth-layout-migration", "03-auth-route-tabs"],
   "userStories": [13, 14, 15, 18, 24],
   "scope": {
