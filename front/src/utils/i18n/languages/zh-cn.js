@@ -447,6 +447,7 @@ export default {
   'copySuccess': '复制成功',
   'deprecated': '已废弃',
   'closeOthers': '关闭其他',
+  'closeCurrent': '关闭当前',
   'closeAll': '关闭全部',
   'closeLeft': '关闭左侧',
   'closeRight': '关闭右侧',

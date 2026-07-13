@@ -15,6 +15,7 @@
     <template slot="sidebar">
       <slot name="sidebar" :collapsed="menuCollapsed" />
     </template>
+    <workspace-tabs />
     <slot />
   </console-shell>
 </template>
@@ -23,12 +24,14 @@
 import ConsoleShell from './ConsoleShell'
 import Logo from '@/components/Logo'
 import ResizeMixin from '../mixin/ResizeHandler'
+import WorkspaceTabs from './WorkspaceTabs'
 
 export default {
   name: 'AuthenticatedLayout',
   components: {
     ConsoleShell,
-    Logo
+    Logo,
+    WorkspaceTabs
   },
   mixins: [ResizeMixin],
   computed: {

@@ -2,7 +2,7 @@
   "id": "03-auth-route-tabs",
   "title": "实现登录态路由工作 Tab",
   "type": "AFK",
-  "status": "pending",
+  "status": "completed",
   "dependencies": ["02-auth-layout-migration"],
   "userStories": [6, 7, 8, 9, 10, 11, 18, 22],
   "scope": {

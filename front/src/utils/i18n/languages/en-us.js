@@ -446,6 +446,7 @@ export default {
   'copySuccess': 'Copy Success',
   'deprecated': 'Deprecated',
   'closeOthers': 'Close Others',
+  'closeCurrent': 'Close Current',
   'closeAll': 'Close All',
   'closeLeft': 'Close Left',
   'closeRight': 'Close Right',

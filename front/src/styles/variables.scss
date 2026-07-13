@@ -18,6 +18,7 @@ $resizeBarWidth: 8px;
 $consoleHeaderHeight: 56px;
 $consoleSidebarWidth: 208px;
 $consoleSidebarCollapsedWidth: 64px;
+$consoleTabsHeight: 40px;
 $consolePageBackground: #f5f7fa;
 $consoleSurface: #ffffff;
 $consoleTextPrimary: #1f2937;
@@ -44,4 +45,5 @@ $consoleShadow: 0 1px 4px rgba(15, 23, 42, 0.08);
   consoleHeaderHeight: $consoleHeaderHeight;
   consoleSidebarWidth: $consoleSidebarWidth;
   consoleSidebarCollapsedWidth: $consoleSidebarCollapsedWidth;
+  consoleTabsHeight: $consoleTabsHeight;
 }

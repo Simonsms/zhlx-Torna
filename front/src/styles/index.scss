@@ -670,7 +670,7 @@ figure.table {
   }
 
   .app-main {
-    min-height: calc(100vh - #{$consoleHeaderHeight});
+    min-height: calc(100vh - #{$consoleHeaderHeight} - #{$consoleTabsHeight});
   }
 
   .app-container {
