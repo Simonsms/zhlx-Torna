@@ -1,7 +1,7 @@
 <template>
   <authenticated-layout>
     <template slot="topbar">
-      <navbar :show-breadcrumb="false" />
+      <navbar />
     </template>
     <template slot="sidebar" slot-scope="{ collapsed }">
       <user-center-menu :collapsed="collapsed" />

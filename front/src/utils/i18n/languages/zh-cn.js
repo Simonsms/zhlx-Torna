@@ -452,6 +452,7 @@ export default {
   'functionNavigation': '功能导航',
   'functionSearchPlaceholder': '输入功能名称或关键词',
   'noMatchingFunction': '没有匹配的功能',
+  'quickNavigation': '快捷导航',
   'closeAll': '关闭全部',
   'closeLeft': '关闭左侧',
   'closeRight': '关闭右侧',

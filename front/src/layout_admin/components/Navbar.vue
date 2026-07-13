@@ -1,5 +1,7 @@
 <template>
   <div class="navbar">
+    <console-breadcrumb />
+    <quick-navigation />
     <command-palette class="navbar-command-palette" />
     <div class="right-menu">
       <div class="right-menu-item">
@@ -24,12 +26,16 @@
 import RightDropdown from '@/components/RightDropdown'
 import UserMessage from '@/components/UserMessage'
 import CommandPalette from '@/layout/components/CommandPalette'
+import ConsoleBreadcrumb from '@/layout/components/ConsoleBreadcrumb'
+import QuickNavigation from '@/layout/components/QuickNavigation'
 
 export default {
   components: {
     RightDropdown,
     UserMessage,
-    CommandPalette
+    CommandPalette,
+    ConsoleBreadcrumb,
+    QuickNavigation
   }
 }
 </script>

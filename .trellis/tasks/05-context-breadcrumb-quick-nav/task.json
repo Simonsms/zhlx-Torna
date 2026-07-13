@@ -2,7 +2,7 @@
   "id": "05-context-breadcrumb-quick-nav",
   "title": "统一上下文面包屑与快捷导航",
   "type": "AFK",
-  "status": "pending",
+  "status": "completed",
   "dependencies": ["02-auth-layout-migration", "03-auth-route-tabs"],
   "userStories": [2, 12, 16, 17, 18],
   "scope": {

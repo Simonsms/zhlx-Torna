@@ -1,10 +1,7 @@
 <template>
   <div class="navbar">
-    <el-breadcrumb v-if="showBreadcrumb" class="app-breadcrumb" separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: `/` }">{{ $t('home') }}</el-breadcrumb-item>
-      <el-breadcrumb-item v-if="currentSpace" :to="{ path: spaceRoute }">{{ currentSpace.name }}</el-breadcrumb-item>
-      <el-breadcrumb-item v-if="currentProject">{{ currentProject.name }}</el-breadcrumb-item>
-    </el-breadcrumb>
+    <console-breadcrumb />
+    <quick-navigation />
     <command-palette class="navbar-command-palette" />
     <div class="right-menu">
       <div v-if="isSuperAdmin()" class="right-menu-item">
@@ -32,30 +29,16 @@
 import RightDropdown from '@/components/RightDropdown'
 import UserMessage from '@/components/UserMessage'
 import CommandPalette from './CommandPalette'
+import ConsoleBreadcrumb from './ConsoleBreadcrumb'
+import QuickNavigation from './QuickNavigation'
 
 export default {
   components: {
     RightDropdown,
     UserMessage,
-    CommandPalette
-  },
-  props: {
-    showBreadcrumb: {
-      type: Boolean,
-      default: true
-    }
-  },
-  computed: {
-    currentProject() {
-      return this.getCurrentProject()
-    },
-    currentSpace() {
-      return this.getSpace()
-    },
-    spaceRoute() {
-      const path = this.$route.path
-      return path.indexOf('compose') > -1 ? `/space/compose/${this.currentSpace.id}` : `/space/project/${this.currentSpace.id}`
-    }
+    CommandPalette,
+    ConsoleBreadcrumb,
+    QuickNavigation
   },
   created() {
     this.initPerm()
@@ -69,19 +52,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.app-breadcrumb.el-breadcrumb {
-  float: left;
-  display: inline-block;
-  line-height: 50px;
-  font-size: 14px;
-  margin-left: 8px;
-
-  .no-redirect {
-    color: #97a8be;
-    cursor: text;
-  }
-}
 .el-dropdown-link {
   cursor: pointer;
 }

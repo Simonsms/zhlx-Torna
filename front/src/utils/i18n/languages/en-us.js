@@ -451,6 +451,7 @@ export default {
   'functionNavigation': 'Function navigation',
   'functionSearchPlaceholder': 'Search by function or keyword',
   'noMatchingFunction': 'No matching functions',
+  'quickNavigation': 'Quick navigation',
   'closeAll': 'Close All',
   'closeLeft': 'Close Left',
   'closeRight': 'Close Right',
