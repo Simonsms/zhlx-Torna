@@ -12,6 +12,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import favicon from '@/assets/images/document-collaboration-logo.svg'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -37,6 +38,11 @@ Vue.use(UmyUi)
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+const faviconLink = document.querySelector('link[rel~="icon"]')
+if (faviconLink) {
+  faviconLink.href = favicon
+}
 
 new Vue({
   el: '#app',
