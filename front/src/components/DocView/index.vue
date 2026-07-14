@@ -15,18 +15,18 @@
             @click="onSubscribe"
           />
         </el-tooltip>
-        <div v-show="showOptBar" class="show-opt-bar" style="float: right;">
-          <div class="item">
+        <div v-show="showOptBar || isSuperAdmin() === 1" class="show-opt-bar" style="float: right;">
+          <div v-show="showOptBar" class="item" data-testid="document-codegen-action">
             <el-tooltip placement="top" :content="$t('codeGenerate')">
               <el-button type="text" icon="el-icon-finished" @click="onCodeGen"></el-button>
             </el-tooltip>
           </div>
-          <div class="item">
+          <div class="item" data-testid="document-history-action">
             <el-tooltip placement="top" :content="$t('changeHistory')">
               <el-button type="text" icon="el-icon-date" @click="onShowHistory"></el-button>
             </el-tooltip>
           </div>
-          <div class="item">
+          <div class="item" data-testid="document-export-action">
             <el-dropdown trigger="click" @command="handleCommand">
               <el-tooltip placement="top" :content="$t('export')">
                 <el-button type="text" class="icon-button" icon="el-icon-download" />
@@ -38,7 +38,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <div class="item">
+          <div v-show="showOptBar" class="item" data-testid="document-const-action">
             <el-tooltip placement="top" :content="$t('viewConst')">
               <el-button type="text" class="icon-button" icon="el-icon-collection" @click="showConst" />
             </el-tooltip>
