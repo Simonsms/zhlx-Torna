@@ -1,0 +1,36 @@
+{
+  "id": "11-public-portal-access-states",
+  "title": "统一门户访问校验与异常状态",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": ["07-public-portal-foundation"],
+  "userStories": [27, 28, 29, 30, 31, 32, 33, 37, 38, 39],
+  "scope": {
+    "in": [
+      "重构加密分享与加密聚合的密码访问视觉",
+      "统一加载、空目录、禁用、不存在和请求失败状态",
+      "保留现有摘要算法、校验接口、本地授权键和刷新行为",
+      "提供桌面和窄屏可访问反馈"
+    ],
+    "out": [
+      "修改密码规则或授权有效期",
+      "修改后端错误码",
+      "新增登录注册流程",
+      "修改分享和聚合配置页面"
+    ]
+  },
+  "acceptanceCriteria": [
+    "加密分享和聚合均使用统一、清晰的密码访问页面",
+    "密码提交和成功授权行为与现状一致",
+    "禁用、不存在、空目录和失败状态不再显示裸文本或空白",
+    "加载状态不会误导为无数据",
+    "相关单元测试、定向 ESLint 和生产构建通过"
+  ],
+  "moduleHints": [
+    "front/src/layout_public/components/PublicPortalAccess.vue",
+    "front/src/layout_public/components/PublicPortalState.vue",
+    "front/src/layout_share/index.vue",
+    "front/src/layout_show/index.vue",
+    "front/tests/unit/components"
+  ]
+}

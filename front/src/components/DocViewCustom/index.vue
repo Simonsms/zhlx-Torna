@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'doc-view': portalMode }" class="doc-view-custom">
     <h1 style="margin-bottom: 0">
       {{ docInfo.name }}
       <el-tooltip placement="top" :content="isSubscribe ? $t('cancelSubscribe') : $t('clickSubscribe')">
@@ -82,6 +82,10 @@ export default {
     initSubscribe: {
       type: Boolean,
       default: true
+    },
+    portalMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

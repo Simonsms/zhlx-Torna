@@ -1,0 +1,46 @@
+{
+  "id": "12-public-portal-hardening",
+  "title": "完成公开门户回归与视觉验收",
+  "type": "HITL",
+  "status": "in_progress",
+  "dependencies": [
+    "08-public-portal-home",
+    "09-public-doc-navigation",
+    "10-public-doc-reader",
+    "11-public-portal-access-states"
+  ],
+  "userStories": [25, 26, 27, 28, 29, 30, 31, 32, 33, 37, 38, 39, 40],
+  "scope": {
+    "in": [
+      "完成公开、加密、禁用、空目录和主要文档类型回归",
+      "完成 1440px、1024px 和窄屏视觉检查",
+      "确认 /view 布局和多文档 Tab 无回归",
+      "在兼容 Node 环境执行质量门禁",
+      "记录验证证据和剩余问题"
+    ],
+    "out": [
+      "治理全仓历史 ESLint 基线",
+      "框架或依赖升级",
+      "新增端到端测试框架",
+      "第三阶段业务页面改造"
+    ]
+  },
+  "acceptanceCriteria": [
+    "分享和聚合门户主要访问路径人工回归通过",
+    "HTTP、Dubbo、Markdown 和自定义文档阅读验证通过",
+    "桌面、笔记本和窄屏无关键功能遮挡",
+    "键盘焦点、搜索、目录、浏览器历史和页内滚动可用",
+    "/view 原布局和 Tab 行为无回归",
+    "定向 ESLint、完整 Jest 和生产构建通过",
+    "项目负责人完成人工视觉验收后方可标记完成"
+  ],
+  "moduleHints": [
+    "front/src/layout_public",
+    "front/src/layout_share",
+    "front/src/layout_show",
+    "front/src/views/share",
+    "front/src/views/show",
+    "front/tests/unit",
+    "docs/prd/public-doc-portal-phase-2.md"
+  ]
+}

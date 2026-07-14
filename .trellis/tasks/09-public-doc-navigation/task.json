@@ -1,0 +1,36 @@
+{
+  "id": "09-public-doc-navigation",
+  "title": "统一公开文档目录导航体验",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": ["07-public-portal-foundation", "08-public-portal-home"],
+  "userStories": [11, 12, 13, 14, 16, 32, 33, 34, 35, 36],
+  "scope": {
+    "in": [
+      "使用统一只读导航节点渲染分享与聚合目录",
+      "统一目录搜索、展开折叠、当前项和请求方法展示",
+      "支持门户首页入口和窄屏抽屉导航",
+      "保持两种模式各自路由参数和接口数据来源"
+    ],
+    "out": [
+      "修改目录后端响应结构",
+      "跨集合搜索",
+      "目录编辑、拖拽和排序",
+      "正文页内目录"
+    ]
+  },
+  "acceptanceCriteria": [
+    "分享与聚合目录具有一致的搜索、层级和选中态",
+    "搜索支持名称、URL 和请求方法且不修改原始数据",
+    "点击文档进入正确模式的详情路由",
+    "窄屏下目录可打开、选择后可收起",
+    "相关单元测试、定向 ESLint 和生产构建通过"
+  ],
+  "moduleHints": [
+    "front/src/layout_public/components/PublicPortalNavigation.vue",
+    "front/src/utils/publicPortal.js",
+    "front/src/layout_share/components/Sidebar",
+    "front/src/layout_show/components/Sidebar",
+    "front/tests/unit"
+  ]
+}

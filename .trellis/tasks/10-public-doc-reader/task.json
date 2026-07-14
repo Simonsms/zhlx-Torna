@@ -1,0 +1,41 @@
+{
+  "id": "10-public-doc-reader",
+  "title": "建立现代文档阅读与页内目录",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": ["07-public-portal-foundation", "09-public-doc-navigation"],
+  "userStories": [15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 32, 33, 36, 39],
+  "scope": {
+    "in": [
+      "建立正文阅读容器和右侧粘性页内目录",
+      "为 HTTP、Dubbo 文档提供稳定章节标识",
+      "为 Markdown 和自定义富文本提取正文标题",
+      "统一标题、方法、URL、参数表、示例和代码块的门户视觉",
+      "实现点击滚动、活动章节和事件清理"
+    ],
+    "out": [
+      "重写文档业务渲染器",
+      "新增在线调试能力",
+      "修改参数和示例数据",
+      "影响内部编辑和管理页面视觉"
+    ]
+  },
+  "acceptanceCriteria": [
+    "桌面文档详情形成左目录、中正文、右大纲的三栏阅读结构",
+    "HTTP、Dubbo、Markdown 和自定义文档均能生成有效大纲",
+    "点击大纲可定位章节，滚动正文可更新活动章节",
+    "窄屏自动隐藏右侧大纲且正文无横向遮挡",
+    "复制、调试和现有详情内容行为保持不变",
+    "相关单元测试、定向 ESLint 和生产构建通过"
+  ],
+  "moduleHints": [
+    "front/src/layout_public/components/PublicDocumentReader.vue",
+    "front/src/layout_public/components/PublicDocumentOutline.vue",
+    "front/src/utils/documentOutline.js",
+    "front/src/components/DocView/index.vue",
+    "front/src/components/DubboView/index.vue",
+    "front/src/components/DocViewCustom/index.vue",
+    "front/src/views/share/index.vue",
+    "front/src/views/show/index.vue"
+  ]
+}

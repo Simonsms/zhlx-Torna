@@ -28,6 +28,18 @@ $consolePrimary: #2563eb;
 $consolePrimaryLight: #eaf2ff;
 $consoleShadow: 0 1px 4px rgba(15, 23, 42, 0.08);
 
+// public documentation portal
+$portalHeaderHeight: 64px;
+$portalSidebarWidth: 288px;
+$portalPageBackground: #f7f9fc;
+$portalSurface: #ffffff;
+$portalTextPrimary: #172033;
+$portalTextSecondary: #667085;
+$portalBorderColor: #e7ebf2;
+$portalPrimary: #1677ff;
+$portalPrimaryLight: #eaf3ff;
+$portalShadow: 0 8px 24px rgba(31, 42, 68, 0.08);
+
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
@@ -46,4 +58,6 @@ $consoleShadow: 0 1px 4px rgba(15, 23, 42, 0.08);
   consoleSidebarWidth: $consoleSidebarWidth;
   consoleSidebarCollapsedWidth: $consoleSidebarCollapsedWidth;
   consoleTabsHeight: $consoleTabsHeight;
+  portalHeaderHeight: $portalHeaderHeight;
+  portalSidebarWidth: $portalSidebarWidth;
 }

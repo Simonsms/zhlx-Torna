@@ -1,0 +1,37 @@
+{
+  "id": "08-public-portal-home",
+  "title": "提供公开门户首页与当前集合搜索",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": ["07-public-portal-foundation"],
+  "userStories": [1, 2, 4, 5, 6, 7, 8, 9, 10, 30, 31, 35, 36, 38],
+  "scope": {
+    "in": [
+      "根路由展示门户首页而非首篇文档或空白页",
+      "展示名称、说明、统计和快速开始区域",
+      "基于现有目录生成分类卡片和当前集合搜索结果",
+      "支持从首页进入具体文档并返回首页"
+    ],
+    "out": [
+      "跨项目全文搜索",
+      "服务端搜索索引",
+      "门户内容运营配置",
+      "文档正文页内目录"
+    ]
+  },
+  "acceptanceCriteria": [
+    "分享和聚合根路由均展示有内容的门户首页",
+    "分享模式不再自动跳转首篇文档",
+    "名称、描述或备注缺失时布局仍完整",
+    "搜索和分类卡片只使用当前目录数据并能打开文档",
+    "空目录显示明确空状态",
+    "相关单元测试、定向 ESLint 和生产构建通过"
+  ],
+  "moduleHints": [
+    "front/src/layout_public/components/PublicPortalHome.vue",
+    "front/src/utils/publicPortal.js",
+    "front/src/layout_share/components/Sidebar/index.vue",
+    "front/src/layout_show/components/Sidebar/index.vue",
+    "front/tests/unit"
+  ]
+}

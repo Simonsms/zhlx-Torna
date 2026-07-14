@@ -1,7 +1,7 @@
 <template>
   <div v-show="docInfo.id || docInfo.isPreview" class="doc-view">
     <div class="doc-title">
-      <h2 class="doc-title">
+      <h2 :id="portalMode ? portalSectionIds.overview : null" class="doc-title">
         <span :class="{ 'deprecated': isDeprecated }" style="color: #303133;">{{ docInfo.docName }}</span>
         <doc-status-tag class="el-tag-method" :status="docInfo.status" />
         <span v-show="docInfo.id" class="doc-id">ID：{{ docInfo.id }}</span>
@@ -55,7 +55,7 @@
       <span class="tip">{{ docInfo.deprecated }}</span>
     </div>
     <h4 v-if="docInfo.author"><span>{{ $t('maintainer') }}</span><span class="content">{{ docInfo.author }}</span></h4>
-    <h4 class="tip"><span class="doc-label">URL</span></h4>
+    <h4 :id="portalMode ? portalSectionIds.endpoint : null" class="tip"><span class="doc-label">URL</span></h4>
     <ul v-if="docInfo.debugEnvs.length > 0" class="debug-url">
       <li v-for="hostConfig in docInfo.debugEnvs" :key="hostConfig.name" @mouseenter="onMouseEnter(hostConfig.name)" @mouseleave="onMouseLeave()">
         {{ hostConfig.name }}: <http-method :method="docInfo.httpMethod" />
@@ -78,7 +78,11 @@
         @click.stop="copy(docInfo.url)"
       >{{ $t('copy') }}</el-tag>
     </div>
-    <h4 v-show="docInfo.description && docInfo.description !== emptyContent" class="doc-descr">
+    <h4
+      v-show="docInfo.description && docInfo.description !== emptyContent"
+      :id="portalMode ? portalSectionIds.description : null"
+      class="doc-descr"
+    >
       <span class="doc-label">{{ $t('description') }}</span>
     </h4>
     <div v-show="docInfo.description && docInfo.descriptionType !== 'markdown'" class="rich-editor" v-html="docInfo.description.replace(/\n/g,'<br />')"></div>
@@ -109,7 +113,7 @@
         :empty-text="$t('noHeader')"
       />
     </div>
-    <h4><span class="doc-label">{{ $t('requestParams') }}</span></h4>
+    <h4 :id="portalMode ? portalSectionIds.request : null"><span class="doc-label">{{ $t('requestParams') }}</span></h4>
     <span v-show="docInfo.queryParams.length === 0 && docInfo.requestParams.length === 0" class="normal-text">{{ $t('empty') }}</span>
     <div v-show="docInfo.queryParams.length > 0">
       <h5>Query Parameter</h5>
@@ -121,7 +125,7 @@
       <parameter-table :data="docInfo.requestParams" :hidden-columns="requestParamHiddenColumns" />
     </div>
     <div v-show="isShowRequestExample">
-      <h4><span class="doc-label">{{ $t('requestExample') }}</span></h4>
+      <h4 :id="portalMode ? portalSectionIds.requestExample : null"><span class="doc-label">{{ $t('requestExample') }}</span></h4>
       <el-link type="primary" @click.stop="copy(formatJson(requestExample))">{{ $t('copy') }}</el-link>
       <span class="split">|</span>
       <el-popover
@@ -147,11 +151,11 @@
       </el-popover>
       <pre class="code-block">{{ formatJson(requestExample) }}</pre>
     </div>
-    <h4><span class="doc-label">{{ $t('responseParam') }}</span></h4>
+    <h4 :id="portalMode ? portalSectionIds.response : null"><span class="doc-label">{{ $t('responseParam') }}</span></h4>
     <el-alert v-if="docInfo.isResponseArray" :closable="false" show-icon :title="$t('objectArrayRespTip')" />
     <parameter-table :data="docInfo.responseParams" :hidden-columns="responseParamHiddenColumns" />
 <!--    <div v-if="isResponseSingleValue">{{ responseSingleValue }}</div>-->
-    <h4><span class="doc-label">{{ $t('responseExample') }}</span></h4>
+    <h4 :id="portalMode ? portalSectionIds.responseExample : null"><span class="doc-label">{{ $t('responseExample') }}</span></h4>
     <el-link type="primary" @click.stop="copy(formatJson(responseSuccessExample))">{{ $t('copy') }}</el-link>
     <span class="split">|</span>
     <el-popover
@@ -177,7 +181,7 @@
     </el-popover>
     <pre class="code-block">{{ formatJson(responseSuccessExample) }}</pre>
     <div v-show="docInfo.errorCodeParams && docInfo.errorCodeParams.length > 0">
-      <h4><span class="doc-label">{{ $t('errorCode') }}</span></h4>
+      <h4 :id="portalMode ? portalSectionIds.errors : null"><span class="doc-label">{{ $t('errorCode') }}</span></h4>
       <parameter-table
         :data="docInfo.errorCodeParams"
         :empty-text="$t('emptyErrorCode')"
@@ -244,8 +248,9 @@ import CodeGenDrawer from '@/components/CodeGenDrawer'
 import CopyText from '@/components/CopyText'
 import ExportUtil from '@/utils/export'
 import { generate } from 'json2interface'
-import {get_effective_url, parse_root_array, StringBuilder} from '@/utils/common'
+import { get_effective_url, parse_root_array, StringBuilder } from '@/utils/common'
 import { mavonEditor } from 'mavon-editor'
+import { PORTAL_SECTION_IDS } from '@/utils/documentOutline'
 
 export default {
   name: 'DocView',
@@ -274,6 +279,10 @@ export default {
     initSubscribe: {
       type: Boolean,
       default: true
+    },
+    portalMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -343,7 +352,8 @@ export default {
       isShowResponseSuccessExample: false,
       emptyContent: '<p><br></p>',
       responseTs: '',
-      requestTs: ''
+      requestTs: '',
+      portalSectionIds: PORTAL_SECTION_IDS
     }
   },
   computed: {
@@ -529,7 +539,7 @@ export default {
 
       // --location --globoff
       const str = new StringBuilder(`curl -L -g `)
-      const httpMethod = this.docInfo.httpMethod;
+      const httpMethod = this.docInfo.httpMethod
       if (httpMethod === 'POST' || httpMethod === 'PUT') {
         str.append(`-X ${httpMethod} `)
       }

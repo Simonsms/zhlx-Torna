@@ -1,7 +1,7 @@
 <template>
   <div class="doc-view">
     <div class="doc-title">
-      <h2 class="doc-title">
+      <h2 :id="portalMode ? portalSectionIds.overview : null" class="doc-title">
         {{ docInfo.name }} <dubbo-service-tip :doc-id-getter="() => docInfo.parentId" placement="bottom" /> <span v-show="docInfo.id" class="doc-id">ID：{{ docInfo.id }}</span>
         <div v-show="showOptBar" style="float: right">
           <el-tooltip placement="top" :content="isSubscribe ? $t('cancelSubscribe') : $t('clickSubscribe')">
@@ -31,17 +31,17 @@
     </div>
     <h4 v-show="docInfo.author">{{ $t('maintainer') }}<span class="content">{{ docInfo.author }}</span></h4>
     <h4>{{ $t('interface') }}<span>{{ docInfo.dubboInfo && docInfo.dubboInfo.interfaceName }}</span></h4>
-    <h4>{{ $t('method') }}<span>{{ buildDefinition(docInfo) }}</span></h4>
+    <h4 :id="portalMode ? portalSectionIds.definition : null">{{ $t('method') }}<span>{{ buildDefinition(docInfo) }}</span></h4>
     <h4 v-if="docInfo.description">
       {{ $t('description') }}
       <span v-show="docInfo.description" class="rich-editor" v-html="docInfo.description.replace(/\n/g,'<br />')" />
     </h4>
-    <h4>{{ $t('invokeParam') }}</h4>
+    <h4 :id="portalMode ? portalSectionIds.request : null">{{ $t('invokeParam') }}</h4>
     <parameter-table :data="docInfo.requestParams" />
-    <h4>{{ $t('returnResult') }}</h4>
+    <h4 :id="portalMode ? portalSectionIds.response : null">{{ $t('returnResult') }}</h4>
     <parameter-table v-show="!isResponseSingleValue" :data="docInfo.responseParams" />
     <div v-if="isResponseSingleValue">{{ responseSingleValue }}</div>
-    <h4>{{ $t('errorCode') }}</h4>
+    <h4 :id="portalMode ? portalSectionIds.errors : null">{{ $t('errorCode') }}</h4>
     <parameter-table
       :data="docInfo.errorCodeParams"
       :empty-text="$t('emptyErrorCode')"
@@ -61,6 +61,7 @@
 import ParameterTable from '@/components/ParameterTable'
 import DubboServiceTip from '@/components/DubboServiceTip'
 import ExportUtil from '@/utils/export'
+import { PORTAL_SECTION_IDS } from '@/utils/documentOutline'
 
 export default {
   name: 'DubboView',
@@ -89,6 +90,10 @@ export default {
     initSubscribe: {
       type: Boolean,
       default: true
+    },
+    portalMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -134,7 +139,8 @@ export default {
       },
       requestExample: {},
       responseSuccessExample: {},
-      isSubscribe: false
+      isSubscribe: false,
+      portalSectionIds: PORTAL_SECTION_IDS
     }
   },
   computed: {

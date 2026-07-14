@@ -1,34 +1,42 @@
 <template>
-  <div class="doc-view-container">
-    <el-tabs v-if="showDoc" v-model="active" @tab-click="onTabSelect">
-      <el-tab-pane name="info">
-        <span slot="label"><i class="el-icon-document" /> {{ $t('apiInfo') }}</span>
-        <doc-view ref="docView" :show-opt-bar="false" :init-subscribe="false" :item="infoItem" />
-      </el-tab-pane>
-      <el-tab-pane v-if="isShowDebug && infoItem.debugEnvs.length > 0" name="debug">
-        <span slot="label"><i class="el-icon-s-promotion" /> {{ $t('debugApi') }}</span>
-        <doc-debug :item="debugItem" />
-      </el-tab-pane>
-    </el-tabs>
-    <el-tabs v-if="showDubbo" v-model="active" @tab-click="onTabSelect">
-      <el-tab-pane name="info">
-        <span slot="label"><i class="el-icon-document"></i> {{ $t('apiInfo') }}</span>
-        <dubbo-view ref="docViewDubbo" :show-opt-bar="false" :init-subscribe="false" />
-      </el-tab-pane>
-    </el-tabs>
-    <div v-if="showCustom">
-      <doc-view-custom :doc-info="item" :show-opt-bar="false" :init-subscribe="false" />
+  <public-document-reader
+    :sections="outlineSections"
+    :dynamic-outline="showCustom"
+    :content-key="item.id || ''"
+  >
+    <div class="doc-view-container">
+      <el-tabs v-if="showDoc" v-model="active" @tab-click="onTabSelect">
+        <el-tab-pane name="info">
+          <span slot="label"><i class="el-icon-document" /> {{ $t('apiInfo') }}</span>
+          <doc-view ref="docView" :show-opt-bar="false" :init-subscribe="false" :item="infoItem" portal-mode />
+        </el-tab-pane>
+        <el-tab-pane v-if="isShowDebug && infoItem.debugEnvs.length > 0" name="debug">
+          <span slot="label"><i class="el-icon-s-promotion" /> {{ $t('debugApi') }}</span>
+          <doc-debug :item="debugItem" />
+        </el-tab-pane>
+      </el-tabs>
+      <el-tabs v-if="showDubbo" v-model="active" @tab-click="onTabSelect">
+        <el-tab-pane name="info">
+          <span slot="label"><i class="el-icon-document" /> {{ $t('apiInfo') }}</span>
+          <dubbo-view ref="docViewDubbo" :show-opt-bar="false" :init-subscribe="false" portal-mode />
+        </el-tab-pane>
+      </el-tabs>
+      <div v-if="showCustom">
+        <doc-view-custom :doc-info="item" :show-opt-bar="false" :init-subscribe="false" portal-mode />
+      </div>
     </div>
-  </div>
+  </public-document-reader>
 </template>
 <script>
 import DocView from '@/components/DocView'
 import DubboView from '@/components/DubboView'
 import DocDebug from '@/components/DocDebug'
 import DocViewCustom from '@/components/DocViewCustom'
+import { PublicDocumentReader } from '@/layout_public/components'
+import { buildDubboOutline, buildHttpOutline } from '@/utils/documentOutline'
 
 export default {
-  components: { DocView, DocDebug, DubboView, DocViewCustom },
+  components: { DocView, DocDebug, DubboView, DocViewCustom, PublicDocumentReader },
   data() {
     return {
       active: 'info',
@@ -51,6 +59,15 @@ export default {
     },
     showCustom() {
       return this.item.type === this.getEnums().DOC_TYPE.CUSTOM || this.item.type === this.getEnums().DOC_TYPE.MARKDOWN
+    },
+    outlineSections() {
+      if (this.showDoc) {
+        return buildHttpOutline(this.item, this.$t)
+      }
+      if (this.showDubbo) {
+        return buildDubboOutline(this.item, this.$t)
+      }
+      return []
     }
   },
   created() {
