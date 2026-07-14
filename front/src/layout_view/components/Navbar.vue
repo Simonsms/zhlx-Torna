@@ -4,6 +4,11 @@
 
     <div class="right-menu">
       <div class="right-menu-item">
+        <el-button class="view-favorite-button" type="text" icon="el-icon-star-off" @click="goFavorites">
+          {{ $t('myFavorites') }}
+        </el-button>
+      </div>
+      <div class="right-menu-item">
         <el-button type="primary" size="mini" icon="el-icon-monitor" @click="goAdminPage">{{ $t('managementModel') }}</el-button>
       </div>
       <div class="right-menu-item">
@@ -36,6 +41,9 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBarView')
     },
+    goFavorites() {
+      this.goRoute('/user/subscribe/doc')
+    },
     goAdminPage() {
       const docId = this.$route.params.docId
       if (docId) {
@@ -54,3 +62,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "~@/styles/variables.scss";
+
+.view-favorite-button {
+  padding: 8px 12px;
+  color: $consoleTextSecondary;
+  font-weight: 500;
+  border-radius: 8px;
+
+  &:hover,
+  &:focus {
+    color: $consolePrimary;
+    background: $consolePrimaryLight;
+  }
+}
+</style>

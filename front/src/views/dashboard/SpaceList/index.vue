@@ -2,14 +2,14 @@
   <div>
     <h3>{{ $t('spaceList') }}</h3>
     <p>
-      <el-button type="primary" @click="onSpaceAdd">{{ $t('createSpace') }}</el-button>
+      <el-button v-if="isSuperAdmin()" type="primary" @click="onSpaceAdd">{{ $t('createSpace') }}</el-button>
     </p>
     <div v-for="(space) in data" :key="space.id" class="torna-card" @click="enterSpace(space)">
       <el-card shadow="hover" class="box-card">
         <div slot="header" class="clearfix">
           <span>{{ space.name }}</span>
           <el-tooltip v-if="space.isCompose" content="聚合空间" placement="top">
-            <i style="float: right; padding: 3px 0" class="el-icon-files"></i>
+            <i style="float: right; padding: 3px 0" class="el-icon-files" />
           </el-tooltip>
         </div>
         <el-form ref="form" :model="space" class="text-form" label-width="100px">
