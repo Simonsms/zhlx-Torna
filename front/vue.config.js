@@ -8,6 +8,8 @@ function resolve(dir) {
 
 const name = defaultSettings.title || '文档协作站' // page title
 const port = 9530 // dev port
+const apiBaseUrl = process.env.VUE_APP_BASE_API
+const proxyTarget = process.env.VUE_APP_PROXY_TARGET || `http://localhost:${port}/mock`
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -37,11 +39,11 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:${port}/mock`,
+      [apiBaseUrl]: {
+        target: proxyTarget,
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
+          ['^' + apiBaseUrl]: ''
         }
       }
     },
