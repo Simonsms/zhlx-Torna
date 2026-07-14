@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'Torna' // page title
+const name = defaultSettings.title || '文档协作站' // page title
 const port = 9530 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Torna',
+  title: '文档协作站',
 
   /**
    * 固定header部分

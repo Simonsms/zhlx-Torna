@@ -2,10 +2,10 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse, 'sidebar-logo-container-style': !noStyle}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" to="/" class="sidebar-logo-link">
-        <img src="@/assets/images/logo.png" class="sidebar-logo" :title="getTornaVersion()">
+        <img :src="logo" class="sidebar-logo" :alt="title" :title="`${title} ${getTornaVersion()}`">
       </router-link>
       <router-link v-else key="expand" to="/" class="sidebar-logo-link">
-        <img src="@/assets/images/logo.png" class="sidebar-logo">
+        <img :src="logo" class="sidebar-logo" alt="" aria-hidden="true">
         <h1 class="sidebar-title">{{ title }} <span class="version">{{ getTornaVersion() }}</span> </h1>
       </router-link>
     </transition>
@@ -13,6 +13,9 @@
 </template>
 
 <script>
+import defaultSettings from '@/settings'
+import logo from '@/assets/images/document-collaboration-logo.svg'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -27,7 +30,8 @@ export default {
   },
   data() {
     return {
-      title: 'Torna'
+      logo,
+      title: defaultSettings.title
     }
   }
 }
@@ -61,7 +65,8 @@ export default {
       font-weight: 600;
       line-height: 50px;
       font-size: 16px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+      font-family: Avenir, Helvetica Neue, PingFang SC, Microsoft YaHei, Arial, sans-serif;
+      white-space: nowrap;
       vertical-align: middle;
     }
     & .version {

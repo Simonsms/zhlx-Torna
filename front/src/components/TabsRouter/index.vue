@@ -119,7 +119,7 @@ export default {
       if (name && !this.isAllowPath(path)) {
         return
       }
-      const tabInfo = { path: path, title: title || 'Torna' }
+      const tabInfo = { path: path, title: title || '文档协作站' }
       this.$store.dispatch('tabsRouter/addVisitedTabs', tabInfo)
         .then(({ position, length }) => {
           this.onResize()
