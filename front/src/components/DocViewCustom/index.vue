@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'doc-view': portalMode }" class="doc-view-custom">
     <h1 style="margin-bottom: 0">
       {{ docInfo.name }}
       <el-tooltip placement="top" :content="isSubscribe ? $t('cancelSubscribe') : $t('clickSubscribe')">
@@ -17,13 +17,13 @@
       {{ docInfo.creatorName }} {{ $t('createdOn') }} {{ docInfo.gmtCreate }}，
       {{ docInfo.modifierName }} {{ $t('lastModifiedBy') }} {{ docInfo.gmtModified }}
     </span>
-    <div v-show="showOptBar" class="show-opt-bar" style="float: right;">
-      <div class="item">
+    <div v-show="showOptBar || isSuperAdmin() === 1" class="show-opt-bar" style="float: right;">
+      <div class="item" data-testid="document-history-action">
         <el-tooltip placement="top" :content="$t('changeHistory')">
           <el-button type="text" icon="el-icon-date" @click="onShowHistory"></el-button>
         </el-tooltip>
       </div>
-      <div class="item">
+      <div class="item" data-testid="document-export-action">
         <el-dropdown trigger="click" @command="handleCommand">
           <el-tooltip placement="top" :content="$t('export')">
             <el-button type="text" class="icon-button" icon="el-icon-download" />
@@ -35,7 +35,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div class="item">
+      <div v-show="showOptBar" class="item" data-testid="document-const-action">
         <el-tooltip placement="top" :content="$t('viewConst')">
           <el-button type="text" class="icon-button" icon="el-icon-collection" @click="showConst" />
         </el-tooltip>
@@ -82,6 +82,10 @@ export default {
     initSubscribe: {
       type: Boolean,
       default: true
+    },
+    portalMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

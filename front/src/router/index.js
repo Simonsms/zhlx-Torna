@@ -161,27 +161,32 @@ export const constantRoutes = [
       {
         path: 'doc/:projectId(\\w+)',
         name: 'ProjectDoc',
-        component: () => import('@/views/project/index_doc')
+        component: () => import('@/views/project/index_doc'),
+        meta: { title: '项目文档' }
       },
       {
         path: 'info/:projectId(\\w+)',
         name: 'ProjectInfo',
-        component: () => import('@/views/project/index_info')
+        component: () => import('@/views/project/index_info'),
+        meta: { title: '项目信息' }
       },
       {
         path: 'member/:projectId(\\w+)',
         name: 'ProjectMember',
-        component: () => import('@/views/project/index_member')
+        component: () => import('@/views/project/index_member'),
+        meta: { title: '项目成员' }
       },
       {
         path: 'code/:projectId(\\w+)',
         name: 'ErrorCode',
-        component: () => import('@/views/project/index_code')
+        component: () => import('@/views/project/index_code'),
+        meta: { title: '常量管理' }
       },
       {
         path: 'release/:projectId(\\w+)',
         name: 'ProjectRelease',
-        component: () => import('@/views/project/index_release')
+        component: () => import('@/views/project/index_release'),
+        meta: { title: '发布管理' }
       }
     ]
   },

@@ -1,34 +1,26 @@
 <template>
-  <div class="sidebar-container">
-    <logo />
-    <el-menu
-      class="torna-menu"
-      router
-      :default-active="currentActive"
-    >
-      <el-menu-item index="/dashboard">
-        <i class="el-icon-house"></i>
-        <span class="title">{{ $t('spaceList') }}</span>
-      </el-menu-item>
-    </el-menu>
-  </div>
+  <console-navigation :label="$t('spaceList')" :collapsed="collapsed" :active-path="currentActive">
+    <el-menu-item index="/dashboard">
+      <i class="el-icon-house" />
+      <span slot="title">{{ $t('spaceList') }}</span>
+    </el-menu-item>
+  </console-navigation>
 </template>
 <script>
-import Logo from '@/components/Logo'
+import ConsoleNavigation from '@/layout/components/ConsoleNavigation'
+
 export default {
-  components: { Logo },
-  data() {
-    return {
-      spaceId: ''
+  components: { ConsoleNavigation },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     currentActive() {
       return this.$route.path
     }
-  },
-  created() {
-    this.spaceId = this.$route.params.spaceId
   }
 }
 </script>

@@ -61,7 +61,7 @@ export function get(uri, data, callback, errorCallback) {
   const that = this
   do_get.call(this, uri, data, response => {
     doResponse.call(that, response, callback, errorCallback)
-  })
+  }, errorCallback)
 }
 
 /**
@@ -75,7 +75,7 @@ export function post(uri, data, callback, errorCallback) {
   const that = this
   do_post.call(this, uri, data, response => {
     doResponse.call(that, response, callback, errorCallback)
-  })
+  }, errorCallback)
 }
 
 /**
@@ -84,7 +84,7 @@ export function post(uri, data, callback, errorCallback) {
  * @param data 请求数据
  * @param callback 成功时回调，参数response
  */
-export function do_get(uri, data, callback) {
+export function do_get(uri, data, callback, errorCallback) {
   const that = this
   client.get(formatUri(uri), {
     params: data
@@ -98,6 +98,7 @@ export function do_get(uri, data, callback) {
         message: '请求异常，请查看日志',
         type: 'error'
       })
+      errorCallback && errorCallback.call(that, error)
     })
 }
 
@@ -107,7 +108,7 @@ export function do_get(uri, data, callback) {
  * @param data 请求数据
  * @param callback 成功时回调，参数response
  */
-export function do_post(uri, data, callback) {
+export function do_post(uri, data, callback, errorCallback) {
   const that = this
   client.post(formatUri(uri), data)
     .then(response => {
@@ -119,6 +120,7 @@ export function do_post(uri, data, callback) {
         message: '请求异常，请查看日志',
         type: 'error'
       })
+      errorCallback && errorCallback.call(that, error)
     })
 }
 

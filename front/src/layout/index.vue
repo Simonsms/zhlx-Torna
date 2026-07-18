@@ -1,18 +1,17 @@
 <template>
-  <div class="app-wrapper">
-    <home-menu />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-      </div>
-      <app-main />
-    </div>
-  </div>
+  <authenticated-layout>
+    <template slot="topbar">
+      <navbar />
+    </template>
+    <template slot="sidebar" slot-scope="{ collapsed }">
+      <home-menu :collapsed="collapsed" />
+    </template>
+    <app-main />
+  </authenticated-layout>
 </template>
 
 <script>
-import { Navbar, AppMain } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+import { Navbar, AppMain, AuthenticatedLayout } from './components'
 import HomeMenu from '@/components/HomeMenu'
 
 export default {
@@ -20,32 +19,8 @@ export default {
   components: {
     Navbar,
     AppMain,
+    AuthenticatedLayout,
     HomeMenu
-  },
-  mixins: [ResizeMixin],
-  computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
-    }
-  },
-  methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
   }
 }
 </script>

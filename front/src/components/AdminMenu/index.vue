@@ -1,33 +1,28 @@
 <template>
-  <div class="sidebar-container">
-    <logo :collapse="true" />
-    <el-menu
-      class="torna-menu"
-      router
-      :default-active="currentActive"
-    >
-      <el-menu-item index="/admin/users">
-        <i class="el-icon-user"></i>
-        <span class="title">{{ $t('userManagement') }}</span>
-      </el-menu-item>
-      <el-menu-item index="/admin/template">
-        <i class="el-icon-tickets"></i>
-        <span class="title">{{ $t('templateSetting') }}</span>
-      </el-menu-item>
-      <el-menu-item index="/admin/setting">
-        <i class="el-icon-setting"></i>
-        <span class="title">{{ $t('systemSetting') }}</span>
-      </el-menu-item>
-    </el-menu>
-  </div>
+  <console-navigation :label="$t('adminManage')" :collapsed="collapsed" :active-path="currentActive">
+    <el-menu-item index="/admin/users">
+      <i class="el-icon-user" />
+      <span slot="title">{{ $t('userManagement') }}</span>
+    </el-menu-item>
+    <el-menu-item index="/admin/template">
+      <i class="el-icon-tickets" />
+      <span slot="title">{{ $t('templateSetting') }}</span>
+    </el-menu-item>
+    <el-menu-item index="/admin/setting">
+      <i class="el-icon-setting" />
+      <span slot="title">{{ $t('systemSetting') }}</span>
+    </el-menu-item>
+  </console-navigation>
 </template>
 <script>
-import Logo from '@/components/Logo'
+import ConsoleNavigation from '@/layout/components/ConsoleNavigation'
+
 export default {
-  components: { Logo },
-  data() {
-    return {
-      projectId: ''
+  components: { ConsoleNavigation },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

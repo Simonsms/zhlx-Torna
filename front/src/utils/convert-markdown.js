@@ -11,6 +11,10 @@ import {
 import { isDubbo, isHttp, isShowRequestExample, isMarkdown } from './convert-common'
 
 const split_char = ' | '
+const SHOW_MAINTAINER = 0
+const DEFAULT_MARKDOWN_OPTIONS = {
+  hideMaintainer: SHOW_MAINTAINER
+}
 
 function joinHeader(arr) {
   const len = arr.length
@@ -124,6 +128,7 @@ const MarkdownUtil = {
   //   return markdown_content.toString()
   // },
   toMarkdown(docInfo, dialogFormData) {
+    const options = dialogFormData || DEFAULT_MARKDOWN_OPTIONS
     const builder = new StringBuilder()
     const append = (str) => {
       builder.append(`\n${str}\n`)
@@ -133,7 +138,7 @@ const MarkdownUtil = {
       builder.append(`\n${codeWrap}\n${str}\n${codeWrap}\n`)
     }
     append(`### ${docInfo.name}`)
-    if (docInfo.author && dialogFormData.hideMaintainer === 0) {
+    if (docInfo.author && options.hideMaintainer === SHOW_MAINTAINER) {
       append(`${$t('maintainer')}：${docInfo.author}`)
     }
     if (isMarkdown(docInfo)) {

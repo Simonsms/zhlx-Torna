@@ -1,0 +1,33 @@
+{
+  "id": "28-super-admin-document-actions",
+  "title": "开放超级管理员浏览文档操作入口",
+  "type": "AFK",
+  "status": "complete",
+  "dependencies": [],
+  "userStories": [1, 2, 3, 4, 5],
+  "scope": {
+    "in": [
+      "标准接口文档的变更历史与下载入口权限控制",
+      "自定义和 Markdown 文档的变更历史与下载入口权限控制",
+      "超级管理员、普通用户和管理模式行为测试"
+    ],
+    "out": [
+      "权限接口或初始化流程改造",
+      "向普通项目管理员开放入口",
+      "其他操作入口或样式改造",
+      "Vue 3 升级文件"
+    ]
+  },
+  "acceptanceCriteria": [
+    "超级管理员在浏览模式看到变更历史和下载入口",
+    "普通用户在浏览模式看不到这两个入口",
+    "管理模式原有入口不回归",
+    "其他操作入口不被额外放开",
+    "标准与自定义文档组件测试通过"
+  ],
+  "moduleHints": [
+    "front/src/components/DocView/index.vue",
+    "front/src/components/DocViewCustom/index.vue",
+    "front/tests/unit/components"
+  ]
+}

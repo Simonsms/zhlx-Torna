@@ -1,18 +1,16 @@
 <template>
   <div class="navbar">
-    <el-breadcrumb v-if="showBreadcrumb" class="app-breadcrumb" separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: `/` }">{{ $t('home') }}</el-breadcrumb-item>
-      <el-breadcrumb-item v-if="currentSpace" :to="{ path: spaceRoute }">{{ currentSpace.name }}</el-breadcrumb-item>
-      <el-breadcrumb-item v-if="currentProject">{{ currentProject.name }}</el-breadcrumb-item>
-    </el-breadcrumb>
+    <console-breadcrumb />
+    <quick-navigation />
+    <command-palette class="navbar-command-palette" />
     <div class="right-menu">
-      <div v-if="isSuperAdmin()" class="right-menu-item">
+      <div v-if="isSuperAdmin()" class="right-menu-item topbar-secondary-action">
         <el-button type="primary" size="mini" @click="goRoute('/admin/users')">{{ $t('adminManage') }}</el-button>
       </div>
-      <div class="right-menu-item">
+      <div class="right-menu-item topbar-secondary-action">
         <el-button type="success" size="mini" icon="el-icon-view" @click="goViewPage">{{ $t('previewModel') }}</el-button>
       </div>
-      <div class="right-menu-item">
+      <div class="right-menu-item topbar-help-action">
         <el-tooltip placement="bottom" :content="$t('helpCenter')">
           <el-button type="text" class="el-icon-question navbar-btn" @click="openLink('/help')" />
         </el-tooltip>
@@ -28,41 +26,19 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import RightDropdown from '@/components/RightDropdown'
 import UserMessage from '@/components/UserMessage'
+import CommandPalette from './CommandPalette'
+import ConsoleBreadcrumb from './ConsoleBreadcrumb'
+import QuickNavigation from './QuickNavigation'
 
 export default {
   components: {
-    RightDropdown, UserMessage
-  },
-  props: {
-    showBreadcrumb: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data() {
-    return {
-      isShowDefault: false,
-      spaceData: []
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ]),
-    currentProject() {
-      return this.getCurrentProject()
-    },
-    currentSpace() {
-      return this.getSpace()
-    },
-    spaceRoute() {
-      const path = this.$route.path
-      return path.indexOf('compose') > -1 ? `/space/compose/${this.currentSpace.id}` : `/space/project/${this.currentSpace.id}`
-    }
+    RightDropdown,
+    UserMessage,
+    CommandPalette,
+    ConsoleBreadcrumb,
+    QuickNavigation
   },
   created() {
     this.initPerm()
@@ -76,19 +52,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.app-breadcrumb.el-breadcrumb {
-  float: left;
-  display: inline-block;
-  line-height: 50px;
-  font-size: 14px;
-  margin-left: 8px;
-
-  .no-redirect {
-    color: #97a8be;
-    cursor: text;
-  }
-}
 .el-dropdown-link {
   cursor: pointer;
 }

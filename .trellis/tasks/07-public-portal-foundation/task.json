@@ -1,0 +1,36 @@
+{
+  "id": "07-public-portal-foundation",
+  "title": "建立统一公开文档门户外壳",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": [],
+  "userStories": [3, 10, 15, 16, 26, 32, 33, 34, 35, 36, 37, 39, 40],
+  "scope": {
+    "in": [
+      "建立分享与聚合模式共用的门户外壳和展示模型",
+      "接入品牌顶部栏、左侧区域、正文区域和响应式遮罩",
+      "从分享与聚合门户移除多文档 Tab",
+      "保留两种模式现有接口、访问校验和文档详情路由"
+    ],
+    "out": [
+      "门户首页分类与搜索",
+      "统一文档树交互",
+      "右侧页内目录和正文视觉重构",
+      "密码页和异常状态视觉重构"
+    ]
+  },
+  "acceptanceCriteria": [
+    "分享和聚合入口均通过统一门户外壳展示品牌顶部栏、侧栏和正文",
+    "公开端不再显示多文档 Tab，/view 仍保持原行为",
+    "现有公开、加密、禁用判断以及文档详情请求契约不变",
+    "桌面和窄屏下门户主要区域可访问",
+    "相关单元测试、定向 ESLint 和生产构建通过"
+  ],
+  "moduleHints": [
+    "front/src/layout_public",
+    "front/src/layout_share/index.vue",
+    "front/src/layout_show/index.vue",
+    "front/src/styles/variables.scss",
+    "front/tests/unit/components"
+  ]
+}

@@ -1,40 +1,25 @@
 <template>
-  <div class="app-wrapper">
-    <user-center-menu />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar :show-breadcrumb="false" />
-      </div>
-      <app-main />
-    </div>
-  </div>
+  <authenticated-layout>
+    <template slot="topbar">
+      <navbar />
+    </template>
+    <template slot="sidebar" slot-scope="{ collapsed }">
+      <user-center-menu :collapsed="collapsed" />
+    </template>
+    <app-main />
+  </authenticated-layout>
 </template>
 
 <script>
-import { Navbar, AppMain, UserCenterMenu } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+import { Navbar, AppMain, UserCenterMenu, AuthenticatedLayout } from './components'
 
 export default {
   name: 'Layout',
   components: {
     Navbar,
     AppMain,
-    UserCenterMenu
-  },
-  mixins: [ResizeMixin],
-  computed: {
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    }
+    UserCenterMenu,
+    AuthenticatedLayout
   }
 }
 </script>
-<style lang="scss" scoped>
-@import "~@/styles/variables.scss";
-.main-container {
-  margin-left: $sideBarUserWidth !important;
-}
-.fixed-header {
-  width: calc(100% - #{$sideBarUserWidth});
-}
-</style>

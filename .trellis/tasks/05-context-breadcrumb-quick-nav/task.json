@@ -1,0 +1,35 @@
+{
+  "id": "05-context-breadcrumb-quick-nav",
+  "title": "统一上下文面包屑与快捷导航",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": ["02-auth-layout-migration", "03-auth-route-tabs"],
+  "userStories": [2, 12, 16, 17, 18],
+  "scope": {
+    "in": [
+      "统一首页、空间、项目、功能和资源面包屑",
+      "提供权限感知的导航型快捷入口",
+      "复用现有路由和上下文状态"
+    ],
+    "out": [
+      "直接创建、导入、同步或发布",
+      "新增上下文接口请求",
+      "修改业务页面按钮"
+    ]
+  },
+  "acceptanceCriteria": [
+    "面包屑在主要登录态页面正确表达上下文",
+    "缺少空间或项目时不展示虚假层级",
+    "快捷入口只跳转现有页面",
+    "管理员入口遵守现有权限",
+    "导航后正确打开或复用工作 Tab",
+    "面包屑组件测试覆盖主要上下文"
+  ],
+  "moduleHints": [
+    "front/src/components/Breadcrumb/index.vue",
+    "front/src/layout/components/Navbar.vue",
+    "front/src/store/modules/settings.js",
+    "front/src/router/index.js",
+    "front/tests/unit/components/Breadcrumb.spec.js"
+  ]
+}

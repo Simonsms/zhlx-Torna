@@ -1,0 +1,36 @@
+{
+  "id": "04-command-navigation-search",
+  "title": "提供功能导航搜索与快捷键",
+  "type": "AFK",
+  "status": "completed",
+  "dependencies": ["02-auth-layout-migration", "03-auth-route-tabs"],
+  "userStories": [13, 14, 15, 18, 24],
+  "scope": {
+    "in": [
+      "建立前端导航命令注册表",
+      "提供关键词匹配、权限过滤和上下文过滤",
+      "通过现有路由和工作 Tab 打开结果",
+      "提供键盘快捷键"
+    ],
+    "out": [
+      "文档全文搜索",
+      "新增后端接口",
+      "搜索历史和个性化排序"
+    ]
+  },
+  "acceptanceCriteria": [
+    "用户可从顶部入口或快捷键打开搜索",
+    "可按标题和关键词查找现有控制台功能",
+    "无权限或缺少上下文的命令不会显示",
+    "选择结果后通过现有路由打开或复用 Tab",
+    "搜索匹配和过滤逻辑具有单元测试",
+    "无任何后端代码或接口改动"
+  ],
+  "moduleHints": [
+    "front/src/router/index.js",
+    "front/src/utils/perm.js",
+    "front/src/utils/routeUtil.js",
+    "front/src/store/modules/settings.js",
+    "front/src/layout/components"
+  ]
+}

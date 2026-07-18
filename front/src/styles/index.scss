@@ -646,3 +646,70 @@ figure.table {
 .v-show-content {
   background-color: #fff !important;
 }
+
+// Unified shell for authenticated console pages.
+.console-shell {
+  .sidebar-logo-container {
+    width: 100%;
+
+    .sidebar-logo-link {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .navbar {
+    flex: 1;
+    height: $consoleHeaderHeight;
+    box-shadow: none;
+
+    .app-breadcrumb.el-breadcrumb,
+    .right-menu {
+      line-height: $consoleHeaderHeight;
+    }
+  }
+
+  .app-main {
+    min-height: calc(100vh - #{$consoleHeaderHeight} - #{$consoleTabsHeight});
+  }
+
+  .app-container {
+    padding: 20px 24px 32px;
+  }
+
+  .navbar-command-palette {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 320px;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1279px) {
+  .console-shell .navbar-command-palette {
+    display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .console-shell {
+    .console-breadcrumb,
+    .quick-navigation,
+    .topbar-secondary-action {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 639px) {
+  .console-shell {
+    .topbar-help-action {
+      display: none;
+    }
+
+    .navbar .right-menu .right-menu-item {
+      padding: 0 6px;
+    }
+  }
+}
